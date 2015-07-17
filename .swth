@@ -1,0 +1,5 @@
+# swth config file
+MODE=master
+LATEX=pdflatex
+BIBTEX=biber
+MAIN="Springer_2015_Thesis"

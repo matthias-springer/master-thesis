@@ -1,0 +1,101 @@
+% Options.
+%
+% Language
+%  en  -  english (default)
+%  de  -  german
+%
+% Modes
+%  draft     - drafting mode, esp for todos
+%  fulldraft - drafting mode, also for listings/graphics, faster
+%  final     - final mode
+%
+%
+% Fonts
+%  lmodern   - Latin Modern, like TeX default
+%  palatino  - Heavier, slightly more readable (default)
+%  garamond  - Lighter than palatino, heavier than latin modern, more readable.
+%
+% Other
+%  print - do not color links
+%  zebralistings - alternating row colors for listings
+%
+\documentclass[draft,master]{swathesis}
+\usepackage[backend=biber]{biblatex}
+\addbibresource{thesis.bib}
+
+\usepackage{titlepage}
+\TitlePageStyle[
+subject=master,degree={Master of Science},
+]{hpi-swa}
+
+\supervisors{%
+Prof.\,Dr.\,Robert Hirschfeld%\and %
+%Dr.\,John Doe%
+}
+
+% ABGABEDATUM
+% \setdate{2012}{04}{05}
+% \date{\datedate}
+
+\author{Matthias Springer}
+\location{Potsdam}
+\extratitle{\raggedleft Springer, \\ Nested Class Modularity in Squeak/Smalltalk\par}
+\title{Nested Class Modularity in Squeak/Smalltalk}
+\subtitle{}
+\othertitle{}
+\othersubtitle{}
+
+\begin{document}
+\frontmatter
+\maketitle
+\input{abstract}
+\input{acknowledgment}
+\tableofcontents
+\listoffigures
+\listoftables
+\lstlistoflistings
+\listofacronyms %
+\mainmatter
+% HAUPTTEIL
+% \input{introduction}
+% \input{context}
+% \input{solution}
+% \input{implementation}
+% \input{evaluation}
+% \input{relatedwork}
+% \input{conclusion}
+%
+
+% beispiel.
+
+\input{introduction}
+\input{problem}
+\input{relatedwork}
+\input{concept}
+\input{implementation}
+\input{usecases}
+\input{futurework}
+
+%\blinddocument
+
+\printbibliography
+\clearpage
+\appendix
+\input{appendix}
+\backmatter
+\markboth{}\relax
+
+% BAMA-O (2009) §24.8
+%  Am Schluss der Arbeit hat die/der Kandidat/in  zu versichern, dass 
+%  sie/er sie selbstständig verfasst sowie keine anderen Quellen und 
+%  Hilfsmittel als die angegebenen benutzt hat.
+% BAMA-O (2013) §30.6
+%  Am Schluss der Arbeit hat die Kandidatin bzw. der Kandidat zu versichern,
+%  dass sie bzw. er die Arbeit selbstständig verfasst und keine anderen
+%  Quellen und Hilfsmittel als die angegebenen benutzt hat.
+\defaultstatement
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
