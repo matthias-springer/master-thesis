@@ -24,26 +24,107 @@ Figure~\ref{fig:concept_nested_notation} shows an example of nested classes in S
 \end{figure}
 
 \section{Accessing the Lexical Scope}
-It is sometimes necessary to access a method's outer lexical scope (i.e., the enclosing classes), in order to send messages to enclosing classes. Consider, for example, that we want to send a message \texttt{foo} to class \texttt{A B} within \texttt{A class>>B class>>C>>m5} in Figure~\ref{fig:concept_nested_notation}. Either one of the following two statements works in this case.
+It is sometimes necessary to access a method's lexical scope (i.e., the enclosing classes), in order to send messages to enclosing classes. For this reason, our system introduces new keywords, in addition to \texttt{self} and \texttt{super}, which are already present in every Smalltalk dialect. Figure~\ref{fig:concept_keywords} gives an overview of all method lookup-related keywords in the system.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=1]{lookup_keywords.pdf}
+	\caption{Keywords for access to superclass and lexical scope.}
+	\label{fig:concept_keywords}
+\end{figure}
+
+\paragraph{\texttt{self} Keyword}
+This keyword is used make a message send within an object. The receiver is the same object as the sender and the lookup starts at the (polymorphic) class of the receiver. If that class does not provide a corresponding method, the lookup continues in the superclass hierarchy. If no class in the superclass has a corresponding method, a \texttt{MethodNotUnderstood} error is raised.
+
+\paragraph{\texttt{super} Keyword}
+This keyword is also used to make a message send within an object. Again, the receiver is the same object as the sender, but the lookup starts at superclass of the sender's method class. Note, that \texttt{super} is bound to the superclass of the method class, not the superclass of the receiver's class.
+
+\paragraph{\texttt{enclosing} Keyword}
+This keyword is used to make a message send to the class that contains the current current. Consider, for example, that we want to send a message \texttt{foo} to class \texttt{A B} within \texttt{A class>>B class>>C>>m5} in Figure~\ref{fig:concept_nested_notation}. Either one of the following two statements works in this case.
 
 \begin{itemize}
 	\item \texttt{A B foo.}
-	\item \texttt{thisOuter foo.}
+	\item \texttt{enclosing foo.}
 \end{itemize}
 
-\texttt{thisOuter} is a keyword that evaluates to the method owner's enclosing class upon method compilation. Note, that \texttt{thisOuter} is bound to the method's lexical scope, not the receiver class' lexical scope.
+\texttt{enclosing} is a keyword that evaluates to the method owner's enclosing class upon method compilation. Note, that \texttt{enclosing} is bound to the method's lexical scope, not the receiver's lexical scope.
 
-\paragraph{Example}
-Figure~\ref{fig:concept_lexical_thisouter} illustrates how \texttt{thisOuter} is bound. In \texttt{B1 class>>C class>>bar1}, \texttt{thisOuter} is bound to \texttt{B1}. In contrast, \texttt{B2 class>>C class>>bar2} binds \texttt{thisOuter} to \texttt{B2}. Consequently, \texttt{B1 C bar1} calls \texttt{B1 foo} and so does \texttt{B2 C bar1}, even though the receiver of \texttt{bar1} is an instance of \texttt{B2 C class} and not \texttt{B1 C class} in the latter case. Note, that \texttt{B2 C bar2} calls \texttt{B2 foo}, because \texttt{bar2}'s lexically enclosing class is \texttt{B2}.
+Figure~\ref{fig:concept_lexical_thisouter} illustrates how \texttt{enclosing} is bound. In \texttt{B1 class>>C class>>bar1}, \texttt{enclosing} is bound to \texttt{B1}. In contrast, \texttt{B2 class>>C class>>bar2} binds \texttt{enclosing} to \texttt{B2}. Consequently, \texttt{B1 C bar1} calls \texttt{B1 foo} and so does \texttt{B2 C bar1}, even though the receiver of \texttt{bar1} is an instance of \texttt{B2 C class} and not \texttt{B1 C class} in the latter case. Note, that \texttt{B2 C bar2} calls \texttt{B2 foo}, because \texttt{bar2}'s lexically enclosing class is \texttt{B2}.
 
 \begin{figure}[!htp]
 	\includegraphics[scale=1]{nested_lexical1.pdf}
 	\centering
-	\caption{Binding of \texttt{thisOuter} to method's lexical scope.}
+	\caption{Binding of \texttt{enclosing} to method's lexical scope.}
 	\label{fig:concept_lexical_thisouter}
 \end{figure}
 
-thisOuter/thisContext keywords: send messages to lexical scope, all class references are late bound: always call accessor method, class aliasing
+Note, that \texttt{enclosing} can be used for meta programming purposes; however, it should be avoided in general. Our system also provides a \texttt{scope} keyword that should be used instead.
+
+\paragraph{\texttt{enclosing} Method}
+In addition to \texttt{enclosing}, every class in the system has a method \texttt{enclosing} that returns the enclosing class of the receiver\footnote{The enclosing class of an object that is not a class is its class' enclosing class.}, making it possible to send messages to enclosing classes which are more than one level away. If, for example, in Figure~\ref{fig:concept_nested_notation}, \texttt{A class>>B class>>C>>bar} wants to send the message \texttt{m1} to \texttt{A}, either one of the following two statements works.
+
+\begin{itemize}
+	\item \texttt{A m1.}
+	\item \texttt{enclosing enclosing m1.}
+\end{itemize}
+
+Again, the method \texttt{enclosing} should be avoided in general, but is useful to implement parts of our system with code written in the system itself.
+
+\paragraph{\texttt{outer} Keyword}
+The method \texttt{enclosing} can be used to traverse the the lexical scope of a class. Arbitrarily many \texttt{enclosing} sends can be chained, as long as the respective receiver still has an enclosing class and is, therefore, not a top-level class. Arguably, this can result in verbose and complicated code, and is at the very least questionable with regards to the law of demeter.
+
+In addition to \texttt{enclosing}, the system provides the \texttt{outer} keyword, bound to the method's lexical scope. Whenever a message is sent to \texttt{outer}, the message is first interpreted as a send to \texttt{enclosing}. If that message send fails, the message is sent to \texttt{enclosing enclosing}, and, eventually, to the top-level class, if no other class in the lexical scope understands the message. If even that message send is not understood, the selector is looked up in the \texttt{globals} dictionary. If the selector is absent, a \texttt{MessageNotUnderstood} error is raised.
+
+\texttt{outer} is similar to \texttt{super}, with the difference that \texttt{outer} does a horizontal lookup (lexical scope) and \texttt{super} does a vertical lookup (superclass chain). Note, that messages sent to \texttt{outer} are sent to an object different from \texttt{self}.
+
+\paragraph{\texttt{scope} Keyword}
+This keyword combines \texttt{super} and \texttt{outer}: a message sent to \texttt{scope} is first treated as a \texttt{self} send. If the message is not understood, it is treated as an \texttt{outer} send.
+
+Our system essentially first looks up the methods in \texttt{self}, then in the superclass hierarchy, and then in the lexical scope. This is also how the method lookup in Java works, also known as \emph{comb semantics}\todo{Add reference:  Smith, W.R.: NewtonScript: Prototypes on the Palm, pp. 109 – 139. SpringerVerlag (1999), in Prototype-Based Programming: Concepts, Languages and Applications, Noble, Taivalsaari and Moore, editors}. Newspeak uses a different lookup: it first looks for a method in the receiver's class, then in the lexical scope, and finally in superclass hierarchy~\cite{bracha:modules_as_objects}.
+
+The statement \texttt{enclosing enclosing m1} in the previous example can also be written as \texttt{scope m1}. If the method \texttt{m1} would now be moved to its enclosing class (if it had one), the lookup would still succeed. However, \texttt{scope} exposes the risk of accidentially capturing method names in superclasses or the lexical chain.
+
+\paragraph{Implicit \texttt{scope} Receiver}
+In our system, references to globals are in fact message sends with \texttt{scope} as implicit receiver. This makes it easier for Smalltalk programmers to write code in our system, even if they do not know about \texttt{enclosing} and \texttt{scope}. It also makes the code less verbose and easier to read.
+
+Whenever code references an identifier that is not a temporary variable, not an instance variable, and not a \emph{special} object \footnote{\texttt{self}, \texttt{super}, \texttt{thisContext}, \texttt{scope}, \texttt{outer}, \texttt{enclosing}}, the compiler replaces that identifier with a message send to \texttt{scope}.
+
+Consider, for example, that we want to reference class \texttt{A B} within \texttt{A class>>B class>>C>>bar} in Figure~\ref{fig:concept_nested_notation}. Either one of the following two statements works in this case.
+
+\begin{itemize}
+	\item \texttt{A B.}
+	\item \texttt{enclosing.}
+	\item \texttt{enclosing enclosing B.}
+	\item \texttt{outer B.}
+	\item \texttt{scope B.}
+	\item \texttt{B.}
+\end{itemize}
+
+In this example, we used the implicit \texttt{scope} receiver for class lookup, which is in our opinion the most useful case. However, any method in \texttt{self}, the lexical scope, or the superclass hierarchy can in fact be looked up this way. One can argue that this is bad practice and should be forbidden for methods that are not class generator methods. However, it is allowed in Newspeak and other programming languages like Java, and seems to work well, as long as the programmer is aware of how the method lookup works. Note, that only unary messages can have an implicit \texttt{scope} receiver, since we would have to change the Smalltalk syntax otherwise.
 
 \section{Parameterized Classes}
-mixins: functions from classes to classes
+All examples shown in the previous section use unparameterized classes, i.e., class generator methods are always unary. Class generator method can, however, also have binary selectors or selectors with a higher arity. For memory conservation reasons, these classes are then no longer cached.
+
+\paragraph{Mixins}
+Parameterized classes can be used to build mixins. Mixins are not a special feature of this system: they are an application of our system and come for free by just having class nesting as described in the previous sections; they are an immediate consequence of parameterized classes. A mixin is a function that takes as an input a class and outputs a subclass with additional behavior, i.e., it is a class transformator. 
+
+A mixin can be implemented by writing a class generator method with one parameter which is the input class. The method creates a subclass of that input class and returns it. Associated with that parameterized class generator methods is a set of instance-side methods and a set of class-side methods. These are the methods that will be added when applying the mixin.
+
+\paragraph{Recursive Mixin Application}
+A mixin can make sure another mixin is applied upon its application. This is done creating a subclass of a mixin application in the class generator method. Consequently, the system first creates a subclass of the base class, adds the methods of the inner mixin, then creates a subclass of the resulting class, and finally adds the methods of the outer mixin.
+
+\paragraph{Example}
+Figure~\ref{fig:concept_mixins} shows an example of parameterized classes and how they can be used to build mixins.
+
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[scale=1]{nested_mixins.pdf}
+	\caption{Implementation of Mixins with Nested Classes}
+	\label{fig:concept_mixins}
+\end{figure}
+
+Two class generator methods \texttt{A M1:} and \texttt{A M2:} are defined, which take as input a base class and output a subclass with additional behavior. \texttt{A M1M2} is an application of both both mixins. \texttt{A M1M2}'s superclass is \emph{some} \texttt{A M2:}, whose superclass is \emph{some} \texttt{A M1:}, whose superclass is \texttt{Object}. Note, that \texttt{A M1:} and \texttt{A M2:} are not specific classes: we use this notation as a name for \emph{some} application of \texttt{A class>>M1:} and \texttt{A class>>M2:}, respectively. Therefore, even if two classes have the same name, they are not necessarily the same class if they names contain a colon.
+
+Note, that evaluating \texttt{A M1: Object} multiple times returns different class object, since parameterized classes are not cached. However, \texttt{A M1M2} is cached, because it is a unary method. Therefore, calling \texttt{A M1M2} multiple times always returns the same class object.
+
+The notation used in \texttt{A class>>M1M2} can be a bit confusing at first. That method first applies \texttt{A M1:} to \texttt{Object}, and then \texttt{A M2:}; however, in the source code, \texttt{A M2:} appears before \texttt{A M1:}. For readability reasons, and to support more features like pre-include hooks and post-include hooks, we present the Class Generator Pattern in Section~\ref{sec:usecase_classgen}.
