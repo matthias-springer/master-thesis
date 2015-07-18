@@ -3,6 +3,30 @@
 \section{Class Name Clashes}
 
 \subsection{Namespaces/Packages}
+Many programming languages have a concept of namespaces or packages. Classes are typically organized in a package, which is a set of classes. Classes within a package can usually reference each other directly. However, references to classes in other packages typically require imports, aliases, or a fully qualified name.
+
+\paragraph{VisualWorks Namespaces}
+VisualWorks is a commerical Smalltalk implementation sold by Cincom and supports namespaces~\cite{brauer2015programming}. A namespace is a container for other namespaces, classes, and shared variables. Since a namespace can be defined within another namespace, VisualWorks allows for a form of hierarchical decomposition. All namespace members (e.g., classes) in the same namespace can be referenced by just writing down their names. All namespace members in other namespaces can be referenced by writing down their fully qualified name, which is the concatenation of all nested namespace names and the name of the class with dots as separators. For example, the fully qualified name of a class \texttt{C1} in namespace \texttt{B} in namespace \texttt{A} is \texttt{A.B.C1}. Relatives name are also supported: for example, \texttt{A.B.C1} can be referenced as \texttt{B.C1} within \texttt{A}.
+
+A namespace can import members from other namespaces by specifying a list of all imports when the namespace is defined~\cite{cincomst}. Wildcard imports are possible, importing all members of a namespace. Imported members can be referenced within a namespace as if they were part of that namespace. A namespace member can also be defined as \emph{private}; such a member cannot be imported, but always has to be referenced using its fully qualified name or using a relative name.
+
+Namespaces are instances of the class \texttt{NameSpace}, which is a subclass of \texttt{Collection}. \texttt{NameSpace} defines a few helper methods to allow for meta programming, such as listing all classes or defining new namespaces or classes within a namespace.
+
+\paragraph{Java Packages and Nested Classes}
+The Java programming language has a concept of packages. A package is set of classes, interfaces, and pacckages, and corresponds to a directory on the file system. Classes and interfaces in the same package can be referenced directly using their name. Classes and interfaces in other packages can be referenced using their fully qualified name, which is generated exactly as in VisualWorks. They can also be imported explicitly, making it possible to reference them just using their name; wildcard imports are possible.
+
+Classes and interfaces can be defined as package-public or package-private. Only package-public members can be imported or referenced within members outside of the current package.
+
+Java supports the concept of nested classes: a class can either be a top-level class or a class that is nested within another member. There are four different kinds of nested classes~\cite{Bloch:2008:EJ:1377533}.
+\begin{itemize}
+	\item \emph{Static member class:} a class that belongs to another class, i.e., it is a static member of another class. It can be accessed like a static variable of the enclosing class. For example, if \texttt{B} is nested in \texttt{A}, it can be referenced with \texttt{A.B}. Messages sent from within the nested class are first looked up in the nested class and its superclass hierarchy, then on the class side of the enclosing class (static methods), and then in the enclosing class' enclosing class (if it is a nested class).
+	\item \emph{Nonstatic member class:} a class that belongs to an instance of another class, i.e., it is a nonstatic member of another class. It is similar to a static member class, but the method lookup happens on the instance side of the enclosing class. Every instance of a class has its own nonstatic member classes; however, all of these classes must inherit from a class that can be resolved at compile time. Effectively, all nonstatic member classes are the same, with the only exception that they are bound to different enclosing objects.
+	\item \emph{Anonymous class:} a class without a name. In older Java versions, it was frequently used as a substitute for missing block closures. Lambda expressions are available since Java 8, making anonymous classes obsolete in many use cases. Note, that since classes are not first-class objects in Java, it is difficult to pass anonymous classes around and to use them in a different context without using meta programming.
+	\item \emph{Local class:} a class that can be defined anywhere where a local variable can be defined. It is the least frequently used kind of classes.
+\end{itemize}
+% TODO: talk about different types of classes
+
+\paragraph{Ruby Modules}
 VisualWorks, Java, Ruby, Python
 
 \subsection{Squeak Environments}
