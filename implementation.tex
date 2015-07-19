@@ -4,7 +4,14 @@
 Our system has a simple meta model for describing (nested) classes and their methods. The graphical user interface operates exclusively on the meta model and makes changes to it. The meta model can then be instantiated to generate the actual classes. When changes to the meta model are made, these changes can also be applied to already existing instantiations of the model, allowing giving programmers the feeling of working with a live system.
 
 \paragraph{Smalltalk-80 Class/Meta Model}
-Squeak already comes with a meta model: objects are instances of a classes, consequently, classes are also instances of a class. In Smalltalk, every class is an instance of its own meta class, which is in turn instance of \texttt{Metaclass}.
+Squeak already comes with a meta model: objects are instances of a classes, consequently, classes are also instances of a class. In Smalltalk, every class is an instance of its own meta class, which is in turn instance of \texttt{Metaclass} (Figure~\ref{fig:impl_squeak_meta}).
+
+\begin{figure}
+	\includegraphics[width=\textwidth]{squeak_meta.pdf}
+	\centering
+	\caption{Squeak Class Model with Meta Classes}
+	\label{fig:impl_squeak_meta}
+\end{figure}
 
 Our system allows class generation at runtime: class generator methods generate classes along with their respective meta classes. Therefore, we need a specification/blueprint that describes how a class generator method should construct a class. At first glance, it might seem logical to use meta classes; after all, a meta class is the class of a regular (non-meta) class and classes are instance generators. However, meta classes cannot be used as class object generators in a way required by our system for two reasons.
 
@@ -52,7 +59,7 @@ Whenever a class accessor method is invoked, the method first checks if the clas
 \begin{enumerate}
 	\item Install \texttt{enclosing} instance method. This method returns the enclosing class.
 	\item Install/compile all instance methods listed in the class specification.
-	\item Generate the class name. The class name is a concatenation of the enclosing class' name and the selector of this class' accessor method. It is stored as an instance variable at \texttt{Class}. Note, that every class object is an instance of its meta class, which is a subclass of \texttt{Class}.
+	\item Generate the class name. The class name is a concatenation of the enclosing class' name and the selector of this class' accessor method. It is stored as an instance variable at \texttt{Class}. Note, that every class object is an instance of its meta class, which is a subclass of \texttt{Class} (Figure~\ref{fig:impl_squeak_meta}).
 	\item Add a marker method to the meta class to mark it as generated. This makes is easy to check if a class is an ordinary (legacy) Smalltalk class or was generated within our system.
 	\item Install \texttt{specification} class method. This method returns the class specification, which is useful for meta programming purposes.
 	\item Install \texttt{enclosing} class method. This method is identical to the instance method.
@@ -131,6 +138,26 @@ As an example, let us assume that we have classes nested as shown in Figure~\ref
 	\item \texttt{outer Object}: same as before. All classes outside of our system are also present in the \texttt{globals} dictionary.
 	\item \texttt{outer D}: lookup fails and raises a \texttt{MessageNotUnderstood} error.
 \end{itemize}
+
+\paragraph{Implementation of \texttt{scope}}
+References to \texttt{scope} cannot be replaced by a constant literal during compile time. This is because the lookup involves a lookup in \texttt{self} send. Looking up methods in the class of the method under compilation is not sufficient, because that method might be overridden in a subclass. Therefore, we have to construct a \texttt{LexicalScope} object at runtime (instead of compile time) and pass it two objects: the enclosing class and \texttt{self}.
+
+\begin{figure}[!htp]
+	\includegraphics[scale=1]{lexical_scope.pdf}
+	\centering
+	\caption{\texttt{LexicalScope} for \texttt{scope} keyword example}
+	\label{impl:lex_scope}
+\end{figure}
+
+Figure~\ref{impl:lex_scope} shows how the \texttt{scope} lookup works in a slightly modified example. Just as in the previous example, we assume that all message sends happen in \texttt{A class>>B class>>C class>>m4}. However, \texttt{m4} is invoked on class \texttt{D}, which is a subclass of class \texttt{A B C}. Therefore, \texttt{self} is bound to \texttt{D}.
+
+\begin{itemize}
+	\item \texttt{scope bar}: lookup in \texttt{self} succeeds: method \texttt{D class>>bar}.
+	\item \texttt{scope foo}: lookup in \texttt{self} fails, but lookup in \texttt{enclosing} (class \texttt{A B}) succeeds.
+	\item The lookup for the all examples listed for \texttt{outer} (previous paragraph) yields the same result here.
+\end{itemize}
+
+Note, that the reference to \texttt{self} (\texttt{target}) cannot be established at compile time, because it is unclear what the polymorphic receiver class is. Therefore, references to the keyword \texttt{scope} have to be replaced by a message send: \texttt{LexicalScope for: self in: enclosing}. This has the side effect that the decompiled source code (and the code shown in the debugger) looks slightly different from the code written by the programmer.
 
 \section{Class Updates}
 using instances weak array on specification

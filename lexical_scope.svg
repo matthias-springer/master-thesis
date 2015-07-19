@@ -1,0 +1,1050 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="491"
+   height="307"
+   id="svg7929"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="lexical_scope.svg">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="145.96625"
+     inkscape:cy="197.29376"
+     inkscape:document-units="px"
+     inkscape:current-layer="g8058"
+     showgrid="true"
+     inkscape:window-width="1394"
+     inkscape:window-height="871"
+     inkscape:window-x="70"
+     inkscape:window-y="56"
+     inkscape:window-maximized="0"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0">
+    <inkscape:grid
+       originy="-565.14285px"
+       originx="-90.642856px"
+       snapvisiblegridlinesonly="true"
+       enabled="true"
+       visible="true"
+       empspacing="5"
+       type="xygrid"
+       id="grid9069" />
+  </sodipodi:namedview>
+  <defs
+     id="defs7931">
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lend"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4599"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
+    <defs
+       id="defs1">
+      <clipPath
+         id="clipPath1"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8429"
+           d="m -7,-7 158,0 0,58 -158,0 0,-58 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath2"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8432"
+           d="m 0,0 0,22 140,0 0,-22 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath3"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8435"
+           d="M 0,0 140,0 140,18 0,18 0,0 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath4"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8438"
+           d="m -7,-7 150,0 0,58 -150,0 0,-58 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath5"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8441"
+           d="m 0,0 0,22 132,0 0,-22 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath6"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8444"
+           d="M 0,0 132,0 132,18 0,18 0,0 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath7"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8447"
+           d="m -7,-7 98,0 0,61 -98,0 0,-61 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath8"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8450"
+           d="M 0,0 0,25 80,25 80,0 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath9"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8453"
+           d="M 0,0 80,0 80,18 0,18 0,0 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath10"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8456"
+           d="m -7,-7 98,0 0,58 -98,0 0,-58 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath11"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8459"
+           d="M 0,0 0,22 80,22 80,0 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath12"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8462"
+           d="m -7,-7 86,0 0,35 -86,0 0,-35 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath13"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8465"
+           d="M 0,0 68,0 68,17 0,17 0,0 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath14"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8468"
+           d="m -7,-7 70,0 0,32 -70,0 0,-32 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath15"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8471"
+           d="M 0,0 52,0 52,14 0,14 0,0 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath16"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8474"
+           d="M 0,0 104,0 104,142 0,142 0,0 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath17"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8477"
+           d="M 0,0 192,0 192,104 0,104 0,0 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath18"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8480"
+           d="M 0,0 104,0 104,152 0,152 0,0 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath19"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8483"
+           d="M 0,0 173,0 173,294 0,294 0,0 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+      <clipPath
+         id="clipPath20"
+         clipPathUnits="userSpaceOnUse">
+        <path
+           id="path8486"
+           d="m -81,-17 243,0 0,51 -243,0 0,-51 z"
+           inkscape:connector-curvature="0" />
+      </clipPath>
+    </defs>
+    <marker
+       inkscape:stockid="Arrow1Lendq"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lendq"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path9817"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill:#808080;fill-rule:evenodd;stroke:#808080;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1LendY"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1LendY"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path9820"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill:#808080;fill-rule:evenodd;stroke:#808080;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lendb"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lendb"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path9823"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill:#808080;fill-rule:evenodd;stroke:#808080;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1LendZ"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1LendZ"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path9826"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill:#808080;fill-rule:evenodd;stroke:#808080;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lendqz"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lendqz"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path8856"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="stroke:#808080;stroke-width:1pt;fill:#808080;fill-rule:evenodd"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
+  </defs>
+  <metadata
+     id="metadata7934">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-90.642856,-180.21933)"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g8492"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(401.14286,180.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <rect
+         id="rect8494"
+         clip-path="url(#clipPath1)"
+         y="0"
+         height="40"
+         width="140"
+         x="0"
+         style="stroke:none" />
+    </g>
+    <g
+       id="g8496"
+       stroke-miterlimit="0"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(401.14286,180.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <rect
+         id="rect8498"
+         clip-path="url(#clipPath1)"
+         y="0"
+         height="40"
+         width="140"
+         x="0"
+         style="fill:none" />
+      <line
+         id="line8500"
+         y1="18"
+         x2="140"
+         clip-path="url(#clipPath1)"
+         x1="0"
+         y2="18"
+         style="fill:none" />
+    </g>
+    <g
+       id="g8502"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(401.14286,180.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <text
+         id="text8504"
+         clip-path="url(#clipPath3)"
+         y="13"
+         xml:space="preserve"
+         x="34"
+         style="stroke:none">ProtoObject</text>
+    </g>
+    <g
+       id="g8506"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(405.14286,260.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <rect
+         id="rect8508"
+         clip-path="url(#clipPath4)"
+         y="0"
+         height="40"
+         width="132"
+         x="0"
+         style="stroke:none" />
+    </g>
+    <g
+       id="g8510"
+       stroke-miterlimit="0"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(405.14286,260.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <rect
+         id="rect8512"
+         clip-path="url(#clipPath4)"
+         y="0"
+         height="40"
+         width="132"
+         x="0"
+         style="fill:none" />
+      <line
+         id="line8514"
+         y1="18"
+         x2="132"
+         clip-path="url(#clipPath4)"
+         x1="0"
+         y2="18"
+         style="fill:none" />
+    </g>
+    <g
+       id="g8516"
+       text-rendering="geometricPrecision"
+       transform="translate(405.14286,278.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <text
+         id="text8518"
+         clip-path="url(#clipPath5)"
+         y="15"
+         xml:space="preserve"
+         x="2"
+         style="stroke:none">+doesNotUnderstand:()</text>
+    </g>
+    <g
+       id="g8520"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(405.14286,260.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <text
+         id="text8522"
+         clip-path="url(#clipPath6)"
+         y="13"
+         xml:space="preserve"
+         x="28"
+         style="stroke:none">LexicalScope</text>
+    </g>
+    <g
+       id="g8524"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(431.14286,350.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <rect
+         id="rect8526"
+         clip-path="url(#clipPath7)"
+         y="0"
+         height="43"
+         width="80"
+         x="0"
+         style="stroke:none" />
+    </g>
+    <g
+       id="g8528"
+       stroke-miterlimit="0"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(431.14286,350.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <rect
+         id="rect8530"
+         clip-path="url(#clipPath7)"
+         y="0"
+         height="43"
+         width="80"
+         x="0"
+         style="fill:none" />
+      <line
+         id="line8532"
+         y1="18"
+         x2="80"
+         clip-path="url(#clipPath7)"
+         x1="0"
+         y2="18"
+         style="fill:none" />
+    </g>
+    <g
+       id="g8534"
+       text-rendering="geometricPrecision"
+       transform="translate(431.14286,368.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <text
+         id="text8536"
+         clip-path="url(#clipPath8)"
+         y="15"
+         xml:space="preserve"
+         x="2"
+         style="stroke:none">+bar()</text>
+    </g>
+    <g
+       id="g8538"
+       text-rendering="geometricPrecision"
+       transform="translate(431.14286,368.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <line
+         id="line8540"
+         y1="18"
+         x2="33"
+         clip-path="url(#clipPath8)"
+         x1="2"
+         y2="18"
+         style="fill:none" />
+    </g>
+    <g
+       id="g8542"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(431.14286,350.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <text
+         id="text8544"
+         clip-path="url(#clipPath9)"
+         y="13"
+         xml:space="preserve"
+         x="35"
+         style="stroke:none">C</text>
+    </g>
+    <g
+       id="g8546"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(261.14286,350.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <rect
+         id="rect8548"
+         clip-path="url(#clipPath10)"
+         y="0"
+         height="40"
+         width="80"
+         x="0"
+         style="stroke:none" />
+    </g>
+    <g
+       id="g8550"
+       stroke-miterlimit="0"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(261.14286,350.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <rect
+         id="rect8552"
+         clip-path="url(#clipPath10)"
+         y="0"
+         height="40"
+         width="80"
+         x="0"
+         style="fill:none" />
+      <line
+         id="line8554"
+         y1="18"
+         x2="80"
+         clip-path="url(#clipPath10)"
+         x1="0"
+         y2="18"
+         style="fill:none" />
+    </g>
+    <g
+       id="g8556"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(261.14286,350.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <text
+         id="text8558"
+         clip-path="url(#clipPath9)"
+         y="13"
+         xml:space="preserve"
+         x="35"
+         style="stroke:none">B</text>
+    </g>
+    <g
+       id="g8560"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(91.142856,350.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <rect
+         id="rect8562"
+         clip-path="url(#clipPath10)"
+         y="0"
+         height="40"
+         width="80"
+         x="0"
+         style="stroke:none" />
+    </g>
+    <g
+       id="g8564"
+       stroke-miterlimit="0"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(91.142856,350.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <rect
+         id="rect8566"
+         clip-path="url(#clipPath10)"
+         y="0"
+         height="40"
+         width="80"
+         x="0"
+         style="fill:none" />
+      <line
+         id="line8568"
+         y1="18"
+         x2="80"
+         clip-path="url(#clipPath10)"
+         x1="0"
+         y2="18"
+         style="fill:none" />
+    </g>
+    <g
+       id="g8570"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(91.142856,350.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <text
+         id="text8572"
+         clip-path="url(#clipPath9)"
+         y="13"
+         xml:space="preserve"
+         x="35"
+         style="stroke:none">A</text>
+    </g>
+    <g
+       id="g8574"
+       text-rendering="geometricPrecision"
+       transform="translate(471.14286,330.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <text
+         id="text8576"
+         clip-path="url(#clipPath13)"
+         y="13"
+         xml:space="preserve"
+         x="10"
+         style="stroke:none">enclosing</text>
+    </g>
+    <g
+       id="g8578"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(431.14286,443.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <rect
+         id="rect8580"
+         clip-path="url(#clipPath7)"
+         y="0"
+         height="43"
+         width="80"
+         x="0"
+         style="stroke:none" />
+    </g>
+    <g
+       id="g8582"
+       stroke-miterlimit="0"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(431.14286,443.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <rect
+         id="rect8584"
+         clip-path="url(#clipPath7)"
+         y="0"
+         height="43"
+         width="80"
+         x="0"
+         style="fill:none" />
+      <line
+         id="line8586"
+         y1="18"
+         x2="80"
+         clip-path="url(#clipPath7)"
+         x1="0"
+         y2="18"
+         style="fill:none" />
+    </g>
+    <g
+       id="g8588"
+       text-rendering="geometricPrecision"
+       transform="translate(431.14286,461.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <text
+         id="text8590"
+         clip-path="url(#clipPath8)"
+         y="15"
+         xml:space="preserve"
+         x="2"
+         style="stroke:none">+bar()</text>
+    </g>
+    <g
+       id="g8592"
+       text-rendering="geometricPrecision"
+       transform="translate(431.14286,461.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <line
+         id="line8594"
+         y1="18"
+         x2="33"
+         clip-path="url(#clipPath8)"
+         x1="2"
+         y2="18"
+         style="fill:none" />
+    </g>
+    <g
+       id="g8596"
+       font-weight="bold"
+       text-rendering="geometricPrecision"
+       transform="translate(431.14286,443.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <text
+         id="text8598"
+         clip-path="url(#clipPath9)"
+         y="13"
+         xml:space="preserve"
+         x="34"
+         style="stroke:none">D</text>
+    </g>
+    <g
+       id="g8600"
+       text-rendering="geometricPrecision"
+       transform="translate(515.14286,473.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:sans-serif">
+      <text
+         id="text8602"
+         clip-path="url(#clipPath15)"
+         y="11"
+         xml:space="preserve"
+         x="10"
+         style="stroke:none">target</text>
+    </g>
+    <g
+       id="g8604"
+       text-rendering="geometricPrecision"
+       transform="translate(421.14286,171.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:sans-serif">
+      <line
+         id="line8606"
+         y1="50"
+         x2="50"
+         clip-path="url(#clipPath16)"
+         x1="50"
+         y2="88"
+         style="fill:none" />
+      <polygon
+         id="polygon8608"
+         points="44,62 56,62 50,50 "
+         clip-path="url(#clipPath16)"
+         style="fill:#ffffff;stroke:none" />
+      <polygon
+         id="polygon8610"
+         clip-path="url(#clipPath16)"
+         points="44,62 56,62 50,50 "
+         style="fill:none" />
+    </g>
+    <g
+       id="g8612"
+       text-rendering="geometricPrecision"
+       transform="translate(122.14286,320.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:5;stroke-dashoffset:1;font-family:TeX Gyre Schola">
+      <line
+         id="line8614"
+         y1="50"
+         x2="138"
+         clip-path="url(#clipPath17)"
+         x1="50"
+         y2="50"
+         style="fill:none" />
+      <line
+         id="line8616"
+         y2="44"
+         y1="50"
+         x2="126"
+         x1="138"
+         clip-path="url(#clipPath17)"
+         style="fill:none;stroke-dasharray:none;stroke-dashoffset:0" />
+      <line
+         id="line8618"
+         y2="56"
+         y1="50"
+         x2="126"
+         x1="138"
+         clip-path="url(#clipPath17)"
+         style="fill:none;stroke-dasharray:none;stroke-dashoffset:0" />
+    </g>
+    <g
+       id="g8620"
+       text-rendering="geometricPrecision"
+       transform="translate(292.14286,320.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:5;stroke-dashoffset:1;font-family:TeX Gyre Schola">
+      <line
+         id="line8622"
+         y1="50"
+         x2="138"
+         clip-path="url(#clipPath17)"
+         x1="50"
+         y2="50"
+         style="fill:none" />
+      <line
+         id="line8624"
+         y2="44"
+         y1="50"
+         x2="126"
+         x1="138"
+         clip-path="url(#clipPath17)"
+         style="fill:none;stroke-dasharray:none;stroke-dashoffset:0" />
+      <line
+         id="line8626"
+         y2="56"
+         y1="50"
+         x2="126"
+         x1="138"
+         clip-path="url(#clipPath17)"
+         style="fill:none;stroke-dasharray:none;stroke-dashoffset:0" />
+    </g>
+    <g
+       id="g8628"
+       text-rendering="geometricPrecision"
+       transform="translate(421.14286,251.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <line
+         id="line8630"
+         y1="50"
+         x2="50"
+         clip-path="url(#clipPath18)"
+         x1="50"
+         y2="98"
+         style="fill:none" />
+      <line
+         id="line8632"
+         y1="98"
+         x2="56"
+         clip-path="url(#clipPath18)"
+         x1="50"
+         y2="86"
+         style="fill:none" />
+      <line
+         id="line8634"
+         y1="98"
+         x2="44"
+         clip-path="url(#clipPath18)"
+         x1="50"
+         y2="86"
+         style="fill:none" />
+    </g>
+    <g
+       id="g8636"
+       text-rendering="geometricPrecision"
+       transform="translate(421.14286,344.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:sans-serif">
+      <line
+         id="line8638"
+         y1="50"
+         x2="50"
+         clip-path="url(#clipPath18)"
+         x1="50"
+         y2="98"
+         style="fill:none" />
+      <polygon
+         id="polygon8640"
+         points="44,62 56,62 50,50 "
+         clip-path="url(#clipPath18)"
+         style="fill:#ffffff;stroke:none" />
+      <polygon
+         id="polygon8642"
+         clip-path="url(#clipPath18)"
+         points="44,62 56,62 50,50 "
+         style="fill:none" />
+    </g>
+    <g
+       id="g8644"
+       text-rendering="geometricPrecision"
+       transform="translate(462.14286,230.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:sans-serif">
+      <line
+         id="line8646"
+         y1="50"
+         x2="119"
+         clip-path="url(#clipPath19)"
+         x1="76"
+         y2="50"
+         style="fill:none" />
+      <line
+         id="line8648"
+         y1="50"
+         x2="119"
+         clip-path="url(#clipPath19)"
+         x1="119"
+         y2="240"
+         style="fill:none" />
+      <line
+         id="line8650"
+         y1="240"
+         x2="50"
+         clip-path="url(#clipPath19)"
+         x1="119"
+         y2="240"
+         style="fill:none" />
+      <line
+         id="line8652"
+         y1="240"
+         x2="62"
+         clip-path="url(#clipPath19)"
+         x1="50"
+         y2="246"
+         style="fill:none" />
+      <line
+         id="line8654"
+         y1="240"
+         x2="62"
+         clip-path="url(#clipPath19)"
+         x1="50"
+         y2="234"
+         style="fill:none" />
+    </g>
+    <g
+       id="g8656"
+       text-rendering="geometricPrecision"
+       transform="translate(341.14286,350.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <text
+         id="text8658"
+         clip-path="url(#clipPath20)"
+         y="13"
+         xml:space="preserve"
+         x="9"
+         style="stroke:none">&lt;&lt;nested&gt;&gt;</text>
+    </g>
+    <g
+       id="g8660"
+       text-rendering="geometricPrecision"
+       transform="translate(171.14286,350.71933)"
+       font-size="11"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola">
+      <text
+         id="text8662"
+         clip-path="url(#clipPath20)"
+         y="13"
+         xml:space="preserve"
+         x="9"
+         style="stroke:none">&lt;&lt;nested&gt;&gt;</text>
+    </g>
+    <path
+       style="fill:none;stroke:#808080;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#Arrow1LendY)"
+       d="m 535,307.36218 c 0,0 45,55 15,95 -30,40 -30,40 -30,40"
+       id="path9071"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#808080;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#Arrow1Lendq)"
+       d="m 440,437.36218 c 0,0 -15,-15 -10,-25 5,-10 5,-10 5,-10"
+       id="path9073"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#808080;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#Arrow1LendZ)"
+       d="m 435,342.36218 c 0,0 -115,-20 -135,-10 -20,10 -20,10 -20,10"
+       id="path9075"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path9077"
+       d="m 265,342.36218 c 0,0 -115,-20 -135,-10 -20,10 -20,10 -20,10"
+       style="fill:none;stroke:#808080;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#Arrow1Lendb)" />
+    <text
+       transform="translate(90.642856,180.21933)"
+       sodipodi:linespacing="125%"
+       id="text8054"
+       y="55.472019"
+       x="49.497475"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve"><tspan
+         y="55.472019"
+         x="49.497475"
+         id="tspan8056"
+         sodipodi:role="line" /></text>
+    <g
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola"
+       font-size="11"
+       transform="translate(264,367.36218)"
+       text-rendering="geometricPrecision"
+       id="g8058">
+      <text
+         style="stroke:none"
+         x="2"
+         xml:space="preserve"
+         y="15"
+         clip-path="url(#clipPath8)"
+         id="text8060">+foo()</text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text8066"
+         y="-80"
+         x="-124"
+         style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:TeX Gyre Schola;-inkscape-font-specification:TeX Gyre Schola"
+         xml:space="preserve"><tspan
+           y="-80"
+           x="-124"
+           id="tspan8068"
+           sodipodi:role="line">(globals)</tspan></text>
+      <path
+         transform="translate(-173.35714,-187.14285)"
+         inkscape:connector-curvature="0"
+         id="path8070"
+         d="m 9.357144,162.14285 c 0,0 -5,-40 15,-50 20,-10 20,-10 20,-10"
+         style="stroke-linejoin:miter;marker-end:url(#Arrow1Lendqz);stroke-opacity:1;stroke-dashoffset:0;stroke:#808080;stroke-linecap:butt;stroke-miterlimit:10;stroke-dasharray:1, 1;stroke-width:1;fill:none" />
+    </g>
+    <g
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:TeX Gyre Schola"
+       font-size="11"
+       transform="translate(264,367.36218)"
+       text-rendering="geometricPrecision"
+       id="g8062">
+      <line
+         style="fill:none"
+         y2="18"
+         x1="2"
+         clip-path="url(#clipPath8)"
+         x2="33"
+         y1="18"
+         id="line8064" />
+    </g>
+  </g>
+</svg>
