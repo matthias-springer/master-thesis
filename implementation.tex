@@ -159,6 +159,44 @@ Figure~\ref{impl:lex_scope} shows how the \texttt{scope} lookup works in a sligh
 
 Note, that the reference to \texttt{self} (\texttt{target}) cannot be established at compile time, because it is unclear what the polymorphic receiver class is. Therefore, references to the keyword \texttt{scope} have to be replaced by a message send: \texttt{LexicalScope for: self in: enclosing}. This has the side effect that the decompiled source code (and the code shown in the debugger) looks slightly different from the code written by the programmer.
 
+\section{Class Caching}
+Whenever a nested class is accessed, the class accessor method checks if the class was already generated. If that is the case, the cached version if the class is returned. For this reason, every class specification with a unary selector (unparameterized class) has an instance variable \texttt{classCache}, which contains the cached class object. The system does not cache parameterized classes, as this could result in an excessive number of classes being kept around.
+
+One can argue, that a nested weak identity key dictionary data structure could solve this problem: \texttt{classCache} is a \texttt{WeakIdentityKeyDictionary}, whose keys are the first argument. The values are again \texttt{WeakIdentityKeyDictionary}s, mapping the second argument to \texttt{WeakIdentityKeyDictionary}s. Eventually, the last argument is mapped to class objects instead of dictionaries (Figure~\ref{fig:impl_class_cache}).
+\begin{figure}[!htp]
+	\includegraphics[width=\textwidth]{class_cache.pdf}
+	\centering
+	\caption{Class Cache stored in \texttt{ClassSpecification}}
+	\label{fig:impl_class_cache}
+\end{figure}
+
+In this case, class objects are garbage collected once there is no reference to at least one of the arguments in the system anymore. However, it depends on how exactly parameterized classes are used. If parameterized classes are used heavily, for example with \texttt{SmallInteger}s as parameters, no class would ever be garbage collected, because \texttt{SmallInteger}s are represented as tagged objects in Squeak~\cite{Bolz:2008:BFO:1482373.1482382, papetechreport}. If parameterized classes are used as mixins, this is arguably less of a problem, because the the number of base classes to which a mixin is applied is usually not excessively large. However, note, that mixin applications can easily be cached by aliasing them as an unparameterized class (Figure~\ref{fig:impl_cached_mixin_application}). We argue that mixins will most of the time be used in such a way, because writing the mixin application explicitly is more verbose and hinders readability; in addition, the programmer might want to add additional methods to the mixin application, in which case the mixin application must be subclassed or aliased as described, anyway.
+
+\begin{figure}[!htp]
+\begin{lstlisting}
+MyLibrary class>>BaseClass
+	< class >
+	" This is the class that serves as 
+	  an input for the mixin in this example. "
+	
+
+MyLibrary class>>CollectionMixin: base
+    < class >
+    " This class is uncached because it is parameterized "
+
+    ^ base subclass
+
+
+MyLibrary class>>MyCollection
+    < class >
+    " This is the cached mixin application. "
+
+    ^ self CollectionMixin: self BaseClass
+\end{lstlisting}
+\caption{Cached Mixin Application Example}
+\label{fig:impl_cached_mixin_application}
+\end{figure}
+
 \section{Class Updates}
 using instances weak array on specification
 
