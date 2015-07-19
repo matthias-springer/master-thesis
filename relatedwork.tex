@@ -2,8 +2,8 @@
 
 \section{Class Name Clashes}
 
-\subsection{Namespaces/Packages}
-Many programming languages have a concept of namespaces or packages. Classes are typically organized in a package, which is a set of classes. Classes within a package can usually reference each other directly. However, references to classes in other packages typically require imports, aliases, or a fully qualified name.
+\subsection{Namespaces/Packages and Class Nesting}
+Many programming languages have a concept of namespaces or packages. Classes are typically organized in a package, which is a set of classes. Classes within a package can usually reference each other directly. However, references to classes in other packages typically require imports, aliases, or a fully qualified name. Some programming languages also support class nesting, where the enclosing class creates a namespace for all inner/nested classes.
 
 \paragraph{VisualWorks Namespaces}
 VisualWorks is a commerical Smalltalk implementation sold by Cincom and supports namespaces~\cite{brauer2015programming}. A namespace is a container for other namespaces, classes, and shared variables. Since a namespace can be defined within another namespace, VisualWorks allows for a form of hierarchical decomposition. All namespace members (e.g., classes) in the same namespace can be referenced by just writing down their names. All namespace members in other namespaces can be referenced by writing down their fully qualified name, which is the concatenation of all nested namespace names and the name of the class with dots as separators. For example, the fully qualified name of a class \texttt{C1} in namespace \texttt{B} in namespace \texttt{A} is \texttt{A.B.C1}. Relatives name are also supported: for example, \texttt{A.B.C1} can be referenced as \texttt{B.C1} within \texttt{A}.
@@ -27,18 +27,25 @@ Java supports the concept of nested classes: a class can either be a top-level c
 
 Static member classes are similar to packages. By just looking at source code that references a static member class, it is not obvious whether the class is statically nested or contained in a package.
 
-Java imposes certain restrictions on member classes. For example, nonstatic member classes are not allowed to have static member which are not final~\cite{javalang1}. Furthermore, a subclass cannot override a member class definition~\cite{igarashi2002inner}. With \emph{Jx}, Nystrom et al. changed the Java language is such a way, that subclasses can enhance member classes~\cite{Nystrom:2004:SEV:1028976.1028986}: the new member class is always a subclass and a subtype of the member class in the superclass. Jx allows changing the superclass of a member class in a subclass of the enclosing class, a form of mixin modularity.
+Java imposes certain restrictions on member classes. For example, nonstatic member classes are not allowed to have static member which are not final~\cite{javalang1}. Furthermore, a subclass cannot override a member class definition~\cite{igarashi2002inner}; it can just define its own member class. The difference is that overriding implies late binding, which is not the case in Java. With \emph{Jx}, Nystrom et al. changed the Java language is such a way, that subclasses can enhance member classes~\cite{Nystrom:2004:SEV:1028976.1028986}: the new member class overrides the original one and is always a subclass and a subtype of the member class in the superclass. Jx also allows changing the superclass of a member class in a subclass of the enclosing class, a form of mixin modularity.
 
 \paragraph{Ruby Modules}
 Ruby has the concept of classes and modules. Modules are classes which are not instantiable. They can be included in classes and be used as mixins. Modules and classes can be nested in each other, defining a namespace. Classes and modules can be accessed using their fully qualified name, which is the concatenation of their names with two colons as separator. For example, if class \texttt{B} is nested in class \texttt{A}, \texttt{B}'s fully qualified named is \texttt{A::B}. Classes and modules can also be accessed using relative names. For example, when accessing \texttt{A::B}, Ruby first looks for \texttt{A} in the current class/module. If there no such member, it looks in the enclosing class/module.
 
-Nested classes and modules cannot be overriden in subclasses. Furthermore, a nested class/module is always a class-side member of their enclosing class/module (nonstatic member class in Java).
+In Ruby, a class can have methods, variables, and constants. An inner class or module is just a constant defined on the enclosing class. Constants are copied or shared during subclassing. Subclasses can replace inner classes with their own implementation. A nested class/module is always a class-side member of their enclosing class/module (nonstatic member class in Java).
 
-In Ruby, classes and modules can be extended after they have been defined. In case of an accidential class/module name clash, the two (or more) classes/modules are effectively merged. In case of colliding methods, the method that was last seen (read from the file) overwrites all previous definitions. This process is often used deliberately in Ruby, in order change the behavior of a library or application, e.g., to fix a known bug (\emph{monkey patching})~\cite{Benson:2008:AR:1386543}.
+In Ruby, classes and modules can be extended after they have been defined. In case of an accidential class/module name clash, the two (or more) classes/modules are effectively merged. In case of colliding methods, the method that was last seen (read from the file) overwrites all previous definitions. This process is often used deliberately in Ruby, in order change the behavior of a library or application, e.g., to fix a known bug (\emph{monkey patching})~\cite{Benson:2008:AR:1386543}. 
 
 \paragraph{Python Modules}
+In Python, every source code file is a module. Modules have to be imported, before they can be used within another module. Members defined in a module can be referenced by concatenating the module name and the name of the member (e.g., class or function) inside the module with a dot as a separator, if the module is imported. It is also possible to import single members from a module with their own name or an alias. These members can be accessed without writing down the module name.
 
-VisualWorks, Java, Ruby, Python
+In Python, every directory with a \texttt{\_\_init\_\_.py} source code file is a package. Packages can contain other packages and modules. Packages can be imported just like modules. The fully qualified name of a module is the concatenation of all package names and the module name, with a dot as a separator.
+
+Modules in other packages can be imported by writing their fully qualified name or using a path relative to the current module~\cite{pythonp1}.
+
+Python supports inner classes, but only for readability and understandability reasons, and their usage is not wide-spread. Inner classes are class-side members of the enclosing class. In fact, for every inner class, Python creates an attribute on the enclosing class object with the inner class name as name and the inner class object as value. Since all nested class attributes are copied during subclassing, a subclass shares the same inner classes as the superclass. Redefining an inner class on the superclass simply replaces it. Inner classes do not affect the class lookup: for example, when two inner classes nested on the same level want to reference each other, both have to write their \emph{full path} (i.e., sequence of attribute reads).
+
+Whenever a top-level class is defined and there is already a class with that name in the same module, the new class replaces the existing one.
 
 \subsection{Squeak Environments}
 
