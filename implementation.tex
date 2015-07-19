@@ -92,23 +92,45 @@ NewClass class
 \label{fig:impl_subclass_squeak}
 \end{figure}
 
-Figure~\ref{fig:impl_subclass_nested} shows how subclassesa created in our system. \texttt{NewClass} is a class generator method and also the name of the new class. Therefore, it is no longer necessary to pass a symbol with the name of the new class to the \texttt{subclass:} method. Note, that the \textttt{<class>} pragma is necessary to distinguish between class generator methods and regular methods, which might accidentially return a class. Only in the former case, a class specification object is created.
+Figure~\ref{fig:impl_subclass_nested} shows how subclasses are created in our system. \texttt{NewClass} is a class generator method and also the name of the new class. Therefore, it is no longer necessary to pass a symbol with the name of the new class to the \texttt{subclass:} method. Note, that the \texttt{<class>} pragma is necessary to distinguish between class generator methods and regular methods, which might accidentially return a class. Only in the former case, a class specification object is created.
 
 \begin{figure}[!htp]
 \begin{lstlisting}
 NewClass
     < class >
     ^ Object 
-    	subclassWithInstVars: 'foo bar'
-    	classVars: 'Bar'
+        subclassWithInstVars: 'foo bar'
+        classVars: 'Bar'
         classInstVars: 'Foo'
 \end{lstlisting}
 \caption{Subclass notation with nested classes}
 \label{fig:impl_subclass_nested}
 \end{figure}
 
+\section{Implementation of Keywords}
+In this section, we explain how the keywords \texttt{enclosing}, \texttt{outer}, and \texttt{scope} are implemented. All message sends to \texttt{enclosing} are forwarded to the enclosing class. All message sends to \texttt{outer} are forwarded all enclosing classes consecutively, whenever a class does not understand the message. All message sends to \texttt{scope} are first treated as \texttt{self} sends, then as sends to \texttt{outer}.
 
-\section{\texttt{thisOuter} and \texttt{thisScope}}
+\paragraph{Implementation of \texttt{enclosing}}
+During compilation, all references to \texttt{enclosing} bound to the enclosing classes, which is known during class initialization. Technically, every class has its own Squeak environment which binds \texttt{enclosing} to the enclosing class. Therefore, it is also possible to evaluate \texttt{enclosing} in the debugger, for example.
+
+\paragraph{Implementation of \texttt{outer}}
+During compilation, all references to \texttt{outer} are bound to an instance of \texttt{LexicalScope}. This class is a subclass of \texttt{ProtoObject}, holds a reference to the enclosing class, and contains a \texttt{doesNotUnderstand:} handler, that forwards messages to the enclosing class. If the enclosing class does not understand the message, the message is forwarded to that class' enclosing class. If at some point, a top-level class without an enclosing class is reached, the handler looks for an entry in the \texttt{globals} dictionary with the message's selector.
+
+\begin{figure}[!htp]
+	\includegraphics[scale=1]{lexical_outer.pdf}
+	\centering
+	\caption{\texttt{LexicalScope} for \texttt{outer} keyword example}
+	\label{impl:lex_outer}
+\end{figure}
+
+As an example, let us assume that we have classes nested as shown in Figure~\ref{fig:concept_nested_notation} and that all following message sends to \texttt{outer} happen in \texttt{A class>>B class>>C class>>m4}. See Figure~\ref{impl:lex_outer} for a visualization of the lookup.
+\begin{itemize}
+	\item \texttt{outer foo}: lookup in \texttt{enclosing} (class \texttt{A B}) succeeds.
+	\item \texttt{outer B}: lookup in \texttt{enclosing} fails, but lookup in \texttt{enclosing enclosing} (class \texttt{A}) succeeds.
+	\item \texttt{outer A}: lookup in \texttt{enclosing} and \texttt{enclosing enclosing} fails, but \texttt{A} is present in the \texttt{globals} dictionary.
+	\item \texttt{outer Object}: same as before. All classes outside of our system are also present in the \texttt{globals} dictionary.
+	\item \texttt{outer D}: lookup fails and raises a \texttt{MessageNotUnderstood} error.
+\end{itemize}
 
 \section{Class Updates}
 using instances weak array on specification
