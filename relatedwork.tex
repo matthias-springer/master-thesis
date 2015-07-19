@@ -24,9 +24,20 @@ Java supports the concept of nested classes: a class can either be a top-level c
 	\item \emph{Anonymous class:} a class without a name. In older Java versions, it was frequently used as a substitute for missing block closures. Lambda expressions are available since Java 8, making anonymous classes obsolete in many use cases. Note, that since classes are not first-class objects in Java, it is difficult to pass anonymous classes around and to use them in a different context without using meta programming.
 	\item \emph{Local class:} a class that can be defined anywhere where a local variable can be defined. It is the least frequently used kind of classes.
 \end{itemize}
-% TODO: talk about different types of classes
+
+Static member classes are similar to packages. By just looking at source code that references a static member class, it is not obvious whether the class is statically nested or contained in a package.
+
+Java imposes certain restrictions on member classes. For example, nonstatic member classes are not allowed to have static member which are not final~\cite{javalang1}. Furthermore, a subclass cannot override a member class definition~\cite{igarashi2002inner}. With \emph{Jx}, Nystrom et al. changed the Java language is such a way, that subclasses can enhance member classes~\cite{Nystrom:2004:SEV:1028976.1028986}: the new member class is always a subclass and a subtype of the member class in the superclass. Jx allows changing the superclass of a member class in a subclass of the enclosing class, a form of mixin modularity.
 
 \paragraph{Ruby Modules}
+Ruby has the concept of classes and modules. Modules are classes which are not instantiable. They can be included in classes and be used as mixins. Modules and classes can be nested in each other, defining a namespace. Classes and modules can be accessed using their fully qualified name, which is the concatenation of their names with two colons as separator. For example, if class \texttt{B} is nested in class \texttt{A}, \texttt{B}'s fully qualified named is \texttt{A::B}. Classes and modules can also be accessed using relative names. For example, when accessing \texttt{A::B}, Ruby first looks for \texttt{A} in the current class/module. If there no such member, it looks in the enclosing class/module.
+
+Nested classes and modules cannot be overriden in subclasses. Furthermore, a nested class/module is always a class-side member of their enclosing class/module (nonstatic member class in Java).
+
+In Ruby, classes and modules can be extended after they have been defined. In case of an accidential class/module name clash, the two (or more) classes/modules are effectively merged. In case of colliding methods, the method that was last seen (read from the file) overwrites all previous definitions. This process is often used deliberately in Ruby, in order change the behavior of a library or application, e.g., to fix a known bug (\emph{monkey patching})~\cite{Benson:2008:AR:1386543}.
+
+\paragraph{Python Modules}
+
 VisualWorks, Java, Ruby, Python
 
 \subsection{Squeak Environments}

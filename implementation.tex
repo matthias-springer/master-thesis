@@ -1,6 +1,7 @@
 \chapter{Implementation}
 
 \section{Meta Model and Instantiation}
+\label{sec:impl_meta_model}
 Our system has a simple meta model for describing (nested) classes and their methods. The graphical user interface operates exclusively on the meta model and makes changes to it. The meta model can then be instantiated to generate the actual classes. When changes to the meta model are made, these changes can also be applied to already existing instantiations of the model, allowing giving programmers the feeling of working with a live system.
 
 \paragraph{Smalltalk-80 Class/Meta Model}
@@ -31,7 +32,7 @@ Figure~\ref{fig:impl_meta_model} shows the meta model in our system. The meta mo
 	\label{fig:impl_meta_model}
 \end{figure}
 
-\paragraph{Class Specifications}
+\paragraph{Class Specification}
 A class specification describes classes. It has a collection of \texttt{MethodSpecification}s, representing instance methods of the class. Upon instantiation, all method specifications are instantiated within the target class. For every class specification, there is a corresponding method specification containing the source code of the class generator method in the parent's method dictionary. This method specification determines (when executed in the running system) to which class the methods will be added (\emph{target class}). Top-level classes are an exception: they are always a new subclass of the class \texttt{Module}.
 
 \paragraph{Meta Class Specification}
@@ -115,6 +116,7 @@ NewClass
 \end{figure}
 
 \section{Implementation of Keywords}
+\label{sec:impl_keywords}
 In this section, we explain how the keywords \texttt{enclosing}, \texttt{outer}, and \texttt{scope} are implemented. All message sends to \texttt{enclosing} are forwarded to the enclosing class. All message sends to \texttt{outer} are forwarded all enclosing classes consecutively, whenever a class does not understand the message. All message sends to \texttt{scope} are first treated as \texttt{self} sends, then as sends to \texttt{outer}.
 
 \paragraph{Implementation of \texttt{enclosing}}
@@ -198,15 +200,68 @@ MyLibrary class>>MyCollection
 \end{figure}
 
 \section{Class Updates}
-using instances weak array on specification
+Squeak is a live programming environment with immediate feedback. When the programmers changes a class, these changes should immediately affect all instances of the class in the system, i.e., exisiting instances must be migrated to the new class~\cite{casaccio2011bootstrapping}. In that sense, Squeak and many other Smalltalk implementations~\cite{Penney:1987:CMG:38765.38817} are different from other programming languages with an ``edit/compile/run cycle''~\cite{conf/sofsem/NierstraszG10}: the programmer has the feeling that there is no difference between compile time and runtime.
+
+For this reason, our system has to ensure that changes to the source code are immediately applied to all living objects in the image. It is important to understand, that changes to parameterized class specifications can affect multiple classes (model instantiations) at runtime. Therefore, every class specification stores a weak collection of all its instantiations. When a class specification is changed, all of its instantiations can be looked up easily and adapted one by one.
+
+\paragraph{Changing Instance Methods}
+Whenever an instance method is added, removed, or changed, the system retrieves the collection of all instantiations, and performs the corresponding change on the class object. This does not require creating a new class object, but merely changing the method dictionary using Squeak's meta object protocol~\cite{Goldberg:1983:SLI:273, Kiczales:1991:AMP:574212}.
+
+\paragraph{Changing Class Methods}
+Changing class methods is equivalent to changing instance methods, with the only difference being that the meta class object is changed instead of the class object.
+
+\paragraph{Changing Instance Variables}
+This kind of class change is more difficult to handle than method changes. Whenever an instance variable is add or removed, some methods might have to be recompiled, because instance variables are referenced with indices in the bytecode (see also Section~\ref{sec:impl_meta_model}). 
+
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[scale=1]{inst_vars.pdf}
+	\caption{Instance Variable Indexing}
+	\label{fig:impl_inst_vars}
+\end{figure}
+
+In Figure~\ref{fig:impl_inst_vars}, class \texttt{X} has instance variable \texttt{foo}, class \texttt{Y} has instance variables \texttt{foo} and \texttt{bar}, and class \texttt{Z} has instance variables \texttt{foo}, \texttt{bar}, \texttt{baz}, and \texttt{qux}. Instance variables are indexed according to the superclass hierarchy. Therefore, \texttt{foo} has index 0, \texttt{bar} has index 1, \texttt{baz} has index 2, and \texttt{qux} has index 3. These indices are used in the bytecode instead of string literals or symbols. Therefore, when instance variables are changed in \texttt{X}, all classes (methods in these classes) \texttt{X}, \texttt{Y}, and \texttt{Z} have to be recompiled. If instance variables in \texttt{Z} are changed, only \texttt{Z} has to be recompiled.
+
+What is more interesting is how instance variables are defined in our system: they are part of the class generator method (Figure~\ref{fig:impl_subclass_nested}). Therefore, the system has to execute that method a second time whenever it is changed. The method returns a new class object which must be initialized again, i.e., all methods are recompiled. Note, Squeak has the same behavior: whenever an instance variable is changed, methods in the current class and all subclasses are recompiled. 
+
+Class generator methods for unparameterized classes can just be invoked without any parameters. However, in order to update parameterized classes, the system has to cache the arguments provided to the class generator method when the class was generated. Therefore, in addition to the class cache, every class specification maintains an argument cache, mapping instantiations (classes) to an array of arguments. This argument cache is a \texttt{WeakIdentityKeyDictionary} and different from the dictionary data structure shown in Figure~\ref{fig:impl_class_cache}. That class cache would map arguments to instantiations, but this cache maps instantiations to arguments. Whenever there is no reference to an instantiation in the image anymore, the array of arguments can be garbage collected, because nobody can access the class anymore; therefore, this class does not have to be updated.
+
+Note, that invoking the class generator method a second time might generate a new class. Therefore, all references to the old class have to replaced with references to the new class using the \texttt{becomeForward:} method. Also, all instances of the old class have to be migrated to the new class. This is no different from what Squeak does when an instance variable is added or removed, and not described in any more detail in this work. We encourage the reader to consult the \emph{Smalltalk Blue Book}~\cite{Goldberg:1983:SLI:273} for more information.
+
+\paragraph{Changing Class Instance Variables}
+Changing class instance variables is equivalent to changing instance variables, with the only difference being that the meta class object is changed instead of the class object.
+
 
 \section{Integration in Squeak}
+In this section, we describe how our system is integrated in Squeak.
 
 \subsection{Module Repository}
-replacement for Smalltalk dict
+At the moment, there is a separate \emph{module repository} for our system. This is a singleton class with a collection all top-level class specifications and a collection of instantiated top-level class specifications. This is useful for development purposes, because basic Squeak classes can be migrated to our system without the risk of damaging the base system. References to classes are first looked up in the module repository, then in the Smalltalk \texttt{globals} dictionary.
+
+Eventually, all classes from our system should be listed in the Smalltalk \texttt{globals} dictionary, replacing system classes with their counterparts written in our system, which would also make the module repository obsolete.
 
 \subsection{IDE Support}
-works in workspace, test runner. How to write tests? New system browser
+Our system comes with a proof-of-concept implementation of a class browser. The existing system browser cannot be used, because it cannot handle class nesting. Our class browser is written in Vivide~\cite{Taeumel:2012:VPE:2384592.2384604}, a framework for dataflow-driven tool development, and shown in Figure~\ref{fig:impl_class_browser}. It supports creating and deleting methods and nested classes, but basic refactoring functionality and functionality such as browsing senders and receivers is still missing.
+
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[width=\textwidth]{screenshot_classbrowser.png}
+	\caption{Class Browser for Nested Classes}
+	\label{fig:impl_class_browser}
+\end{figure}
+
+Our system is also integrated with the Squeak workspace and the test runner (Figure~\ref{fig:impl_integration}). Unit tests can be written and will show up in the test runner, as long as test classes are defined in a nested class called \texttt{Tests} within a top-level class. Later versions might traverse the entire nested classes graph to look for subclasses of \texttt{TestCase}, but this basic functionality allows us already to test parts of our system with code written in the system itself.
+
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[width=\textwidth]{screenshot_integration.png}
+	\caption{Integration in Squeak}
+	\label{fig:impl_integration}
+\end{figure}
 
 \subsection{Debugger}
-shows slightly different code (thisContext automatically inserted, generator methods)
+The Squeak debugger can be used to step through the source code. Parts of the source code can be selected and being evaluated. This also works keywords that were introduced with our system, such as \texttt{outer} and \texttt{enclosing}, because they are bound in the Squeak environment of the class.
+
+What is still an issue is that the debugger shows slightly different source code from what the programmer wrote. For example, class references are prepended with the \texttt{scope} keyword. In addition, whenever the scope keyword is used, code must be inserted that generates a new instance of \texttt{LexicalScope}, because \texttt{scope} cannot be bound at compile time (see Section~\ref{sec:impl_keywords}). When stepping through the source code, the programmer will see additional stack frames for the class generator method and the class accessor method. The class accessor method is merely generated code, which is why it might be hidden in future versions of our system.
+
+Whenever the source code is changed in the debugger, the corresponding method specification is changed, causing all instantiations to be updated.
