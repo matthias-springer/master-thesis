@@ -25,9 +25,9 @@ For this reason, we cannot use the Smalltalk-80 meta model to generate new class
 \paragraph{Nested Classes Meta Model}
 Figure~\ref{fig:impl_meta_model} shows the meta model in our system. The meta model is built around specifications: there are specifications for classes, meta classes, and methods. A specification describes how its corresponding object is built. \texttt{ClassSpecification}s generate classes, \texttt{MetaclassSpecification}s generate meta classes, and \texttt{MethodSpecification}s generate methods. Since classes cannot exist without their respective meta classes, a class specification is always linked with its meta class specification and vice-versa. When a class specification is instantiated, the system generates both the class and the meta class. Meta class specifications cannot be instantiated.
 
-\begin{figure}
+\begin{figure}[!hbp]
 	\centering
-	\includegraphics[scale=1]{metamodel.pdf}
+	\includegraphics[scale=0.75]{metamodel.pdf}
 	\caption{Meta Model for Nested Classes}
 	\label{fig:impl_meta_model}
 \end{figure}
