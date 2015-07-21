@@ -48,6 +48,7 @@ Python supports inner classes, but only for readability and understandability re
 Whenever a top-level class is defined and there is already a class with that name in the same module, the new class replaces the existing one.
 
 \subsection{Squeak Environments}
+\label{sec:rel_sq_env}
 
 \subsection{Newspeak Modules}
 
@@ -80,3 +81,36 @@ Ruby Modules, Python Multiple Inheritance, Newspeak, Jigsaw
 
 \subsection{Traits}
 Squeak implementation
+
+\subsection{Java Generics}
+Java generics allow classes and interfaces to be parameterized by one or multiple classes and interfaces for type checking reasons~\cite{bracha2004generics}. Theya are often used together with collections~\cite{Parnin:2011:JGA:1985441.1985446}. Generic parameters are defined as part of the class or interface definition. When a class or interface is used, the programmer can pass classes and interfaces as arguments.
+
+\begin{figure}[!htp]
+\begin{lstlisting}
+class Array<T> {
+    T[] storage;
+
+    public List(int size) {
+        storage = /* ??? */;
+    }
+
+    T get(int index) {
+        return storage[index];
+    }
+
+    void set(int index, T value) {
+        storage[index] = value;
+    }
+}
+
+Array<String> arr = new Array<String>(100);
+\end{lstlisting}
+\caption{Generic array implementation using Java generics}
+\label{fig:rel_java_generics}
+\end{figure}
+
+Figure~\ref{fig:rel_java_generics} shows how Java generics are used in practise. \texttt{T} is the generic parameter of the class \texttt{Array}. The compiler ensures that only arguments with the correct type \texttt{T} can be passed to \texttt{set()} and knows that \texttt{get()} can only return objects of type \texttt{T}. 
+
+One shortcoming of Java generics is type erasure: generic type information is only known at compile time, but not at runtime. Therefore, Java actually allocates a storage array of type \texttt{Object[]}. Therefore, it is difficult to initialize \texttt{storage} to an array of type \texttt{T}. In fact, the statement \texttt{new T[size]} does not compile. What the programmer could write instead is an unchecked type cast~\cite{nino2007cost}: \texttt{(T[]) new Object[size]}.
+
+\subsection{C++ Templates}

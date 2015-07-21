@@ -46,7 +46,7 @@ A method specification describes methods. It contains the source code of the met
 Note, that different byte code must be generated for different target classes: for example, instance variable reads and write are compiled to parameterized\footnote{There are separate bytecodes for reading the first or second instance variable etc.} \texttt{pushRcvr:} and \texttt{popIntoRcvr:} bytecodes, where instance variables are referenced with their index\footnote{The first instance variable has index 0, second index variable has index 1, etc.}. In addition, the \texttt{outer} and the \texttt{enclosing} keyword must be bound to different method literals, depending on the lexical scope of the class.
 
 \paragraph{Class Initialization}
-Figure~\ref{fig:lazy_class_gen} illustrates how the system generates and initializes a nested class (class specification instantiation).
+Figure~\ref{fig:lazy_class_gen} illustrates how the system generates and initializes a nested class (class specification instantiation). \todo{Add methods for class parameters.}
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{lazy_class_gen.pdf}
@@ -88,13 +88,13 @@ Figure~\ref{fig:impl_subclass_squeak} shows how subclasses are created in Squeak
 \begin{figure}[!htp]
 \begin{lstlisting}
 Object subclass: #NewClass
-    instanceVariableNames: 'foo bar'
-    classVariableNames: 'Bar'
-    poolDictionaries: ''
-    category: 'Demo-Experiments'.
+    instanceVariableNames: <@\textcolor{RoyalPurple}{'foo bar'}@>
+    classVariableNames: <@\textcolor{RoyalPurple}{'Bar'}@>
+    poolDictionaries: <@\textcolor{RoyalPurple}{''}@>
+    category: <@\textcolor{RoyalPurple}{'Demo-Experiments'}@>.
 
 NewClass class
-	instanceVariableNames: 'Foo'.
+	instanceVariableNames: <@\textcolor{RoyalPurple}{'Foo'}@>.
 \end{lstlisting}
 \caption{Subclass notation in Squeak}
 \label{fig:impl_subclass_squeak}
@@ -104,12 +104,12 @@ Figure~\ref{fig:impl_subclass_nested} shows how subclasses are created in our sy
 
 \begin{figure}[!htp]
 \begin{lstlisting}
-NewClass
-    < class >
+<@\textbf{NewClass}@>
+    <@\textcolor{OliveGreen}{\textbf{< class >}}@>
     ^ Object 
-        subclassWithInstVars: 'foo bar'
-        classVars: 'Bar'
-        classInstVars: 'Foo'
+        subclassWithInstVars: <@\textcolor{RoyalPurple}{'foo bar'}@>
+        classVars: <@\textcolor{RoyalPurple}{'Bar'}@>
+        classInstVars: <@\textcolor{RoyalPurple}{'Foo'}@>
 \end{lstlisting}
 \caption{Subclass notation with nested classes}
 \label{fig:impl_subclass_nested}
@@ -176,21 +176,21 @@ In this case, class objects are garbage collected once there is no reference to 
 
 \begin{figure}[!htp]
 \begin{lstlisting}
-MyLibrary class>>BaseClass
-	< class >
-	" This is the class that serves as 
-	  an input for the mixin in this example. "
+<@\textbf{MyLibrary class>>BaseClass}@>
+    <@\textcolor{OliveGreen}{\textbf{< class >}}@>
+    " This is the class that serves as 
+      an input for the mixin in this example. "
 	
 
-MyLibrary class>>CollectionMixin: base
-    < class >
+<@\textbf{MyLibrary class>>CollectionMixin:}@> base
+    <@\textcolor{OliveGreen}{\textbf{< class >}}@>
     " This class is uncached because it is parameterized "
 
     ^ base subclass
 
 
-MyLibrary class>>MyCollection
-    < class >
+<@\textbf{MyLibrary class>>MyCollection}@>
+    <@\textcolor{OliveGreen}{\textbf{< class >}}@>
     " This is the cached mixin application. "
 
     ^ self CollectionMixin: self BaseClass
@@ -231,7 +231,6 @@ Note, that invoking the class generator method a second time might generate a ne
 \paragraph{Changing Class Instance Variables}
 Changing class instance variables is equivalent to changing instance variables, with the only difference being that the meta class object is changed instead of the class object.
 
-
 \section{Integration in Squeak}
 In this section, we describe how our system is integrated in Squeak.
 
@@ -265,3 +264,14 @@ The Squeak debugger can be used to step through the source code. Parts of the so
 What is still an issue is that the debugger shows slightly different source code from what the programmer wrote. For example, class references are prepended with the \texttt{scope} keyword. In addition, whenever the scope keyword is used, code must be inserted that generates a new instance of \texttt{LexicalScope}, because \texttt{scope} cannot be bound at compile time (see Section~\ref{sec:impl_keywords}). When stepping through the source code, the programmer will see additional stack frames for the class generator method and the class accessor method. The class accessor method is merely generated code, which is why it might be hidden in future versions of our system.
 
 Whenever the source code is changed in the debugger, the corresponding method specification is changed, causing all instantiations to be updated.
+
+\section{Source Code Management}
+Squeak uses Monticello as a source code packaging tool. Monticello can import and export code on a per-package basis. It can supports file system directories, HTTP URLs, and FTP URLs as repositories (i.e., the place where the code is loaded from and stored at). Whenever the programmer wants to get a new version of the source code, two options are available: packages can be loaded which will overwrite all local changes, and packages can be merged which will preserve local changes and only update new methods and classes. In case of merge conflicts, the programmer has to decide which version to load (old method or new method).
+
+SqueakSource\footnote{http://www.squeaksource.com/} used to be a remote repository for Monticello projects (groups of packages). It is now deprecated and SmalltalkHub\footnote{http://www.smalltalkhub.com/} is one possible replacement.
+
+Our system is not integrated with Monticello, because Monticello does currently not support class nesting. Many changes would be necessary in the import/export code, the user interface (e.g., merge window), and the backend repository; for example, SqueakSource allows browsing the code on its website, which does no longer work with class nesting.
+
+\paragraph{Source Code Format}
+Our system comes with its own import/export functionality and supports as only repository the file system as of now. The exported format is similar to the FileTree\footnote{https://github.com/dalehenrich/filetree} format. There is a directory for every class. Inside that directory, there are \texttt{instance} and \texttt{class} directories storing instance method and class methods, respectively. For every nested class, the corresponding \texttt{class} directory contains a source code file for the class generator method and a directory for the nested class. For every method, there is a file containing its source code with the selector of the method as file name (colons are replaced with dots).
+

@@ -48,6 +48,7 @@ This keyword is used make a message send within an object. The receiver is the s
 This keyword is also used to make a message send within an object. Again, the receiver is the same object as the sender, but the lookup starts at superclass of the sender's method class. Note, that \texttt{super} is bound to the superclass of the method class, not the superclass of the receiver's class.
 
 \paragraph{\texttt{enclosing} Keyword}
+\todo{Binding of arguments for parameterized classes.}
 This keyword is used to make a message send to the class that contains the current current. Consider, for example, that we want to send a message \texttt{foo} to class \texttt{A B} within \texttt{A class>>B class>>C>>m5} in Figure~\ref{fig:concept_nested_notation}. Either one of the following two statements works in this case.
 
 \begin{itemize}

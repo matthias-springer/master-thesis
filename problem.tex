@@ -2,13 +2,33 @@
 Design Principles Behind Smalltalk
 
 \section{Class Name Clashes}
-flat global namespace
+In Squeak, there can only be only one class with a certain name. Whenever, the programmer tries to add another class with the same name, a conflict occurs. When source code is loaded into the system with the Monticello version control system, the system asks the programmer if the already existing class should be replaced.
+
+Squeak has packages~\cite{Nierstrasz:2009:SE:1816759}, but these are not used as namespaces. Their purpose is to make it easier to find existing classes (like method protocols). They are also used as deployment units. The programmer does usually not load single classes into the system. Instead, packages (groups of classes) are loaded.
+
+As a workaround, it is good practice to add unique namespace prefixes to all class names in an application. Consider, for example, the RB AST library\footnote{\url{http://www.squeaksource.com/AST.html}}. This library is used for parsing Smalltalk source code and working with abstract syntax trees (AST). Among others, the library contains classes for parsing code and representing AST nodes. All of these classes start with an \texttt{RB} prefix, e.g., \texttt{RBParser}, \texttt{RBMethodNode}, or \texttt{RBLiteralNode}. When all application and library developers adhere to this convention, it is unlikely that class name classes occur.
+
+Squeak environments provide a way to have multiple classes with the same name in one image. However, they suffer from poor tool support and do not integrate well with some of the other goals (e.g., code reuse) for our system. See Section~\ref{sec:rel_sq_env} for a detailed discussion of Squeak environments and why we did not use them in this system.
 
 \section{Dependency Managment}
 two application require the same module but in different versions
 
-\section{Readability and Understandability}
-only one level of grouping: package
+\section{Hierarchical Decomposition}
+Smalltalk packages allow the programmer to group together what belongs together~\cite{Eckel:2002:TJ:579108}. This is especially useful in big projects with many classes and allows for a form of modular decomposition. Different criterias for modular decomposition have been proposed: e.g., functional decompositon (making every step in the \emph{flowchart} a module) or information hiding~\cite{Parnas:1972:CUD:361598.361623}. The following list shows some benefits of good modular decomposition.
+
+\begin{itemize}
+	\item Changability: only few classes are affected when changing a detail.
+	\item Independent development: classes can be developed in parallel.
+	\item Comprehensibility: in order to understand the behavior of a class, it is sufficient to read code within that class.
+\end{itemize}
+
+What we want to achieve is hierarchical decomposition~\cite{Blume:1999:HM:325478.325518}, which is in a basic form realized in Java packages, Ruby namespace module, or Python modules. It can increase comprehensibility of the overall system when it acts as some kind of decision tree that helps the programmer finding a submodule corresponding to a certain functionality in an unknown application. 
+
+It also allows for fine-grained dependency management: for example, it is considered good practice in many programming languages to keep import statements as small as possible. Import statements also act as documentation, giving the reader of the source code a rough idea of what the source code might do. Furthermore, if a functionality is nested in a submodule, it is likely that it is written in a more general way, such that it might be reused elsewhere in the application without bigger changes.
+
+If the source code is functionally decomposed in a hierarchical way~\cite{Tsui:2009:ESE:1823101}, it is also easier to understand single submodules of the system. The reader of the source code might only be interested in a certain level of detail (e.g., no low-level functionality), and then skip deeply nested submodules~\cite{hierarch1} (information hiding or abstraction). Since in functional decomposition, the purpose of nested modules is usually only to serve their enclosing modules, readers can start off with a high-level idea of the module is doing by going through the first few levels of nesting, and dive in deeper as needed.
+
+Therefore, one of the requirements for our system is to provide a mechanism for hierarchical code decomposition that is more than just one level deep (Smalltalk packages).
 
 \section{Code Reuse}
 share behavior among multiple classes

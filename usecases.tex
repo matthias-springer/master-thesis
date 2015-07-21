@@ -68,9 +68,15 @@ In our system, methods inside parameterized classes can reference arguments prov
 Figure~\ref{fig:use_paintbrush} shows part of the implementation of simple drawing application. \texttt{PaintbrushWith:IO:} is a parameterized top-level class which takes as arguments a matrix implementation and a file IO library. The matrix implementation is used for storing the pixels inside the application. In the simplest case, this is could be the class \texttt{Matrix} from the Squeak standard library. It could, however, also be a class which stores pixels in a compressed form (e.g., using run-length encoding), but has \texttt{at:}, \texttt{at:put:}, \texttt{rows}, and \texttt{columns} as public API methods. \texttt{ReaderWriter} must be a class or object that supports reading and writing files on a pixel-by-pixel basis. Depending on which IO class the user of the library provides to \texttt{PaintbrushWith:IO:}, the application might for example generate JPEG files or PNG files.
 
 \begin{figure}[!htp]
+\begin{subfigure}[b]{\textwidth}
 \centering
 \includegraphics[width=0.8\textwidth]{usecase_paintbrush.pdf}
+\caption{Overview of the \texttt{PaintBrushWith:IO:} module and dependent interfaces}
+\end{subfigure}
 
+\vspace{10pt}
+
+\begin{subfigure}[b]{\textwidth}
 \begin{lstlisting}
 <@\textbf{PaintbrushWith:}@> Matrix <@\textbf{IO:}@> ReaderWriter
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
@@ -104,25 +110,136 @@ Figure~\ref{fig:use_paintbrush} shows part of the implementation of simple drawi
             <@\textcolor{Gray}{writer}@> writePixel: x@y color: (pixels at: x@y) ] ].
     <@\textcolor{Gray}{writer}@> close.
 \end{lstlisting}
+\caption{Source code for configurable application}
+\end{subfigure}
 \caption{Parameterized classes for external module configuration}
 \label{fig:use_paintbrush}
 \end{figure}
 
 It is important to understand that the implementation of \texttt{PaintbrushWith:IO:} is entirely decoupled from the pixel data structure representation and the import/export functionality. It is up to the user of \texttt{PaintbrushWith:IO:} to configure the class as needed.
 
-\subsection{Dependency Injection}
+External configuration as shown in this example is similar to a constructor that accepts class objects as parameters and constructs and instance of the class with the class objects stored in instance variables. The difference to this approach is that, in our system, also class methods are bound to the passed arguments, because a new class object is constructed instead of an instance of a class. Furthermore, our system allows creating new nested classes with the argument as a superclass (mixins).
 
-
-
-
-\section{Readability and Understandability}
+\section{Hierarchical Decomposition}
 example: large project, where parts of the code can now be understood, given that we have hierarchical nesting. could be an example where grouping according to multiple criteria is needed (would result in n x m packages)
 
 \section{Mixin Modularity with Parameterized Classes}
 
-\section{Class Generator Pattern}
+\section{Unparameterized Class Generator Pattern}
 \label{sec:usecase_classgen}
-better syntax for class generators
+The syntax used for mixin application has a few shortcomings. For example, the statements \texttt{self A: (self B: Object))} means that mixin \texttt{B:} is applied to \texttt{Object}, and then mixin \texttt{A:} is applied to that result. The problem is that the source code statement does not reflect the order of mixin applications: the statement has to be interpreter from right to left. Another problem is that \texttt{A:} and \texttt{B:} are parameterized classes and parameterized classe cannot be referenced using an implicit \texttt{scope} receiver. Therefore, the programmer always has to write an explicit receiver.
+
+Both problems can be solved by wrapping the mixin in an unparameterized class and adding a helper method to \texttt{Class}. We assume that name of the parameterized nested class is always \texttt{Mixin:}. Then, the helper method \texttt{<<} can be defined as shown in Figure~\ref{fig:usecase_class_lele}.
+
+\begin{figure}[!htp]
+\begin{lstlisting}
+<@\textbf{Class>><< aMixin}@>
+    ^ aMixin Mixin: self
+\end{lstlisting}
+\caption{Helper method on \texttt{Class} for unparameterized mixin wrapper classes}
+\label{fig:usecase_class_lele}
+\end{figure}
+
+\paragraph{Example}
+Figure~\ref{fig:usecase_unparam_class_gen} shows two mixins and a base class: \texttt{CollectionLogic} is a mixin that adds the methods \texttt{allSatisfy:} and \texttt{anySatisfy:}, and \texttt{CollectionFilter} is a mixin that adds the methods \texttt{detect:} and \texttt{select:}. All of these four methods can be implemented based on \texttt{do:}, which iterates through all elements of a collection. Consequently, these four methods are written in such a way, meaning that both mixins can be applied classes providing at lease this method.
+
+\begin{figure}[!htp]
+\begin{subfigure}[b]{\textwidth}
+	\centering
+	\includegraphics[width=0.95\textwidth]{usecase_classgen.pdf}
+	\caption{Class diagram showing mixin and result of mixin application}
+\end{subfigure}
+
+\vspace{10pt}
+
+\begin{subfigure}[b]{\textwidth}
+\begin{lstlisting}
+<@\textbf{CollectionLogic class>>Mixin:}@> base
+    <@\textcolor{OliveGreen}{\textbf{< class >}}@>
+    ^ base subclass
+
+<@\textbf{(CollectionLogic class>>Mixin:}@> base<@\textbf{)>>allSatisfy:}@> aBlock
+    self do: [ :each | 
+        (aBlock value: each) ifFalse: [ ^ false ] ].
+    ^ true
+
+<@\textbf{(CollectionLogic class>>Mixin:}@> base<@\textbf{)>>anySatisfy:}@> aBlock
+    self do: [ :each | 
+        (aBlock value: each) ifTrue: [ ^ true ] ].
+    ^ false
+
+" (implementation of CollectionLogic omitted) "
+
+<@\textbf{MyCollection>>do:}@> aBlock
+    " Some implementation "
+
+<@\textbf{CachedCollection}@>
+    <@\textcolor{OliveGreen}{\textbf{< class >}}@>
+    ^ MyCollection << CollectionFilter << CollectionLogic
+\end{lstlisting}
+\caption{Definition and application of mixins}
+\end{subfigure}
+\caption{Unparameterized class generator pattern}
+\label{fig:usecase_unparam_class_gen}
+\end{figure}
+
+\texttt{CollectionLogic} and \texttt{CollectionFilter} are wrappers around mixins, making it possible to access them like any unparameterized class. When a mixin is applied using the \texttt{<<} syntax, the receiver is sent to the \texttt{Mixin:} method. Therefore, the name of the actual mixin must always be \texttt{Mixin:}, as long as, \texttt{<<} is implemented as shown in Figure~\ref{fig:usecase_class_lele}. Note, that \texttt{<<} inverses the order of receiver and argument, which is why the statement in \texttt{CachedCollection} can be read from left to right: first \texttt{CollectionFilter} and then \texttt{CollectionLogic} is applied to \texttt{MyCollection}.
+
+\paragraph{Pre-Include Hooks and Post-Include Hooks}
+The unparameterized class generator pattern allows the definition of pre-include hooks and post-include hooks. A pre-include hook is a method defined on the mixin wrapper, which is executed before the mixin was applied, with the base class as an argument. Similarly, a post-commit hook is executed after the mixin was applied, with the resulting class as an argument. 
+
+Note, that the programmer can already write arbitrary code at the point where the mixin is applied. However, pre-include hooks and post-include hooks are provided by the mixin itself, and not by the user of a mixin.
+
+\begin{figure}[!htp]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\begin{lstlisting}
+<@\textbf{Class>><< aMixin}@>
+    <@\textcolor{Gray}{| result |}@>
+    aMixin before: self.
+    <@\textcolor{Gray}{result}@> := aMixin Mixin: self.
+    aMixin after: <@\textcolor{Gray}{result}@>.
+    ^ <@\textcolor{Gray}{result}@>
+\end{lstlisting}
+\caption{Mixin wrapper application}
+\end{subfigure}
+\qquad
+\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\includegraphics[scale=1]{abstract_mixin_classgen.pdf}
+	\caption{Mixin wrapper base class}
+\end{subfigure}
+\caption{Implementation of pre-incude hooks and post-include hooks for mixins}
+\label{fig:usecase_prepostincl}
+\end{figure}
+
+Figure~\ref{fig:usecase_prepostincl} shows how these hooks are implemented. Mixins with a pre-include hook or a post-include hook should be a subclass of the abstract class \texttt{Mixin}. This class provides empty \texttt{before:} and \texttt{after:} methods which should be overridden in subclasses and contain the pre-include hook or post-include hook.
+
+In the previous paragraph, the unparameterized class generator pattern was presented as a tool to increase code readability. With regards to include hooks, this pattern is more: it is necessary to have some kind of wrapping. Include hooks shold not be defined on the mixin function itself, because all methods defined on the mixin function are added during mixin application. This is usually not desirable.
+
+\section{Traits}
 
 \section{Extension Methods}
-better way is needed (e.g., class boxes, refinements, COP, world (paper viewpoints), monkey patching). return already existing class in generator method
+There are cases, in which the functionality of an already class in a different module must be extended or changed. For example, this is the case when a bug in another library must be fixed. The programmer typically writes a method that replaces the existing one with the bug. Sometimes, extension methods are also used add additional behavior. For example, the \texttt{Morphic} package adds the convenience method \texttt{asStringMorph} to \texttt{String}. Sometimes it is sufficient to create a subclass of the class in question, and add the changed behavior only to the subclass. However, there are cases where the application code is not in control of instance creation.
+
+An extension method can be added in our system by creating a nested classes whose class generator method returns an already existing class instead of a new subclass.
+
+Consider, for example, that we want to add a method \texttt{asString} to the top-level class \texttt{CachedCollection} in Figure~\ref{fig:usecase_unparam_class_gen}. Figure~\ref{fig:use_ext_meth} shows how do define a method returning the string concatenation of all elements in the collection.
+
+\begin{figure}[!htp]
+\begin{lstlisting}
+<@\textbf{MyApplication class>>CachedCollection}@>
+    <@\textcolor{OliveGreen}{\textbf{< class >}}@>
+    ^ Repository CachedCollection
+
+<@\textbf{MyApplication class>>CachedCollection>>asString}@>
+    ^ String streamContents: [ :stream |
+        self do: [ :each | stream nextPutAll: each asString ] ]
+\end{lstlisting}
+\caption{Extension methods using nested classes}
+\label{fig:use_ext_meth}
+\end{figure}
+
+Note, that it is not possible to add extension methods to all parameterized classes or class specifications. Extension methods can only be added to concrete classes (i.e., class objects). For example, it is not possible, to add an extension method to all classes that are generated by \texttt{PaintBrushWith:IO:} in Figure~\ref{fig:use_paintbrush}; only a concrete class object (instantiation) can be extended.
+
+Extension methods are dangerous because changes to existing methods could break other code relying on the old behavior. Numerous alternatives have been proposed, and we provide a brief overview of some of them in Section~\ref{sec:future_ext_meth}.
