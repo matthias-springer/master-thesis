@@ -275,3 +275,30 @@ Our system is not integrated with Monticello, because Monticello does currently 
 \paragraph{Source Code Format}
 Our system comes with its own import/export functionality and supports as only repository the file system as of now. The exported format is similar to the FileTree\footnote{https://github.com/dalehenrich/filetree} format. There is a directory for every class. Inside that directory, there are \texttt{instance} and \texttt{class} directories storing instance method and class methods, respectively. For every nested class, the corresponding \texttt{class} directory contains a source code file for the class generator method and a directory for the nested class. For every method, there is a file containing its source code with the selector of the method as file name (colons are replaced with dots).
 
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[width=0.75\textwidth]{source_code_ex.pdf}
+	\caption{Source code export example}
+	\label{fig:impl_source_export}
+\end{figure}
+
+Figure~\ref{fig:impl_source_export} illustrates what the exported format looks like. The top-level module is \texttt{Bomberman}. It does not have any methods on the instance side, but a regular method \texttt{open} on class side, as well as a nested class \texttt{Game}. That nested class has to instance methods \texttt{initialize} and \texttt{startGameWithPlayers:}.
+
+\paragraph{Source Code Repository}
+At the moment, we use git and GitHub to store modules written in our system, but any other external source code management systen, such as Subversion or Mercurial, can be used. Our system does only support loading and saving, but not merging. It does also not store metadata associated with methods or classes, e.g., the author of a method or when it was changed. Instead, we rely on the underlying source code management system.
+
+The following list gives an overview of how to load new changes into the system.
+\begin{enumerate}
+	\item Export local changes (if any).
+	\item Get the lastest source code from the remote repository (e.g., \texttt{git pull}).
+	\item Resolve merge conflicts on the file system, if any.
+	\item Import the entire module\footnote{This step only recompiles changed methods.}.
+\end{enumerate}
+
+The following list gives an overview of how local changes can be stored in a repository.
+\begin{enumerate}
+	\item Export the entire module.
+	\item Get the latest source code from the remote repository (e.g., \texttt{git pull}).
+	\item Resolve merge conflicts on the file system, if any.
+	\item Send local working copy to the remote repository (e.g., \texttt{git commit} and \texttt{git push}).
+\end{enumerate}

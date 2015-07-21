@@ -114,26 +114,6 @@ In this example, we used the implicit \texttt{scope} receiver for class lookup, 
 \section{Parameterized Classes}
 All examples shown in the previous section use unparameterized classes, i.e., class generator methods are always unary. Class generator method can, however, also have binary selectors or selectors with a higher arity. For memory conservation reasons, these classes are then no longer cached.
 
-\paragraph{Mixins}
-Parameterized classes can be used to build mixins. Mixins are not a special feature of this system: they are an application of our system and come for free by just having class nesting as described in the previous sections; they are an immediate consequence of parameterized classes. A mixin is a function that takes as an input a class and outputs a subclass with additional behavior, i.e., it is a class transformator. 
+Parameterized classes can be used to make modules externally configurable or to implement mixins. We will present some conrete use cases in Section~\ref{sec:usecases}.
 
-A mixin can be implemented by writing a class generator method with one parameter which is the input class. The method creates a subclass of that input class and returns it. Associated with that parameterized class generator methods is a set of instance-side methods and a set of class-side methods. These are the methods that will be added when applying the mixin.
-
-\paragraph{Recursive Mixin Application}
-A mixin can make sure another mixin is applied upon its application. This is done creating a subclass of a mixin application in the class generator method. Consequently, the system first creates a subclass of the base class, adds the methods of the inner mixin, then creates a subclass of the resulting class, and finally adds the methods of the outer mixin.
-
-\paragraph{Example}
-Figure~\ref{fig:concept_mixins} shows an example of parameterized classes and how they can be used to build mixins.
-
-\begin{figure}[!htp]
-	\centering
-	\includegraphics[scale=0.75]{nested_mixins.pdf}
-	\caption{Implementation of Mixins with Nested Classes}
-	\label{fig:concept_mixins}
-\end{figure}
-
-Two class generator methods \texttt{A M1:} and \texttt{A M2:} are defined, which take as input a base class and output a subclass with additional behavior. \texttt{A M1M2} is an application of both both mixins. \texttt{A M1M2}'s superclass is \emph{some} \texttt{A M2:}, whose superclass is \emph{some} \texttt{A M1:}, whose superclass is \texttt{Object}. Note, that \texttt{A M1:} and \texttt{A M2:} are not specific classes: we use this notation as a name for \emph{some} application of \texttt{A class>>M1:} and \texttt{A class>>M2:}, respectively. Therefore, even if two classes have the same name, they are not necessarily the same class if they names contain a colon.
-
-Note, that evaluating \texttt{A M1: Object} multiple times returns different class object, since parameterized classes are not cached. However, \texttt{A M1M2} is cached, because it is a unary method. Therefore, calling \texttt{A M1M2} multiple times always returns the same class object.
-
-The notation used in \texttt{A class>>M1M2} can be a bit confusing at first. That method first applies \texttt{A M1:} to \texttt{Object}, and then \texttt{A M2:}; however, in the source code, \texttt{A M2:} appears before \texttt{A M1:}. For readability reasons, and to support more features like pre-include hooks and post-include hooks, we present the Class Generator Pattern in Section~\ref{sec:usecase_classgen}.
+The arguments passed to a parameterized class generator method are considered when a message is sent to \texttt{enclosing}. At first, the system tries to send the message to the enclosing class. If that fails, the system checks if the selector corresponds to one of the parameter names in the enclosing class' class generator method.
