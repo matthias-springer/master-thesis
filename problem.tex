@@ -1,5 +1,5 @@
 \chapter{Modularity Problems in Squeak}
-Design Principles Behind Smalltalk
+\label{sec:problem}
 
 \section{Class Name Clashes}
 In Squeak, there can only be only one class with a certain name. Whenever, the programmer tries to add another class with the same name, a conflict occurs. When source code is loaded into the system with the Monticello version control system, the system asks the programmer if the already existing class should be replaced.
@@ -17,9 +17,9 @@ two application require the same module but in different versions
 Smalltalk packages allow the programmer to group together what belongs together~\cite{Eckel:2002:TJ:579108}. This is especially useful in big projects with many classes and allows for a form of modular decomposition. Different criterias for modular decomposition have been proposed: e.g., functional decompositon (making every step in the \emph{flowchart} a module) or information hiding~\cite{Parnas:1972:CUD:361598.361623}. The following list shows some benefits of good modular decomposition.
 
 \begin{itemize}
-	\item Changability: only few classes are affected when changing a detail.
+	\item Changability (continuity): only few classes are affected when changing a detail.
 	\item Independent development: classes can be developed in parallel.
-	\item Comprehensibility: in order to understand the behavior of a class, it is sufficient to read code within that class.
+	\item Understandability: in order to understand the behavior of a class, it is sufficient to read code within that class.
 \end{itemize}
 
 What we want to achieve is hierarchical decomposition~\cite{Blume:1999:HM:325478.325518}, which is in a basic form realized in Java packages, Ruby namespace module, or Python modules. It can increase comprehensibility of the overall system when it acts as some kind of decision tree that helps the programmer finding a submodule corresponding to a certain functionality in an unknown application. 

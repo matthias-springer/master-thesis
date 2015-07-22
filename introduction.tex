@@ -1,6 +1,22 @@
 \chapter{Introduction}
 
 \section{Modularity}
+What is modularity? According to Myers, ``modularity is the single attribute of software that allows a program to be intellectually managable''~\cite{myers1978composite}. This work describes a module system or the Squeak programming language, i.e., a system that should help the programmer in writing modular code. According to Meyer, there are five requirements that a method or system should satisfy to be ``worthy of being called \emph{modular}''~\cite{Meyer:1988:OSC:534929}.
+
+\paragraph{Decomposability}
+If a design method supports modular decomposability, it helps the programmer in breaking down big components into smaller one. These components should be less complex, serve a different purpose, and be mostly independent of each other. Meyer compares decomposability with \emph{division of labor}: every subcomponent does a smaller, in itself less complex part of the job. Decomposability also supports independent development of subcomponents, if these are mostly independent of each other. An example of a method supporting decomposability is top-down design.
+
+\paragraph{Composability}
+If a design method supports modular composability, it helps the programmer in building more complex components out of smaller one. This encourages code reuse and subcomponents do not have to be implemented a second time. An example of composability are libraries. They fulfill a certain purpose, but cannot work on their own. Instead, they were designed to be used in another program.
+
+\paragraph{Understandability}
+If a design method supports understandability, it helps programmers getting an overview and a broad understanding of an application more quickly. This goes hand in hand with decomposability: every subcomponent should be less complex and, therefore, easier to understand than the composed component. This is important to keep software maintainable and makes software development more time-efficient, as it reduces development time, because the programmer has to spend less time understanding the system.
+
+\paragraph{Continuity}
+If a design method supports continuity, it is easier to make changes to the program, since a single change should ideally only affect a single or at least a small number of modules. Every change should be confined to a very small number of modules. This is can be a side effect of decomposability, if done properly~\cite{Parnas:1972:CUD:361598.361623}. Continuity also makes it easier to extend the behavior of a program.
+
+\paragraph{Protection}
+If a design method supports protection, it helps the programmer writing code where program malfunctions are confined to a single or a small number of modules, instead of spreading across the entire program. For example, every subcomponent should have a well-specified interface and could check input parameters before running the actual implementation.
 
 \section{The Squeak Programming Language}
 Smalltalk is an object-oriented, class-based programming language and Squeak is a Smalltalk-80 dialect. It was originally developed by Alan Kay, Dan Ingalls, and Adele Goldberg. Dan Ingalls described Smallktalk-80 as a project whose purpose is to ``provide computer support for the creative spirit in everyone.'' In his article ``Design Principles Behind Smalltalk''~\cite{Inga81a}, which appeared in August 1981 in the BYTE Magazine, he mentions some of the most fundamental principles behind the Smalltalk project. Some of these go hand and hand with modularity and can be further supported by a good module system.
@@ -12,5 +28,5 @@ Smalltalk is an object-oriented, class-based programming language and Squeak is 
 	\item ``Good Design: A system should be built with a minimum set of unchangable parts; those parts should be as generic as possible.'' Consequently, if we are to create a module system for Smalltalk, that system should build on top of a single fundamental concept, and all features and use cases should evolve out of this concept in a natural way without any special corner cases.
 \end{itemize}
 
-
 \section{Outline of this Work}
+The remainder of this thesis is structured as follows. Section~\ref{sec:problem} gives an overview of modular programming in Squeak/Smalltalk, shows what is possible already, and describes concrete points where we see room for improvement. Section~\ref{sec:concept} describes the concept of our module system in an abstract way, without diving into notation or implementation details. Section~\ref{sec:impl} describes the implementation of our module system in Squeak/Smalltalk, as well as corner cases and pitfalls. Section~\ref{sec:usecases} deescribes concrete use cases and provides examples, implemented in our module system, based on the shortcomings motivated in Section~\ref{sec:problem}. Sections~\ref{sec:related} and~\ref{sec:future} compare our implementation with other exisiting systems, and give an overview of the next steps, respectively. Finally, we give a short summary of our concept and implementation in Section~\ref{sec:summary}.
