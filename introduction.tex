@@ -1,5 +1,13 @@
 \chapter{Introduction}
-This thesis describes the concept, the implementation, and concrete use cases of a module system developed for Squeak/Smalltalk. Before, explaining the concept, we will elaborate what modularity is and why it is desirable. Then, we will go into more detail about the Smalltalk programming language and explain what modularity means in the context of Squeak/Smalltalk.
+This thesis describes the concept, the implementation, and concrete use cases of \emph{\msname}, a module system for and written in Squeak/Smalltalk. \msname used to be a popular Russian name and is believed to be the origin of the name \emph{Matryoshka}~\cite{dixon1998encyclopedia}, also known as Russian doll. Matryoshka dolls are wodden dolls that can be nested in each other (Figure~\ref{fig:matryoshka}), and are a metaphor for class nesting, the most fundamental concept of \msname.
+
+\begin{figure}[!htp]
+	\includegraphics[width=\textwidth]{matryoshka.jpg}
+	\caption{Matryoshka doll, also called Russian doll}
+	\label{fig:matryoshka}
+\end{figure}
+
+Before, explaining the concept, we will elaborate what modularity is and why it is desirable. Then, we will go into more detail about the Smalltalk programming language and explain what modularity means in the context of Squeak/Smalltalk.
 
 \section{Modularity}
 What is modularity? According to Myers, ``modularity is the single attribute of software that allows a program to be intellectually managable''~\cite{myers1978composite}. This work describes a module system or the Squeak programming language, i.e., a system that should help the programmer in writing modular code. According to Meyer, there are five requirements that a method or system should satisfy to be ``worthy of being called \emph{modular}''~\cite{Meyer:1988:OSC:534929}.
