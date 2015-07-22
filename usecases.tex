@@ -124,9 +124,24 @@ External configuration as shown in this example is similar to a constructor that
 \section{Hierarchical Decomposition}
 One of the benefits of hierarchical decomposition is better readability and better understandability. Proper class nesting makes it easier for readers of the source code to understand which classes belong together and to find the class containing a certain functionality.
 
-As an example, we took two simple computer games written in Squeak: SpaceCleanup\footnote{\url{https://github.com/matthias-springer/space-cleanup}}, a bomberman clone, and Breakout\footnote{\url{https://github.com/fniephaus/BroBreakout}}.
+As an example, we took two simple computer games written in Squeak: SpaceCleanup\footnote{\url{https://github.com/matthias-springer/space-cleanup}}, a bomberman clone, and Breakout\footnote{\url{https://github.com/fniephaus/BroBreakout}} (Figure~\ref{fig:usecase_games}).
 
-Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup and the source code after we introduced class nesting. The original source code already made use of packages, which can be compared to a single level of class nesting. The refactored source code is mostly unchanged, except for class name changes. What is interesting to see is that the class structure is already much more readable by just getting rid of all namespace prefixes. We can not only get rid of class prefixes, but also suffixes. For example, the \texttt{Builder}, \texttt{Item}, and \texttt{State} suffixes are omitted. It is now also possible to group classes together that belong together logically. For example, all both level builders are nested within \texttt{SpaceCleanup Level}. Similarly, all items are nested in \texttt{SpaceCleanup Level Items}, which makes sense because a level consists of tiles and every tile can have items. An item cannot be used without a tile and a tile is never used outside a level.
+\begin{figure}[!htp]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{screen_scleanup.jpeg}
+    \caption{SpaceCleanup}
+\end{subfigure}
+\qquad
+\begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{screen_breakout.jpeg}
+    \caption{Breakout}
+\end{subfigure}
+\caption{Example games as subjects for hierarchical decomposition}
+\label{fig:usecase_games}
+\end{figure}
+
+Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup and the source code after we introduced class nesting. The original source code already made use of packages, which can be compared to a single level of class nesting. The refactored source code is mostly unchanged, except for class name changes. What is interesting to see is that the class structure is already much more readable by just getting rid of all namespace prefixes. We can not only get rid of class prefixes, but also suffixes. For example, the \texttt{Builder}, \texttt{Item}, and \texttt{State} suffixes are omitted. It is now also possible to group classes together that belong together logically. For example, all both level builders are nested within \texttt{SpaceCleanup Level}. Similarly, all items are nested in \texttt{SpaceCleanup Level Items}, which makes sense because a level consists of tiles and every tile can have items. An item cannot be used without a tile and a tile is never used outside a level. Note, that there exist two classes with the name \texttt{Random}, but they are nested in different classes.
 
 \begin{figure}
 \begin{subfigure}[b]{0.45\textwidth}
