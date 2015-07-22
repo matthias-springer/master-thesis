@@ -122,6 +122,173 @@ It is important to understand that the implementation of \texttt{PaintbrushWith:
 External configuration as shown in this example is similar to a constructor that accepts class objects as parameters and constructs and instance of the class with the class objects stored in instance variables. The difference to this approach is that, in our system, also class methods are bound to the passed arguments, because a new class object is constructed instead of an instance of a class. Furthermore, our system allows creating new nested classes with the argument as a superclass (mixins).
 
 \section{Hierarchical Decomposition}
+One of the benefits of hierarchical decomposition is better readability and better understandability. Proper class nesting makes it easier for readers of the source code to understand which classes belong together and to find the class containing a certain functionality.
+
+As an example, we took two simple computer games written in Squeak: SpaceCleanup\footnote{\url{https://github.com/matthias-springer/space-cleanup}}, a bomberman clone, and Breakout\footnote{\url{https://github.com/fniephaus/BroBreakout}}.
+
+Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup and the source code after we introduced class nesting. The original source code already made use of packages, which can be compared to a single level of class nesting. The refactored source code is mostly unchanged, except for class name changes. What is interesting to see is that the class structure is already much more readable by just getting rid of all namespace prefixes. We can not only get rid of class prefixes, but also suffixes. For example, the \texttt{Builder}, \texttt{Item}, and \texttt{State} suffixes are omitted. It is now also possible to group classes together that belong together logically. For example, all both level builders are nested within \texttt{SpaceCleanup Level}. Similarly, all items are nested in \texttt{SpaceCleanup Level Items}, which makes sense because a level consists of tiles and every tile can have items. An item cannot be used without a tile and a tile is never used outside a level.
+
+\begin{figure}
+\begin{subfigure}[b]{0.45\textwidth}
+\dirtree{%
+.1 \framebox{\textbf{SpaceCleanup}}. 
+.2 EventDispatcher.
+.2 Level.
+.3 \textit{Builder}.
+.4 GridPattern.
+.4 Random.
+.3 Tile.
+.4 \textit{Item}.
+.5 Bucket.
+.5 \textit{Destructible}.
+.5 Floor.
+.5 Monster.
+.6 \textit{Strategy}.
+.7 MoveToPlayer.
+.7 Random.
+.5 \textit{Moving}.
+.5 PickUp.
+.5 Player.
+.5 Portal.
+.5 Slime.
+.5 Wall.
+.5 Water.
+.2 \textit{State}.
+.3 Building.
+.3 Configuring.
+.3 GameOver.
+.3 GameWon.
+.3 Paused.
+.3 Running.
+.2 Resources.
+.2 UI.
+.3 CheatWindow.
+.3 ConfigurationWindow.
+.3 Controls.
+.3 GameInformation. 
+}
+\caption{Refactored project structure}
+\end{subfigure}
+\qquad
+\begin{subfigure}[b]{0.45\textwidth}
+\dirtree{%
+.1 \framebox{\textbf{SpaceCleanup-Core}}.
+.2 ScuEventDispatcher.
+.2 ScuGame.
+.2 ScuGameBuildState.
+.2 ScuGameConfigState.
+.2 ScuGameOverState.
+.2 ScuGamePausedState.
+.2 ScuGameRunningState.
+.2 \textit{ScuGameState}.
+.2 ScuGameWonState.
+.2 \textit{ScuMonsterStrategy}.
+.2 ScuMonsterRandomStrategy.
+.2 ScuMonsterToPlayerStrategy.
+}
+\vspace{10pt}
+\dirtree{%
+.1 \framebox{\textbf{SpaceCleanup-Items}}.
+.2 ScuBucket.
+.2 \textit{ScuDestructibleItem}.
+.2 ScuFloor.
+.2 \textit{ScuItem}.
+.2 ScuMonster.
+.2 \textit{ScuMovingItem}.
+.2 ScuPickUpItem.
+.2 ScuPlayer.
+.2 ScuPortal.
+.2 ScuSlime.
+.2 ScuWall.
+.2 ScuWater.
+}
+\vspace{10pt}
+\dirtree{%
+.1 \framebox{\textbf{SpaceCleanup-Level}}.
+.2 ScuLevel.
+.2 \textit{ScuLevelBuilder}.
+.2 ScuGridPatternLevelBuilder.
+.2 ScuRandomLevelBuilder.
+.2 ScuTile.
+}
+\vspace{10pt}
+\dirtree{%
+.1 \framebox{\textbf{SpaceCleanup-Resources}}.
+.2 ScuResourceManager.
+}
+\vspace{10pt}
+\dirtree{%
+.1 \framebox{\textbf{SpaceCleanup-UI}}.
+.2 ScuCheatWindow.
+.2 ScuConfigurationWindow.
+.2 ScuControls.
+.2 ScuGameInformation.
+}
+\caption{Original project structure}
+\end{subfigure}
+\caption{SpaceCleanup game implementation with/without hierarchical decomposition}
+\label{fig:usecase_sc_space}
+\end{figure}
+
+\begin{figure}[!htp]
+\begin{subfigure}[b]{0.45\textwidth}
+\dirtree{%
+.1 \framebox{\textbf{Breakout}}.
+.2 Level.
+.3 Ball.
+.3 \textit{Block}.
+.4 Boundary.
+.4 Explosion.
+.4 Racket.
+.3 Builder.
+.3 \textit{Powerup}.
+.4 Accelerate.
+.4 Ball.
+.4 Decelerate.
+.4 Enlarge.
+.4 Shrink.
+.3 World.
+.2 \textit{View}.
+.3 Level.
+.3 Menu.
+.3 Welcome.
+.2 LevelStatistics.
+.3 Item.
+.2 MenuLabel.
+}
+\caption{Refactored project structure}
+\end{subfigure}
+\qquad
+\begin{subfigure}[b]{0.45\textwidth}
+\dirtree{%
+.1 \framebox{\textbf{BroBreakout}}.
+.2 BroBall.
+.2 \textit{BroBlock}.
+.2 BroBoundary.
+.2 BroBreakout.
+.2 BroExplosion.
+.2 BroLevelBuilder.
+.2 BroLevelStatistics.
+.2 BroLevelStatisticsItem.
+.2 BroLevelView.
+.2 BroLevelWorld.
+.2 BroMenuLabel.
+.2 BroMenuView.
+.2 \textit{BroPowerup}.
+.2 BroPowerupAccelerate.
+.2 BroPowerupBall.
+.2 BroPowerupDecelerate.
+.2 BroPowerupEnlarge.
+.2 BroPowerupShrink.
+.2 BroRacket.
+.2 \textit{BroView}.
+.2 BroWelcomeView.
+}
+\caption{Original project structure}
+\end{subfigure}
+\caption{Breakout game implementation with/without hierarchical decomposition}
+\end{figure}
+
 example: large project, where parts of the code can now be understood, given that we have hierarchical nesting. could be an example where grouping according to multiple criteria is needed (would result in n x m packages)
 
 \section{Mixin Modularity with Parameterized Classes}
