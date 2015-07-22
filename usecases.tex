@@ -141,7 +141,7 @@ As an example, we took two simple computer games written in Squeak: SpaceCleanup
 \label{fig:usecase_games}
 \end{figure}
 
-Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup and the source code after we introduced class nesting. The original source code already made use of packages, which can be compared to a single level of class nesting. The refactored source code is mostly unchanged, except for class name changes. What is interesting to see is that the class structure is already much more readable by just getting rid of all namespace prefixes. We can not only get rid of class prefixes, but also suffixes. For example, the \texttt{Builder}, \texttt{Item}, and \texttt{State} suffixes are omitted. It is now also possible to group classes together that belong together logically. For example, all both level builders are nested within \texttt{SpaceCleanup Level}. Similarly, all items are nested in \texttt{SpaceCleanup Level Items}, which makes sense because a level consists of tiles and every tile can have items. An item cannot be used without a tile and a tile is never used outside a level. Note, that there exist two classes with the name \texttt{Random}, but they are nested in different classes.
+Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup and the source code after we introduced class nesting. The original source code already made use of packages, which can be compared to a single level of class nesting. The refactored source code is mostly unchanged, except for class name changes. What is interesting to see is that the class structure is already much more readable by just getting rid of all namespace prefixes. We can not only get rid of class prefixes, but also suffixes. For example, the \texttt{Builder}, \texttt{Item}, and \texttt{State} suffixes are omitted. It is now also possible to group classes together that belong together logically. For example, all both level builders are nested within \texttt{SpaceCleanup Level}. Similarly, all items are nested in \texttt{SpaceCleanup Level Items} (which is also a superclass of all items), which makes sense because a level consists of tiles and every tile can have items. An item cannot be used without a tile and a tile is never used outside a level. Note, that there exist two classes with the name \texttt{Random}, but they are nested in different classes.
 
 \begin{figure}
 \begin{subfigure}[b]{0.45\textwidth}
@@ -245,13 +245,15 @@ Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup
 \label{fig:usecase_sc_space}
 \end{figure}
 
+Figure~\ref{fig:usecase_breakout_game} shows the original source code of Breakout, as well as a refactored version. We did not change the source code, except for class names. All block-related classes are stored as nested classes in the class \texttt{Breakout Block}, which is also used to represent regular blocks in the game, that can be destroyed using \texttt{Racket}. \texttt{Breakout Block Boundary} represents a special block used for the design undestroyable borders of the game. All power ups are represented as classes and stored as nested classes in the abstract superclass \texttt{Breakout Powerup}. The structure of the refactored version is much clearer, because the original version did not take advantage of packages, probably due to the relatively small number of classes.
+
 \begin{figure}[!htp]
 \begin{subfigure}[b]{0.45\textwidth}
 \dirtree{%
 .1 \framebox{\textbf{Breakout}}.
 .2 Level.
 .3 Ball.
-.3 \textit{Block}.
+.3 Block.
 .4 Boundary.
 .4 Explosion.
 .4 Racket.
@@ -278,7 +280,7 @@ Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup
 \dirtree{%
 .1 \framebox{\textbf{BroBreakout}}.
 .2 BroBall.
-.2 \textit{BroBlock}.
+.2 BroBlock.
 .2 BroBoundary.
 .2 BroBreakout.
 .2 BroExplosion.
@@ -302,6 +304,7 @@ Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup
 \caption{Original project structure}
 \end{subfigure}
 \caption{Breakout game implementation with/without hierarchical decomposition}
+\label{fig:usecase_breakout_game}
 \end{figure}
 
 example: large project, where parts of the code can now be understood, given that we have hierarchical nesting. could be an example where grouping according to multiple criteria is needed (would result in n x m packages)

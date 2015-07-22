@@ -3,5 +3,14 @@
 \section{Modularity}
 
 \section{The Squeak Programming Language}
+Smalltalk is an object-oriented, class-based programming language and Squeak is a Smalltalk-80 dialect. It was originally developed by Alan Kay, Dan Ingalls, and Adele Goldberg. Dan Ingalls described Smallktalk-80 as a project whose purpose is to ``provide computer support for the creative spirit in everyone.'' In his article ``Design Principles Behind Smalltalk''~\cite{Inga81a}, which appeared in August 1981 in the BYTE Magazine, he mentions some of the most fundamental principles behind the Smalltalk project. Some of these go hand and hand with modularity and can be further supported by a good module system.
+
+\begin{itemize}
+	\item ``Personal mastery: If a system is to serve the creative spirit, it must be entirely comprehensible to a single individual.'' A module system can support understandability of a system by breaking up big components into smaller one (\emph{hierarchical decomposition}) and hiding irrelevant implementation details.
+	\item ``Factoring: Each independent component in a system would appear in only one place.'' A module system can encourage code reuse by making it easy to store shared behavior and components in a designated place that allows other components to take advantage of it and eliminate code duplication.
+	\item ``Modularity: No component in a complex system should depend on the internal details of another component.'' Through information hiding, a module system can encourage programmers not to rely on implementation-specific behavior. A notion of what is considered a public interface can help keeping modules exchangable and increases understandability, since only the public interface should be sufficient to understand what a module is doing.
+	\item ``Good Design: A system should be built with a minimum set of unchangable parts; those parts should be as generic as possible.'' Consequently, if we are to create a module system for Smalltalk, that system should build on top of a single fundamental concept, and all features and use cases should evolve out of this concept in a natural way without any special corner cases.
+\end{itemize}
+
 
 \section{Outline of this Work}
