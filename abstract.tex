@@ -22,7 +22,13 @@
 
 
 \begin{abstract}
-  The english abstract.
+We present the concept, the implementation, and an evaluation of \msname, a module system for and written in Squeak/Smalltalk. \msname is inspired by Newspeak and based on class nesting: classes can be members of other classes, similarly to instance variables. 
+
+Top-level classes (modules) are globals and nested classes can be accessed using message sends to the corresponding enclosing class. Class nesting effectively establishes a global and hierarchical namespace, and allows for modular decomposition, resulting in better understandability, if applied properly. 
+
+Nested classes can be parameterized, allowing for external configuration of classes, a form of dependency injection. Furthermore, parameterized classes go hand in hand with mixin modularity. Mixins are a form of inter-class code reuse and based on single inheritance. Traits, another form of inter-class code reuse with explicit conflict resolution can be implemented on top of mixins.
+
+We show how \msname can be used to solve the problem of duplicate classes in different modules, to provide a versioning and dependency management mechanism, and to improve understandability through hierarchical decomposition.
 \end{abstract}
 
 \begin{zusammenfassung}
