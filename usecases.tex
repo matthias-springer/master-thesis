@@ -496,6 +496,7 @@ The idea of mixins used as composable units of behavior is similar to traits~\ci
 \section{Traits}
 
 \section{Extension Methods}
+\label{sec:usecases_ext_meth}
 There are cases, in which the functionality of an already class in a different module must be extended or changed. For example, this is the case when a bug in another library must be fixed. The programmer typically writes a method that replaces the existing one with the bug. Sometimes, extension methods are also used add additional behavior. For example, the \texttt{Morphic} package adds the convenience method \texttt{asStringMorph} to \texttt{String}. Sometimes it is sufficient to create a subclass of the class in question, and add the changed behavior only to the subclass. However, there are cases where the application code is not in control of instance creation.
 
 An extension method can be added in our system by creating a nested classes whose class generator method returns an already existing class instead of a new subclass.

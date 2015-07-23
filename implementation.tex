@@ -1,9 +1,10 @@
 \chapter{Implementation}
 \label{sec:impl}
+In this chapter, we present the implementation of \msname and explain briefly how the system is used. Larger examples and concrete use cases will follow in the next chapter.
 
 \section{Meta Model and Instantiation}
 \label{sec:impl_meta_model}
-Our system has a simple meta model for describing (nested) classes and their methods. The graphical user interface operates exclusively on the meta model and makes changes to it. The meta model can then be instantiated to generate the actual classes. When changes to the meta model are made, these changes can also be applied to already existing instantiations of the model, allowing giving programmers the feeling of working with a live system.
+\msname has a simple meta model for describing (nested) classes and their methods. The graphical user interface operates exclusively on the meta model and makes changes to it. The meta model can then be instantiated to generate the actual classes. When changes to the meta model are made, these changes can also be applied to already existing instantiations of the model, allowing giving programmers the feeling of working with a live system.
 
 \paragraph{Smalltalk-80 Class/Meta Model}
 Squeak already comes with a meta model: objects are instances of a classes, consequently, classes are also instances of a class. In Smalltalk, every class is an instance of its own meta class, which is in turn instance of \texttt{Metaclass} (Figure~\ref{fig:impl_squeak_meta}).
@@ -116,6 +117,54 @@ Figure~\ref{fig:impl_subclass_nested} shows how subclasses are created in our sy
 \label{fig:impl_subclass_nested}
 \end{figure}
 
+\section{Inheriting Nested Classes}
+Nested classes are accessed using accessor methods which return the generated class. They are similar to class instance variable in a sense that nested classes belong to the enclosing class object. Therefore, a subclass of the enclosing class has its own nested class, i.e., the nested classes might have the same methods and variables declared, but they are different object. Nested classes can be overridden in a subclass of the enclosing class, just as any regular method can be overridden. The following paragraphs give an overview of how a subclass of an enclosing class can customize the nested class.
+
+\paragraph{Override with Nested Class}
+A subclass of an enclosing class can define a new nested class. The programmer simply adds a new class generator method with the same selector to the subclass. The superclass will keep using the old nested class, whereas the subclass will use the new one, because the method lookup ends in the subclass when the corresponding class accessor method is found. The new nested class will only have the methods defined in the class specification of the subclass' nested class and not inherit or copy any methods from the superclass' nested class specification.
+
+\paragraph{Override with Regular Method}
+A subclass of an enclosing class can replace/override a nested class with a regular method. The programmer simply adds a new method (without the \texttt{class} pragma) to the subclass.
+
+\paragraph{Extend Inherited Nested Class without Subclassing}
+A subclass can extend the inherited nested class, i.e., nested class in the subclass will have the same superclass as the nested class in the superclass. However, the nested class in the subclass will have all methods defined for the nested class in the superclass and additionally all methods defined in the class specification of the nested class in the subclass. Duplicate methods will be replaced, similarly to extension methods in Squeak.
+
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[scale=0.75]{nested_super_1.pdf}
+	\caption{Extending inherited nested classing}
+	\label{fig:impl:extend_inherited_class}
+\end{figure}
+
+Figure~\ref{fig:impl:extend_inherited_class} shows an example of a nested class extension. Class \texttt{A2} is a subclass of \texttt{A1}, which defines a nested class \texttt{B}. Therefore, both classes \texttt{A1} and \texttt{A2} have a nested class \texttt{B}. \texttt{A2} extends \texttt{B} by perfoming a super call. The following list gives an overview of how the classes \texttt{B} behave.
+
+\begin{itemize}
+	\item \texttt{A1 B foo}: returns 1.
+	\item \texttt{A1 B bar}: returns 2.
+	\item \texttt{A1 B qux}: raises \texttt{MessageNotUnderstood}, because \texttt{qux} is not defined on \texttt{A1 B}.
+	\item \texttt{A2 B foo}: returns 1, because \texttt{A2 B} has all methods defined for \texttt{A1 B}.
+	\item \texttt{A2 B bar}: returns 3, because that method was replaces in \texttt{A2 B}.
+	\item \texttt{A2 B qux}: returns 4.
+\end{itemize}
+
+Note, that \texttt{A1 B} and \texttt{A2 B} have the same superclass, but are different class object. \texttt{A2 B} is \emph{not} a subclass of \texttt{A1 B}. When \texttt{A2 B} is invoked for the first time, \msname first generates the class \texttt{A1 B} (because of the super call) and caches it for \texttt{A2 B}\footnote{Caches are receiver-specific.}. That class is then initialized with the class specification for \texttt{A2 B} (without making a subclass), i.e., all methods defined in \texttt{A2 B}'s class specification are added. A second call to \texttt{A1 B} will not return the previous generated and extended class for \texttt{A2}, because the class cache is implemented on a per-receiver basis.
+
+Also note, that if we actually wanted to extend \texttt{A1 B} and alias it as \texttt{A2 B}, which is technically similar to an extension method in Smalltalk (see Section~]\ref{sec:usecases_ext_meth}), then \texttt{A2 B} should be defined as \texttt{\^{} A1 B}, because the receiver of the message \texttt{B} will then be \texttt{A1} instead of \texttt{A2}. 
+
+At the moment, there is no way to additional instance variables or class variables to an extended nested class, because the class definition (containing the definition of variables) is done in the \texttt{super} call. 
+
+\paragraph{Subclass Inherited Nested Class}
+A subclass can subclass the inherited nested class, i.e., the nested class in the subclass is a subclass of the nested class in the superclass. Effectively, this results in a parallel class hierarchy. The nested subclass can override methods and use \texttt{super} to call methods in the nested superclass.
+
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[scale=0.75]{nested_super_2.pdf}
+	\caption{Subclassing inherited nested classing}
+	\label{fig:impl:subclass_inherited_class}
+\end{figure}
+
+Figure~\ref{fig:impl:subclass_inherited_class} shows an example for subclassing a nested class, which is similar to Figure~\ref{fig:impl:extend_inherited_class}. Note, that \texttt{A2 B} is now a subclass of \texttt{A1 B} and \texttt{super} calls in \texttt{A2 B} now start their lookup in \texttt{A1 B}. The new subclass \texttt{A2 B} behaves like the class in the previous example, except for \texttt{A2 B bar}. That statement returns 1, because the \texttt{super} call invokes \texttt{A1 class>>B class>>foo}.
+
 \section{Implementation of Keywords}
 \label{sec:impl_keywords}
 In this section, we explain how the keywords \texttt{enclosing}, \texttt{outer}, and \texttt{scope} are implemented. All message sends to \texttt{enclosing} are forwarded to the enclosing class. All message sends to \texttt{outer} are forwarded all enclosing classes consecutively, whenever a class does not understand the message. All message sends to \texttt{scope} are first treated as \texttt{self} sends, then as sends to \texttt{outer}.
@@ -163,6 +212,7 @@ Figure~\ref{impl:lex_scope} shows how the \texttt{scope} lookup works in a sligh
 Note, that the reference to \texttt{self} (\texttt{target}) cannot be established at compile time, because it is unclear what the polymorphic receiver class is. Therefore, references to the keyword \texttt{scope} have to be replaced by a message send: \texttt{LexicalScope for: self in: enclosing}. This has the side effect that the decompiled source code (and the code shown in the debugger) looks slightly different from the code written by the programmer.
 
 \section{Class Caching}
+\todo{Cache must map self to instantiation}
 Whenever a nested class is accessed, the class accessor method checks if the class was already generated. If that is the case, the cached version if the class is returned. For this reason, every class specification with a unary selector (unparameterized class) has an instance variable \texttt{classCache}, which contains the cached class object. The system does not cache parameterized classes, as this could result in an excessive number of classes being kept around.
 
 One can argue, that a nested weak identity key dictionary data structure could solve this problem: \texttt{classCache} is a \texttt{WeakIdentityKeyDictionary}, whose keys are the first argument. The values are again \texttt{WeakIdentityKeyDictionary}s, mapping the second argument to \texttt{WeakIdentityKeyDictionary}s. Eventually, the last argument is mapped to class objects instead of dictionaries (Figure~\ref{fig:impl_class_cache}).
