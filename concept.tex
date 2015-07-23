@@ -91,21 +91,21 @@ Again, the method \texttt{enclosing} should be avoided in general, but is useful
 \paragraph{\texttt{outer} Keyword}
 The method \texttt{enclosing} can be used to traverse the the lexical scope of a class. Arbitrarily many \texttt{enclosing} sends can be chained, as long as the respective receiver still has an enclosing class and is, therefore, not a top-level class. Arguably, this can result in verbose and complicated code, and is at the very least questionable with regards to the law of demeter.
 
-In addition to \texttt{enclosing}, the system provides the \texttt{outer} keyword, bound to the method's lexical scope. Whenever a message is sent to \texttt{outer}, the message is first interpreted as a send to \texttt{enclosing}. If that message send fails, the message is sent to \texttt{enclosing enclosing}, and, eventually, to the top-level class, if no other class in the lexical scope understands the message. If even that message send is not understood, the selector is looked up in the \texttt{globals} dictionary. If the selector is absent, a \texttt{MessageNotUnderstood} error is raised.
+In addition to \texttt{enclosing}, \msname provides the \texttt{outer} keyword, bound to the method's lexical scope. Whenever a message is sent to \texttt{outer}, the message is first interpreted as a send to \texttt{enclosing}. If that message send fails, the message is sent to \texttt{enclosing enclosing}, and, eventually, to the top-level class, if no other class in the lexical scope understands the message. If even that message send is not understood, the selector is looked up in the \texttt{globals} dictionary. If the selector is absent, a \texttt{MessageNotUnderstood} error is raised.
 
 \texttt{outer} is similar to \texttt{super}, with the difference that \texttt{outer} does a horizontal lookup (lexical scope) and \texttt{super} does a vertical lookup (superclass chain). Note, that messages sent to \texttt{outer} are sent to an object different from \texttt{self}.
 
 \paragraph{\texttt{scope} Keyword}
 This keyword combines \texttt{super} and \texttt{outer}: a message sent to \texttt{scope} is first treated as a \texttt{self} send. If the message is not understood, it is treated as an \texttt{outer} send.
 
-Our system essentially first looks up the methods in \texttt{self}, then in the superclass hierarchy, and then in the lexical scope. This is also how the method lookup in Java works, also known as \emph{comb semantics}\todo{Add reference:  Smith, W.R.: NewtonScript: Prototypes on the Palm, pp. 109 – 139. SpringerVerlag (1999), in Prototype-Based Programming: Concepts, Languages and Applications, Noble, Taivalsaari and Moore, editors}. Newspeak uses a different lookup: it first looks for a method in the receiver's class, then in the lexical scope, and finally in superclass hierarchy~\cite{bracha:modules_as_objects}.
+\msname essentially first looks up the methods in \texttt{self}, then in the superclass hierarchy, and then in the lexical scope. This is also how the method lookup in Java works, also known as \emph{comb semantics}~\cite{bracha2007interaction}. Newspeak uses a different lookup: it first looks for a method in the receiver's class, then in the lexical scope, and finally in superclass hierarchy~\cite{bracha:modules_as_objects}.
 
 The statement \texttt{enclosing enclosing m1} in the previous example can also be written as \texttt{scope m1}. If the method \texttt{m1} would now be moved to its enclosing class (if it had one), the lookup would still succeed. However, \texttt{scope} exposes the risk of accidentially capturing method names in superclasses or the lexical chain.
 
 \paragraph{Implicit \texttt{scope} Receiver}
-In our system, references to globals are in fact message sends with \texttt{scope} as implicit receiver. This makes it easier for Smalltalk programmers to write code in our system, even if they do not know about \texttt{enclosing} and \texttt{scope}. It also makes the code less verbose and easier to read.
+In our system, references to globals are in fact message sends with \texttt{scope} as implicit receiver. This makes it easier for Smalltalk programmers to write code in \msname, even if they do not know about \texttt{enclosing} and \texttt{scope}. It also makes the code less verbose and easier to read.
 
-Whenever code references an identifier that is not a temporary variable, not an instance variable, and not a \emph{special} object \footnote{\texttt{self}, \texttt{super}, \texttt{thisContext}, \texttt{scope}, \texttt{outer}, \texttt{enclosing}}, the compiler replaces that identifier with a message send to \texttt{scope}.
+Whenever code references an identifier that is not a temporary variable, not an instance variable, and not a \emph{special} object/keyword\footnote{\texttt{self}, \texttt{super}, \texttt{thisContext}, \texttt{scope}, \texttt{outer}, \texttt{enclosing}}, the compiler replaces that identifier with a message send to \texttt{scope}.
 
 Consider, for example, that we want to reference class \texttt{A B} within \texttt{A class>>B class>>C>>bar} in Figure~\ref{fig:concept_nested_notation}. Either one of the following two statements works in this case.
 
@@ -118,11 +118,25 @@ Consider, for example, that we want to reference class \texttt{A B} within \text
 	\item \texttt{B.}
 \end{itemize}
 
-In this example, we used the implicit \texttt{scope} receiver for class lookup, which is in our opinion the most useful case. However, any method in \texttt{self}, the lexical scope, or the superclass hierarchy can in fact be looked up this way. One can argue that this is bad practice and should be forbidden for methods that are not class generator methods. However, it is allowed in Newspeak and other programming languages like Java, and seems to work well, as long as the programmer is aware of how the method lookup works. Note, that only unary messages can have an implicit \texttt{scope} receiver, since we would have to change the Smalltalk syntax otherwise.
+In this example, we used the implicit \texttt{scope} receiver for class lookup, which is in our opinion the most useful case. However, any unary method in \texttt{self}, the lexical scope, or the superclass hierarchy can in fact be looked up this way. One can argue that this is bad practice and should be forbidden for methods that are not class generator methods. However, it is allowed in Newspeak and other programming languages like Java, and seems to work well. Note, that only unary messages can have an implicit \texttt{scope} receiver, since we would have to change the Smalltalk syntax otherwise.
 
 \section{Parameterized Classes}
-All examples shown in the previous section use unparameterized classes, i.e., class generator methods are always unary. Class generator method can, however, also have binary selectors or selectors with a higher arity. For memory conservation reasons, these classes are then no longer cached.
+All examples shown in the previous sections use unparameterized classes, i.e., class generator methods are always unary. Class generator method can, however, also have binary selectors or selectors with a higher arity. For memory conservation reasons, these classes are then no longer cached.
+
+\begin{wrapfigure}{l}{0.5\textwidth}
+	\includegraphics[scale=0.75]{nested_notation_params.pdf}
+	\centering
+	\caption{Parameterized classes example}
+	\label{fig:concept_param_classes}
+\end{wrapfigure}
 
 Parameterized classes can be used to make modules externally configurable or to implement mixins. We will present some conrete use cases in Section~\ref{sec:usecases}.
 
-The arguments passed to a parameterized class generator method are considered when a message is sent to \texttt{enclosing}. At first, the system tries to send the message to the enclosing class. If that fails, the system checks if the selector corresponds to one of the parameter names in the enclosing class' class generator method.
+The arguments passed to a parameterized class generator method are considered when a message is sent to \texttt{enclosing}. At first, the system tries to send the message to the enclosing class. If that fails, \msname checks if the selector corresponds to one of the parameter names in the enclosing class' class generator method.
+
+Consider, for example, that method \texttt{A: class>>B: class>>C: class>>foo} in Figure~\ref{fig:concept_param_classes} contains the following statements.
+\begin{itemize}
+	\item \texttt{scope p3}: method lookup succeeds in \texttt{A: class>>B: class>>C:} and returns the class parameter \texttt{p3}.
+	\item \texttt{scope p2}: method lookup succeeds in \texttt{A: class>>B:} and calls the method \texttt{p2}, which shadows the class parameter \texttt{p2}.
+	\item \texttt{scope p1}: method lookup succeeds in \texttt{A:} and returns the class parameter \texttt{p1}.
+\end{itemize}
