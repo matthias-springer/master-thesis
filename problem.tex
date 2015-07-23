@@ -1,17 +1,68 @@
 \chapter{Modularity Problems in Squeak}
 \label{sec:problem}
+In this section, we describe and evaluate how Squeak can be used to write modular programs at the moment. Based on our observations and programming experience with Squeak, there are four areas in which we see room for improvement. For every area, we will describe what the problem is and how it is currently solved in Squeak.
+
+\paragraph{Class-based Modularity}
+In pure Smalltalk, classes are the highest level of modular units. Classes are first-class objects and can be passed around. This functionality can be used to make behavior interchangable and promotes loose coupling. Classes are Smalltalk's way of sharing behavior with a number of objects, i.e., it is a form of code reuse. Squeak also supports Traits, a design method for composing class of pieces of behavior (see Section~\ref{sec:rel_traits}).
+
+Smalltalk is, as most object-oriented and class-based programming languages, amenable to well-established software design patterns~\cite{Gamma:1995:DPE:186897}, making it easier to write maintainable and understandable code.
 
 \section{Class Name Clashes}
 In Squeak, there can only be only one class with a certain name. Whenever, the programmer tries to add another class with the same name, a conflict occurs. When source code is loaded into the system with the Monticello version control system, the system asks the programmer if the already existing class should be replaced.
 
 Squeak has packages~\cite{Nierstrasz:2009:SE:1816759}, but these are not used as namespaces. Their purpose is to make it easier to find existing classes (like method protocols). They are also used as deployment units. The programmer does usually not load single classes into the system. Instead, packages (groups of classes) are loaded.
 
-As a workaround, it is good practice to add unique namespace prefixes to all class names in an application. Consider, for example, the RB AST library\footnote{\url{http://www.squeaksource.com/AST.html}}. This library is used for parsing Smalltalk source code and working with abstract syntax trees (AST). Among others, the library contains classes for parsing code and representing AST nodes. All of these classes start with an \texttt{RB} prefix, e.g., \texttt{RBParser}, \texttt{RBMethodNode}, or \texttt{RBLiteralNode}. When all application and library developers adhere to this convention, it is unlikely that class name classes occur.
+\begin{figure}[!htp]
+\dirtree{%
+.1 \framebox{\textbf{BroBreakout}}.
+.2 BroBall.
+.2 BroBlock.
+.2 BroBoundary.
+.2 BroBreakout.
+.2 BroExplosion.
+.2 BroLevelBuilder.
+.2 BroLevelStatistics.
+.2 BroLevelStatisticsItem.
+.2 BroLevelView.
+.2 BroLevelWorld.
+.2 BroMenuLabel.
+.2 BroMenuView.
+.2 \textit{BroPowerup}.
+.2 BroPowerupAccelerate.
+.2 BroPowerupBall.
+.2 BroPowerupDecelerate.
+.2 BroPowerupEnlarge.
+.2 BroPowerupShrink.
+.2 BroRacket.
+.2 \textit{BroView}.
+.2 BroWelcomeView.
+}
+\caption{Breakout class structure}
+\label{fig:conc_breakout}
+\end{figure}
+
+As a workaround, it is good practice to add unique namespace prefixes to all class names in an application. Consider, for example, the game Breakout (Figure~\ref{fig:conc_breakout}, see also Section~\ref{sec:usecase_hierach_decomp}). This application uses \texttt{Bro} as a prefix for all classes. If we would not use namespace prefixes, generic class names like \texttt{Block} or \texttt{Ball} would be likely to collide with other classes. On the other hand, if all application and library developers adhere to this convention, it is unlikely that class name classes occur.
 
 Squeak environments provide a way to have multiple classes with the same name in one image. However, they suffer from poor tool support and do not integrate well with some of the other goals (e.g., code reuse) for our system. See Section~\ref{sec:rel_sq_env} for a detailed discussion of Squeak environments and why we did not use them in this system.
 
 \section{Dependency Managment}
-two application require the same module but in different versions
+Dependency management describes the task of keeping track of dependencies and ensuring that required dependencies are available to the application in question. We destinguish between two cases of dependency management: internal dependency management, i.e., the application specifies all dependencies, and external dependency managment (\emph{external configuration}), i.e., user of the application specifies all dependencies. But before managing dependencies, we need a versioning concept that allows us to represent library versions in an image.
+
+\paragraph{Versioning}
+There are situations when it is useful to have multiple versions of the same library in one image; for example, if there are two different applications installed and both require the same library, but in different versions. Old versions of a library might have bugs that an application has to work around. The application might then not work with a newer library, where the bug is fixed. Furthermore, the public API of a library might change with new versions, especially if it is a new major version.
+
+Therefore, we need a versioning mechanism in \msname, that helps us to store and reference different versions of the same application or library in one image. Part of this mechanism must be a way to develop new library versions, and a mechanism to reference a certain version.
+
+\paragraph{Internal Dependency Management}
+In this case, every application or library specifies itself which dependencies (and their versions) it depends on. The application effectively maintains the list of dependencies itself. Consequently, the application is coupled to its dependencies and cannot be used with different versions or implementations without changing its source code.
+
+\paragraph{External Configuration}
+In this case, the dependency management is delegated to the client of an application or library. What the application specifies is that it requires some dependency implementing a certain interface, but not what exact dependency it is exactly or in what version. This mechanism is also called \emph{dependency injection} and used heavily in the Java world~\cite{Prasanna:2009:DI:1795686}. Dependency injection is also known as \emph{inversion of control}~\cite{fowlerioc}, because it inverts the control of dependencies: it is shifted from the application or library in question to the user/client. External configuration is beneficial for modularity, because it supports loose coupling of application and dependencies. This, in turn, promotes understandability, maintainablity, and exchangability (code reuse), because an application cannot rely on implementation details of a loosely bound dependency.
+
+\paragraph{Dependency Management in Squeak}
+In Squeak, there can currently only be one version of a library or application installed at a time. Monticello is used a source code management system and can be used to load new versions of the source code into an image. Metacello is a package management system (see Section~\ref{sec:rel_metacello}), similar to Maven in Java. Every Metacello package has a configuration class containing a list of external dependencies and internal packages to load for every version, along with the location of an external repository where the packages should be loaded from.
+
+External configuration can simulated in Smalltalk by writing class constructors that accept other dependencies as parameters. These dependencies should then be stored in instance variables and only be accessed using instance variables. However, this technique has two pitfalls. Firstly, dependencies have to be forwarded to all other classes, resulting in boilerplate code. Secondly, only instance methods can benefit from external configuration, because class methods are shared among instances (configurations) of the class.
 
 \section{Hierarchical Decomposition}
 Smalltalk packages allow the programmer to group together what belongs together~\cite{Eckel:2002:TJ:579108}. This is especially useful in big projects with many classes and allows for a form of modular decomposition. Different criterias for modular decomposition have been proposed: e.g., functional decompositon (making every step in the \emph{flowchart} a module) or information hiding~\cite{Parnas:1972:CUD:361598.361623}. The following list shows some benefits of good modular decomposition.

@@ -122,6 +122,7 @@ It is important to understand that the implementation of \texttt{PaintbrushWith:
 External configuration as shown in this example is similar to a constructor that accepts class objects as parameters and constructs and instance of the class with the class objects stored in instance variables. The difference to this approach is that, in our system, also class methods are bound to the passed arguments, because a new class object is constructed instead of an instance of a class. Furthermore, our system allows creating new nested classes with the argument as a superclass (mixins).
 
 \section{Hierarchical Decomposition}
+\label{sec:usecase_hierach_decomp}
 One of the benefits of hierarchical decomposition is better readability and better understandability. Proper class nesting makes it easier for readers of the source code to understand which classes belong together and to find the class containing a certain functionality.
 
 As an example, we took two simple computer games written in Squeak: SpaceCleanup\footnote{\url{https://github.com/matthias-springer/space-cleanup}}, a bomberman clone, and Breakout\footnote{\url{https://github.com/fniephaus/BroBreakout}} (Figure~\ref{fig:usecase_games}).
