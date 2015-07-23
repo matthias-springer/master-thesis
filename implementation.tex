@@ -12,7 +12,7 @@ Squeak already comes with a meta model: objects are instances of a classes, cons
 \begin{figure}
 	\includegraphics[width=\textwidth]{squeak_meta.pdf}
 	\centering
-	\caption{Squeak Class Model with Meta Classes}
+	\caption[Squeak class model]{Squeak class model. Every class is an instance of its meta class. Meta classes are instance of \texttt{Metaclass}. Meta classes and non-meta classes form a helix~\cite{Briot:1989:PEM:74877.74921}, connecting the meta class hierarchy with the non-meta class hierarchy.}
 	\label{fig:impl_squeak_meta}
 \end{figure}
 
@@ -30,7 +30,7 @@ Figure~\ref{fig:impl_meta_model} shows the meta model in our system. The meta mo
 \begin{figure}[!hbp]
 	\centering
 	\includegraphics[scale=0.75]{metamodel.pdf}
-	\caption{Meta Model for Nested Classes}
+	\caption[Meta model in \msname]{Meta model for nested classes in \msname. Class specifications can are containers for method specifications. Meta class specification can have additional nested class specifications.}
 	\label{fig:impl_meta_model}
 \end{figure}
 
@@ -53,7 +53,7 @@ Figure~\ref{fig:lazy_class_gen} illustrates how the system generates and initial
 \begin{figure}
 	\includegraphics[width=\textwidth]{lazy_class_gen.pdf}
 	\centering
-	\caption{Lazy class generation and initialization}
+	\caption[Nested class initialization]{Nested class initialization. Classes are generated lazily and initialized using the \msname meta model.}
 	\label{fig:lazy_class_gen}
 \end{figure}
 
@@ -88,6 +88,7 @@ Our system reuses the class builder and adds functionality for creating anonymou
 Figure~\ref{fig:impl_subclass_squeak} shows how subclasses are created in Squeak. The first statement is a message send to \texttt{Object} which not only creates the subclass but also adds it to the \texttt{globals} dictionary. The second statement is also executable code that adds an instance variable to the meta class object. The difference between class variables and class instance variables is that class variables are shared among all subclasses, whereas class instance variables have different values for every class object~\cite{classvar1,classvar2}. For example, if \texttt{A} has a class variable \texttt{Bar} and \texttt{B} is a subclass of \texttt{A}, then both \texttt{A} and \texttt{B} share one variable \texttt{Bar}.
 
 \begin{figure}[!htp]
+\begin{subfigure}[b]{\textwidth}
 \begin{lstlisting}
 Object subclass: #NewClass
     instanceVariableNames: <@\textcolor{RoyalPurple}{'foo bar'}@>
@@ -100,11 +101,11 @@ NewClass class
 \end{lstlisting}
 \caption{Subclass notation in Squeak}
 \label{fig:impl_subclass_squeak}
-\end{figure}
+\end{subfigure}
 
-Figure~\ref{fig:impl_subclass_nested} shows how subclasses are created in our system. \texttt{NewClass} is a class generator method and also the name of the new class. Therefore, it is no longer necessary to pass a symbol with the name of the new class to the \texttt{subclass:} method. Note, that the \texttt{<class>} pragma is necessary to distinguish between class generator methods and regular methods, which might accidentially return a class. Only in the former case, a class specification object is created.
+\vspace{15pt}
 
-\begin{figure}[!htp]
+\begin{subfigure}[b]{\textwidth}
 \begin{lstlisting}
 <@\textbf{NewClass}@>
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
@@ -115,7 +116,11 @@ Figure~\ref{fig:impl_subclass_nested} shows how subclasses are created in our sy
 \end{lstlisting}
 \caption{Subclass notation with nested classes}
 \label{fig:impl_subclass_nested}
+\end{subfigure}
+\caption[Notation for creating subclasses]{Full notation for creating subclasses. \msname provides abbreviations (convenience methods) in case no additional instance variables or class variables should be defined (e.g., \texttt{subclass}).}
 \end{figure}
+
+Figure~\ref{fig:impl_subclass_nested} shows how subclasses are created in our system. \texttt{NewClass} is a class generator method and also the name of the new class. Therefore, it is no longer necessary to pass a symbol with the name of the new class to the \texttt{subclass:} method. Note, that the \texttt{<class>} pragma is necessary to distinguish between class generator methods and regular methods, which might accidentially return a class. Only in the former case, a class specification object is created.
 
 \section{Inheriting Nested Classes}
 Nested classes are accessed using accessor methods which return the generated class. They are similar to class instance variable in a sense that nested classes belong to the enclosing class object. Therefore, a subclass of the enclosing class has its own nested class, i.e., the nested classes might have the same methods and variables declared, but they are different object. Nested classes can be overridden in a subclass of the enclosing class, just as any regular method can be overridden. The following paragraphs give an overview of how a subclass of an enclosing class can customize the nested class.
@@ -130,10 +135,23 @@ A subclass of an enclosing class can replace/override a nested class with a regu
 A subclass can extend the inherited nested class, i.e., nested class in the subclass will have the same superclass as the nested class in the superclass. However, the nested class in the subclass will have all methods defined for the nested class in the superclass and additionally all methods defined in the class specification of the nested class in the subclass. Duplicate methods will be replaced, similarly to extension methods in Squeak.
 
 \begin{figure}[!htp]
+\begin{subfigure}[b]{\textwidth}
 	\centering
 	\includegraphics[scale=0.75]{nested_super_1.pdf}
 	\caption{Extending inherited nested classing}
 	\label{fig:impl:extend_inherited_class}
+\end{subfigure}
+
+\vspace{15pt}
+
+\begin{subfigure}[b]{\textwidth}
+	\centering
+	\includegraphics[scale=0.75]{nested_super_2.pdf}
+	\caption{Subclassing inherited nested classing}
+	\label{fig:impl:subclass_inherited_class}
+\end{subfigure}
+
+\caption[Example: Extending/subclassing nested classes]{Example: Extending and subclassing nested classes. Subclassing inherited nested classes leads to parallel class hierarchies.}
 \end{figure}
 
 Figure~\ref{fig:impl:extend_inherited_class} shows an example of a nested class extension. Class \texttt{A2} is a subclass of \texttt{A1}, which defines a nested class \texttt{B}. Therefore, both classes \texttt{A1} and \texttt{A2} have a nested class \texttt{B}. \texttt{A2} extends \texttt{B} by perfoming a super call. The following list gives an overview of how the classes \texttt{B} behave.
@@ -156,13 +174,6 @@ At the moment, there is no way to additional instance variables or class variabl
 \paragraph{Subclass Inherited Nested Class}
 A subclass can subclass the inherited nested class, i.e., the nested class in the subclass is a subclass of the nested class in the superclass. Effectively, this results in a parallel class hierarchy. The nested subclass can override methods and use \texttt{super} to call methods in the nested superclass.
 
-\begin{figure}[!htp]
-	\centering
-	\includegraphics[scale=0.75]{nested_super_2.pdf}
-	\caption{Subclassing inherited nested classing}
-	\label{fig:impl:subclass_inherited_class}
-\end{figure}
-
 Figure~\ref{fig:impl:subclass_inherited_class} shows an example for subclassing a nested class, which is similar to Figure~\ref{fig:impl:extend_inherited_class}. Note, that \texttt{A2 B} is now a subclass of \texttt{A1 B} and \texttt{super} calls in \texttt{A2 B} now start their lookup in \texttt{A1 B}. The new subclass \texttt{A2 B} behaves like the class in the previous example, except for \texttt{A2 B bar}. That statement returns 1, because the \texttt{super} call invokes \texttt{A1 class>>B class>>foo}.
 
 \section{Implementation of Keywords}
@@ -175,12 +186,30 @@ During compilation, all references to \texttt{enclosing} bound to the enclosing 
 \paragraph{Implementation of \texttt{outer}}
 During compilation, all references to \texttt{outer} are bound to an instance of \texttt{LexicalScope}. This class is a subclass of \texttt{ProtoObject}, holds a reference to the enclosing class, and contains a \texttt{doesNotUnderstand:} handler, that forwards messages to the enclosing class. If the enclosing class does not understand the message, the message is forwarded to that class' enclosing class. If at some point, a top-level class without an enclosing class is reached, the handler looks for an entry in the \texttt{globals} dictionary with the message's selector.
 
+\afterpage{%
+
 \begin{figure}[!htp]
+\vspace{50pt}
+\begin{subfigure}[b]{\textwidth}
 	\includegraphics[scale=1]{lexical_outer.pdf}
 	\centering
-	\caption{\texttt{LexicalScope} for \texttt{outer} keyword example}
+	\caption{\texttt{LexicalScope} for \texttt{outer} keyword}
 	\label{impl:lex_outer}
+\end{subfigure}
+
+\vspace{35pt}
+
+\begin{subfigure}[b]{\textwidth}
+	\includegraphics[scale=1]{lexical_scope.pdf}
+	\centering
+	\caption{\texttt{LexicalScope} for \texttt{scope} keyword}
+	\label{impl:lex_scope}
+\end{subfigure}
+\vspace{10pt}
+\caption[Example: Method lookup with \texttt{LexicalScope}]{Example: Method lookup using \texttt{LexicalScope}. Message sends to \texttt{scope} have an additional \texttt{target} object involved in the lookup, which is the receiver in the context where \texttt{scope} appears in the source code.}
 \end{figure}
+\clearpage
+}
 
 As an example, let us assume that we have classes nested as shown in Figure~\ref{fig:concept_nested_notation} and that all following message sends to \texttt{outer} happen in \texttt{A class>>B class>>C class>>m4}. See Figure~\ref{impl:lex_outer} for a visualization of the lookup.
 \begin{itemize}
@@ -193,13 +222,6 @@ As an example, let us assume that we have classes nested as shown in Figure~\ref
 
 \paragraph{Implementation of \texttt{scope}}
 References to \texttt{scope} cannot be replaced by a constant literal during compile time. This is because the lookup involves a lookup in \texttt{self} send. Looking up methods in the class of the method under compilation is not sufficient, because that method might be overridden in a subclass. Therefore, we have to construct a \texttt{LexicalScope} object at runtime (instead of compile time) and pass it two objects: the enclosing class and \texttt{self}.
-
-\begin{figure}[!htp]
-	\includegraphics[scale=1]{lexical_scope.pdf}
-	\centering
-	\caption{\texttt{LexicalScope} for \texttt{scope} keyword example}
-	\label{impl:lex_scope}
-\end{figure}
 
 Figure~\ref{impl:lex_scope} shows how the \texttt{scope} lookup works in a slightly modified example. Just as in the previous example, we assume that all message sends happen in \texttt{A class>>B class>>C class>>m4}. However, \texttt{m4} is invoked on class \texttt{D}, which is a subclass of class \texttt{A B C}. Therefore, \texttt{self} is bound to \texttt{D}.
 

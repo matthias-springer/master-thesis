@@ -8,7 +8,7 @@ In Smalltalk, every object is an instance of a class, defining the object's inst
 \begin{wrapfigure}{l}{0.5\textwidth}
 	\includegraphics[scale=0.75]{nested_notation.pdf}
 	\centering
-	\caption{Nested Classes Example}
+	\caption[Example: Nested classes]{Example: nested classes. A class can have class-side member classes.}
 	\label{fig:concept_nested_notation}
 \end{wrapfigure}
 
@@ -35,21 +35,20 @@ Top-level classes are called \emph{modules}. All other classes are called \emph{
 %\end{figure}
 
 \section{Accessing the Lexical Scope}
+\begin{wrapfigure}{l}{0.5\textwidth}
+	\includegraphics[scale=0.75]{super_binding.pdf}
+	\centering
+	\caption[Example: Binding of \texttt{super}]{Example: Binding of \texttt{super}. The method lookup starts at the superclass of the calling method's class.}
+	\label{fig:concept_super_binding}
+\end{wrapfigure}
 It is sometimes necessary to access a method's lexical scope (i.e., the enclosing classes), in order to send messages to enclosing classes. For this reason, our system introduces new keywords, in addition to \texttt{self} and \texttt{super}, which are already present in every Smalltalk dialect. Figure~\ref{fig:concept_keywords} gives an overview of all method lookup-related keywords in the system.
 
 \begin{figure}[!htp]
 	\centering
 	\includegraphics[scale=1]{lookup_keywords.pdf}
-	\caption{Keywords for access to superclass and lexical scope.}
+	\caption[Keywords for superclass and lexical scope access]{Keywords for superclass and lexical scope access. The lookup starts at \texttt{self}, and continues with the lexical scope.}
 	\label{fig:concept_keywords}
 \end{figure}
-
-\begin{wrapfigure}{l}{0.5\textwidth}
-	\includegraphics[scale=0.75]{super_binding.pdf}
-	\centering
-	\caption{Binding of \texttt{super} example}
-	\label{fig:concept_super_binding}
-\end{wrapfigure}
 
 \paragraph{\texttt{self} Keyword}
 This keyword is used make a message send within an object. The receiver is the same object as the sender and the lookup starts at the (polymorphic) class of the receiver. If that class does not provide a corresponding method, the lookup continues in the superclass hierarchy. If no class in the superclass hierarchy has a corresponding method, a \texttt{MethodNotUnderstood} error is raised.
@@ -72,7 +71,7 @@ Figure~\ref{fig:concept_lexical_thisouter} illustrates how \texttt{enclosing} is
 \begin{figure}[!htp]
 	\includegraphics[scale=0.75]{nested_lexical1.pdf}
 	\centering
-	\caption{Binding of \texttt{enclosing} to method's lexical scope.}
+	\caption[Example: Binding of \texttt{enclosing}]{Example: Binding of \texttt{enclosing}. The keyword is bound to enclosing class of the class where the method containing the keyword is contained.}
 	\label{fig:concept_lexical_thisouter}
 \end{figure}
 
@@ -126,7 +125,7 @@ All examples shown in the previous sections use unparameterized classes, i.e., c
 \begin{wrapfigure}{l}{0.5\textwidth}
 	\includegraphics[scale=0.75]{nested_notation_params.pdf}
 	\centering
-	\caption{Parameterized classes example}
+	\caption[Example: Parameterized classes]{Example: Parameterized classes. A class can have parameters accessible with message sends to \texttt{enclosing}.}
 	\label{fig:concept_param_classes}
 \end{wrapfigure}
 
