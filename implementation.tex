@@ -92,7 +92,7 @@ Figure~\ref{fig:impl_spec_example} shows an example of a class specification for
 \section{Anonymous Classes and Subclass Generation}
 In Smalltalk, new classes are created by subclassing an already existing class. Squeak has a special class, the \texttt{ClassBuilder}, containing all the functionality for creating the class object, the meta class object, giving the class a name, possibly migrating the old class and its instances (if an existing class was changed), and registering it in the \texttt{globals} dictionary.
 
-Our system reuses the class builder and adds functionality for creating anonymous subclasses. Anonymous subclasses do not have a name and certain checks are omitted (e.g., if the class name starts with a capital letter). Also, anonymous subclasses are not added to the \texttt{globals} dictionary.
+\msname reuses the class builder and adds functionality for creating anonymous subclasses. Anonymous subclasses~\cite{Ducasse99evaluatingmessage} do not have a name and certain checks are omitted (e.g., if the class name starts with a capital letter). Also, anonymous subclasses are not added to the \texttt{globals} dictionary.
 
 \paragraph{Subclass Notation}
 Figure~\ref{fig:impl_subclass_squeak} shows how subclasses are created in Squeak. The first statement is a message send to \texttt{Object} which not only creates the subclass but also adds it to the \texttt{globals} dictionary. The second statement is also executable code that adds an instance variable to the meta class object. The difference between class variables and class instance variables is that class variables are shared among all subclasses, whereas class instance variables have different values for every class object~\cite{classvar1,classvar2}. For example, if \texttt{A} has a class variable \texttt{Bar} and \texttt{B} is a subclass of \texttt{A}, then both \texttt{A} and \texttt{B} share one variable \texttt{Bar}.
@@ -130,14 +130,14 @@ NewClass class
 \caption[Notation for creating subclasses]{Full notation for creating subclasses. \msname provides abbreviations (convenience methods) in case no additional instance variables or class variables should be defined (e.g., \texttt{subclass}).}
 \end{figure}
 
-Figure~\ref{fig:impl_subclass_nested} shows how subclasses are created in our system. \texttt{NewClass} is a class generator method and also the name of the new class. Therefore, it is no longer necessary to pass a symbol with the name of the new class to the \texttt{subclass:} method. Note, that the \texttt{<class>} pragma is necessary to distinguish between class generator methods and regular methods, which might accidentially return a class. Only in the former case, a class specification object is created.
+Figure~\ref{fig:impl_subclass_nested} shows how subclasses are created in \msname. \texttt{NewClass} is a class generator method and also the name of the new class. Therefore, it is no longer necessary to pass a symbol with the name of the new class to the \texttt{subclass:} method. Note, that the \texttt{<class>} pragma is necessary to distinguish between class generator methods and regular methods, which might accidentially return a class. Only in the former case, a class specification object is created.
 
 \section{Implementation of Keywords}
 \label{sec:impl_keywords}
 In this section, we explain how the keywords \texttt{enclosing}, \texttt{outer}, and \texttt{scope} are implemented. All message sends to \texttt{enclosing} are forwarded to the enclosing class. All message sends to \texttt{outer} are forwarded all enclosing classes consecutively, whenever a class does not understand the message. All message sends to \texttt{scope} are first treated as \texttt{self} sends, then as sends to \texttt{outer}.
 
 \paragraph{Implementation of \texttt{enclosing}}
-During compilation, all references to \texttt{enclosing} bound to the enclosing classes, which is known during class initialization. Technically, every class has its own Squeak environment which binds \texttt{enclosing} to the enclosing class. Therefore, it is also possible to evaluate \texttt{enclosing} in the debugger, for example.
+During compilation, all references to \texttt{enclosing} are bound to the enclosing class, which is known during class initialization. Technically, every class has its own Squeak environment which binds \texttt{enclosing} to the enclosing class. Therefore, it is also possible to evaluate \texttt{enclosing} in the debugger, for example.
 
 \paragraph{Implementation of \texttt{outer}}
 During compilation, all references to \texttt{outer} are bound to an instance of \texttt{LexicalScope}. This class is a subclass of \texttt{ProtoObject}, holds a reference to the enclosing class, and contains a \texttt{doesNotUnderstand:} handler, that forwards messages to the enclosing class. If the enclosing class does not understand the message, the message is forwarded to that class' enclosing class. If at some point, a top-level class without an enclosing class is reached, the handler looks for an entry in the \texttt{globals} dictionary with the message's selector.
@@ -177,14 +177,14 @@ As an example, let us assume that we have classes nested as shown in Figure~\ref
 \end{itemize}
 
 \paragraph{Implementation of \texttt{scope}}
-References to \texttt{scope} cannot be replaced by a constant literal during compile time. This is because the lookup involves a lookup in \texttt{self} send. Looking up methods in the class of the method under compilation is not sufficient, because that method might be overridden in a subclass. Therefore, we have to construct a \texttt{LexicalScope} object at runtime (instead of compile time) and pass it two objects: the enclosing class and \texttt{self}.
+References to \texttt{scope} cannot be replaced by a constant literal during compile time. This is because the lookup involves a lookup in \texttt{self}\footnote{If \texttt{scope} is used in an instance method, the lookup starts at \texttt{self class}.}. Looking up methods in the class of the method under compilation is not sufficient, because that method might be overridden in a subclass\footnote{\texttt{self} sends are late bound.}. Therefore, we have to construct a \texttt{LexicalScope} object at runtime (instead of compile time) and pass it two objects: the enclosing class and \texttt{self}.
 
 Figure~\ref{impl:lex_scope} shows how the \texttt{scope} lookup works in a slightly modified example. Just as in the previous example, we assume that all message sends happen in \texttt{A class>>B class>>C class>>m4}. However, \texttt{m4} is invoked on class \texttt{D}, which is a subclass of class \texttt{A B C}. Therefore, \texttt{self} is bound to \texttt{D}.
 
 \begin{itemize}
 	\item \texttt{scope bar}: lookup in \texttt{self} succeeds: method \texttt{D class>>bar}.
 	\item \texttt{scope foo}: lookup in \texttt{self} fails, but lookup in \texttt{enclosing} (class \texttt{A B}) succeeds.
-	\item The lookup for the all examples listed for \texttt{outer} (previous paragraph) yields the same result here.
+	\item The lookup for all other examples listed for \texttt{outer} (previous paragraph) yields the same result in this example.
 \end{itemize}
 
 Note, that the reference to \texttt{self} (\texttt{target}) cannot be established at compile time, because it is unclear what the polymorphic receiver class is. Therefore, references to the keyword \texttt{scope} have to be replaced by a message send: \texttt{LexicalScope for: self in: enclosing}. This has the side effect that the decompiled source code (and the code shown in the debugger) looks slightly different from the code written by the programmer.
