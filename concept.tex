@@ -125,7 +125,7 @@ All examples shown in the previous sections use unparameterized classes, i.e., c
 \begin{wrapfigure}{l}{0.5\textwidth}
 	\includegraphics[scale=0.75]{nested_notation_params.pdf}
 	\centering
-	\caption[Example: Parameterized classes]{Example: Parameterized classes. A class can have parameters accessible with message sends to \texttt{enclosing}.}
+	\caption[Example: Parameterized classes]{Example: Parameterized classes. A class can have parameters accessible with message sends	 to \texttt{enclosing}.}
 	\label{fig:concept_param_classes}
 \end{wrapfigure}
 
@@ -139,3 +139,58 @@ Consider, for example, that method \texttt{A: class>>B: class>>C: class>>foo} in
 	\item \texttt{scope p2}: method lookup succeeds in \texttt{A: class>>B:} and calls the method \texttt{p2}, which shadows the class parameter \texttt{p2}.
 	\item \texttt{scope p1}: method lookup succeeds in \texttt{A:} and returns the class parameter \texttt{p1}.
 \end{itemize}
+
+\section{Inheriting Nested Classes}
+Nested classes are accessed using methods which return the generated class. They are similar to class instance variables in a sense that nested classes belong to the enclosing class object. Therefore, a subclass of the enclosing class has its own nested class, i.e., the nested classes might have the same methods and variables declared, but they are different objects. Nested classes can be overridden in a subclass of the enclosing class, just as any regular method can be overridden. The following paragraphs give an overview of how a subclass of an enclosing class can customize the nested class.
+
+\paragraph{Override with Nested Class}
+A subclass of an enclosing class can define a new nested class. The programmer simply adds a new class generator method with the same selector to the subclass. The superclass will keep using the old nested class, whereas the subclass will use the new one, because the method lookup ends in the subclass when the corresponding class accessor method is found. The new nested class will only have the methods defined for the class of the subclass' nested class and not inherit or copy any methods from the superclass' nested class.
+
+\paragraph{Override with Regular Method}
+A subclass of an enclosing class can replace (override) a nested class with a regular method. The programmer simply adds a new method which is not a class generator method to the subclass.
+
+\paragraph{Extend Inherited Nested Class without Subclassing}
+A subclass can extend the inherited nested class, i.e., the nested class in the subclass will have the same superclass as the nested class in the superclass. However, the nested class in the subclass will have all methods defined for the nested class in the superclass and additionally all methods defined for the class of the nested class in the subclass. Duplicate methods will be replaced, similarly to extension methods in Squeak.
+
+\begin{figure}[!htp]
+\begin{subfigure}[b]{\textwidth}
+	\centering
+	\includegraphics[scale=0.75]{nested_super_1.pdf}
+	\caption{Extending inherited nested classing}
+	\label{fig:impl:extend_inherited_class}
+\end{subfigure}
+
+\vspace{15pt}
+
+\begin{subfigure}[b]{\textwidth}
+	\centering
+	\includegraphics[scale=0.75]{nested_super_2.pdf}
+	\caption{Subclassing inherited nested classing}
+	\label{fig:impl:subclass_inherited_class}
+\end{subfigure}
+
+\caption[Example: Extending/subclassing nested classes]{Example: Extending and subclassing nested classes. Subclassing inherited nested classes leads to parallel class hierarchies.}
+\end{figure}
+
+Figure~\ref{fig:impl:extend_inherited_class} shows an example of a nested class extension. Class \texttt{A2} is a subclass of \texttt{A1}, which defines a nested class \texttt{B}. Therefore, both classes \texttt{A1} and \texttt{A2} have a nested class \texttt{B}. \texttt{A2} extends \texttt{B} by perfoming a super call. The following list gives an overview of how the classes \texttt{B} behave.
+
+\begin{itemize}
+	\item \texttt{A1 B foo}: returns 1.
+	\item \texttt{A1 B bar}: returns 2.
+	\item \texttt{A1 B qux}: raises \texttt{MessageNotUnderstood}, because \texttt{qux} is not defined on \texttt{A1 B}.
+	\item \texttt{A2 B foo}: returns 1, because \texttt{A2 B} has all methods defined for \texttt{A1 B}.
+	\item \texttt{A2 B bar}: returns 3, because that method was replaces in \texttt{A2 B}.
+	\item \texttt{A2 B qux}: returns 4.
+\end{itemize}
+
+Note, that \texttt{A1 B} and \texttt{A2 B} have the same superclass, but are different class objects. \texttt{A2 B} is \emph{not} a subclass of \texttt{A1 B}. When \texttt{A2 B} is invoked for the first time, \msname first generates the class \texttt{A1 B} (because of the \texttt{super} call) and caches it for \texttt{A2 B}\footnote{Caches are receiver-specific.}. That class is then \emph{reinitialized} according to \texttt{A2 B} (without making a subclass), i.e., all methods defined for \texttt{A2 B} are added. A second call to \texttt{A1 B} will not return the previous generated and extended class for \texttt{A2}, because the class cache works on a per-receiver basis.
+
+Also note, that if we actually wanted to extend \texttt{A1 B} and alias it as \texttt{A2 B}, which is technically similar to an extension method in Smalltalk (see Section~\ref{sec:usecases_ext_meth}), then \texttt{A2 B} should be defined as \texttt{\^{} A1 B}, because the receiver of the message \texttt{B} will then be \texttt{A1} instead of \texttt{A2}. 
+
+At the moment, there is no way to add additional instance variables or class variables to an extended nested class, because the class definition (containing the definition of variables) is done in the \texttt{super} call. 
+
+\paragraph{Subclass Inherited Nested Class}
+A subclass can subclass the inherited nested class, i.e., the nested class in the subclass is a subclass of the nested class in the superclass. Effectively, this results in a parallel class hierarchy. The nested subclass can override methods and use \texttt{super} to call methods in the nested superclass.
+
+Figure~\ref{fig:impl:subclass_inherited_class} shows an example for subclassing a nested class, which is similar to Figure~\ref{fig:impl:extend_inherited_class}. Note, that \texttt{A2 B} is now a subclass of \texttt{A1 B} and \texttt{super} calls in \texttt{A2 B} now start their lookup in \texttt{A1 B}. The new subclass \texttt{A2 B} behaves like the class in the previous example, except for \texttt{A2 B bar}. That statement returns 1, because the \texttt{super} call invokes \texttt{A1 class>>B class>>foo}.
+
