@@ -4,28 +4,28 @@ In this chapter, we present the implementation of \msname and explain briefly ho
 
 \section{Meta Model and Instantiation}
 \label{sec:impl_meta_model}
-\msname has a simple meta model for describing (nested) classes and their methods. The graphical user interface operates exclusively on the meta model and makes changes to it. The meta model can then be instantiated to generate the actual classes. When changes to the meta model are made, these changes can also be applied to already existing instantiations of the model, allowing giving programmers the feeling of working with a live system.
+\msname has a simple meta model for describing (nested) classes and their methods. The graphical user interface operates exclusively on the meta model and makes changes to it. The meta model can then be instantiated to generate the actual classes. When changes to the meta model are made, these changes can be applied to already existing instantiations of the model, giving programmers the feeling of working with a live system.
 
 \paragraph{Smalltalk-80 Class/Meta Model}
-Squeak already comes with a meta model: objects are instances of a classes, consequently, classes are also instances of a class. In Smalltalk, every class is an instance of its own meta class, which is in turn instance of \texttt{Metaclass} (Figure~\ref{fig:impl_squeak_meta}).
+Squeak already comes with a meta model: objects are instances of a classes, consequently, classes are also instances of a class. In Smalltalk, every class is an instance of its own meta class, which is in turn an instance of \texttt{Metaclass} (Figure~\ref{fig:impl_squeak_meta}).
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{squeak_meta.pdf}
 	\centering
-	\caption[Squeak class model]{Squeak class model. Every class is an instance of its meta class. Meta classes are instance of \texttt{Metaclass}. Meta classes and non-meta classes form a helix~\cite{Briot:1989:PEM:74877.74921}, connecting the meta class hierarchy with the non-meta class hierarchy.}
+	\caption[Squeak class model]{Squeak class model. Every class is an instance of its meta class. Meta classes are instances of \texttt{Metaclass}. Meta classes and non-meta classes form a helix~\cite{Briot:1989:PEM:74877.74921}, connecting the meta class hierarchy with the non-meta class hierarchy.}
 	\label{fig:impl_squeak_meta}
 \end{figure}
 
-Our system allows class generation at runtime: class generator methods generate classes along with their respective meta classes. Therefore, we need a specification/blueprint that describes how a class generator method should construct a class. At first glance, it might seem logical to use meta classes; after all, a meta class is the class of a regular (non-meta) class and classes are instance generators. However, meta classes cannot be used as class object generators in a way required by our system for two reasons.
+\msname allows class generation at runtime: class generator methods generate classes along with their respective meta classes. Therefore, we need a specification/blueprint that describes how a class generator method should construct a class. At first glance, it might seem logical to use meta classes; after all, a meta class is the class of a regular (non-meta) class and classes are instance generators. However, meta classes cannot be used as class object generators in a way required in our system for two reasons.
 
 Firstly, meta classes do not have any information about their non-meta class counterpart: for example, they do not know anything about their instance methods or their instance variables. Instantiating a meta class would not generate a functional class object, which is why Smalltalk prohibits generating new instances of a meta class. In fact, the class \texttt{ClassBuilder} is used to create new classes and it always creates class objects alongs with their meta class objects.
 
-Secondly, our system supports defining methods on the instance side and on the class side. Consequently, we do not only need to generate class object but also meta class objects. All meta classes are an instance of \texttt{Metaclass}. But if we wanted to generate different meta classes, we would need a different \texttt{Metaclass} class, each of which generates its corresponding meta class. In some programming languages, the instance-of chain carries on infinitely; Ruby is an example. However, in Smalltalk, every meta class is an instance of \texttt{Metaclass} and this is where the instance-of chain recurses: \texttt{Metaclass} is an instance of \texttt{Metaclass class}, which is an instance of \texttt{Metaclass}.
+Secondly, Smalltalk supports defining methods on the instance side and on the class side. Consequently, we do not only need to generate class objects but also meta class objects. All meta classes are an instance of \texttt{Metaclass}. But if we wanted to generate different meta classes, we would need a different \texttt{Metaclass} class, each of which generates its corresponding meta class. In some programming languages, the instance-of chain carries on infinitely; Ruby is an example~\cite{pavlata2012ruby}. However, in Smalltalk, every meta class is an instance of \texttt{Metaclass} and this is where the instance-of chain recurses: \texttt{Metaclass} is an instance of \texttt{Metaclass class}, which is an instance of \texttt{Metaclass}.
 
-For this reason, we cannot use the Smalltalk-80 meta model to generate new classes on the fly and use our own simple meta model instead.
+For this reason, we cannot use the Smalltalk-80 meta model to store information about nested classes and to generate new classes on the fly. We use our own simple meta model instead.
 
 \paragraph{Nested Classes Meta Model}
-Figure~\ref{fig:impl_meta_model} shows the meta model in our system. The meta model is built around specifications: there are specifications for classes, meta classes, and methods. A specification describes how its corresponding object is built. \texttt{ClassSpecification}s generate classes, \texttt{MetaclassSpecification}s generate meta classes, and \texttt{MethodSpecification}s generate methods. Since classes cannot exist without their respective meta classes, a class specification is always linked with its meta class specification and vice-versa. When a class specification is instantiated, the system generates both the class and the meta class. Meta class specifications cannot be instantiated.
+Figure~\ref{fig:impl_meta_model} shows the meta model in our system. The meta model is built around specifications: there are specifications for classes, meta classes, and methods. A specification describes how its corresponding object is built. \texttt{ClassSpecification}s generate classes, \texttt{MetaclassSpecification}s generate meta classes, and \texttt{MethodSpecification}s generate methods. Since classes cannot exist without their respective meta classes, a class specification is always linked with its meta class specification and vice-versa. When a class specification is instantiated, the system generates both the class and the meta class. Meta class specifications cannot be instantiated on their own.
 
 \begin{figure}[!hbp]
 	\centering
@@ -35,20 +35,20 @@ Figure~\ref{fig:impl_meta_model} shows the meta model in our system. The meta mo
 \end{figure}
 
 \paragraph{Class Specification}
-A class specification describes classes. It has a collection of \texttt{MethodSpecification}s, representing instance methods of the class. Upon instantiation, all method specifications are instantiated within the target class. For every class specification, there is a corresponding method specification containing the source code of the class generator method in the parent's method dictionary. This method specification determines (when executed in the running system) to which class the methods will be added (\emph{target class}). Top-level classes are an exception: they are always a new subclass of the class \texttt{Module}.
+A class specification describes classes. It has a collection of \texttt{MethodSpecification}s, representing instance methods of the class. Upon instantiation, all method specifications are instantiated within the target class. For every class specification, there is a corresponding method specification containing the source code of the class generator method in the parent's\footnote{The parent of a class specification is the class specification of the enclosing class.} method dictionary. This method specification determines (when executed in the running system) to which class the methods will be added (\emph{target class}).
 
 \paragraph{Meta Class Specification}
-A meta class specification describes meta classes. It has a collection of \texttt{MethodSpecification}s, representing class methods of the class (i.e., instance methods of the meta class). Upon instantiation, all method specifications are instantiated within the targer class' meta class. Consequently, meta classes do not method specifications associated with.
+A meta class specification describes meta classes. It has a collection of \texttt{MethodSpecification}s, representing class methods of the class (i.e., instance methods of the meta class). Upon instantiation, all method specifications are instantiated within the target class' meta class. Consequently, there is no method specification in the parent for a meta class.
 
-However, meta classes can have nested classes of their own. For every class defined in a meta class, there is a corresponding method specification present in the method dictionary (see previous paragraph).
+Meta classes can have nested classes of their own. For every class defined in a meta class, there is a corresponding method specification present in the method dictionary (class generator method). The class dictionary contains class specifications for nested classes.
 
 \paragraph{Method Specification}
 A method specification describes methods. It contains the source code of the method and stores information necessary for class caching and UI metadata. Whenever a method specification is instantiated, the method source code is compiled in the target class. 
 
-Note, that different byte code must be generated for different target classes: for example, instance variable reads and write are compiled to parameterized\footnote{There are separate bytecodes for reading the first or second instance variable etc.} \texttt{pushRcvr:} and \texttt{popIntoRcvr:} bytecodes, where instance variables are referenced with their index\footnote{The first instance variable has index 0, second index variable has index 1, etc.}. In addition, the \texttt{outer} and the \texttt{enclosing} keyword must be bound to different method literals, depending on the lexical scope of the class.
+Note, that different byte code must be generated for different target classes: for example, instance variable reads and writes are compiled to parameterized\footnote{There are separate bytecodes for reading the first or second instance variable etc.} \texttt{pushRcvr:} and \texttt{popIntoRcvr:} bytecodes, where instance variables are referenced with their index\footnote{The first instance variable has index 0, second index variable has index 1, etc.}. In addition, the \texttt{outer} and the \texttt{enclosing} keyword must be bound to different method literals, depending on the lexical scope of the class.
 
 \paragraph{Class Initialization}
-Figure~\ref{fig:lazy_class_gen} illustrates how the system generates and initializes a nested class (class specification instantiation). \todo{Add methods for class parameters.}
+Figure~\ref{fig:lazy_class_gen} illustrates how the system generates and initializes a class (class specification instantiation). \todo{Add methods for class parameters.}
 
 \begin{figure}
 	\includegraphics[width=\textwidth]{lazy_class_gen.pdf}
@@ -78,6 +78,16 @@ Class generator methods can return subclasses of other classes; the superclass i
 For a nested class, two methods are installed on the meta class object: a class generator method, returning the class to which methods should be added (usually a newly-created subclass), and a class accessor method, checking whether the class was already created and is in the cache or calling the class generator method, otherwise.
 
 The selector for the class accessor method is the name of the class. The selector for the class generator method is the same selector, but with a dollar sign prefix. This ensures that the method can only be called by using meta programming from our system, and also avoids accidential name clashes with other methods. For example, if a class is named \texttt{Foo}, the class accessor method has the selector \texttt{Foo} and the class generator method has the selector \texttt{\$Foo}.
+
+\paragraph{Example}
+Figure~\ref{fig:impl_spec_example} shows an example of a class specification for a class \texttt{Foo}. There is a class specification for \texttt{Foo} and a meta class specification for \texttt{Foo class}. The enclosing class of \texttt{Foo} is not shown in the UML class diagram part. It is, however, shown in the meta model part of the figure, because the enclosing class specification has a method specification corresponding to the class specification of \texttt{Foo}.
+
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[width=\textwidth]{spec_example_r.pdf}
+	\caption[Example: Meta model]{Example: Meta model. There is a class specification for \texttt{Foo} and a meta class specification for \texttt{Foo class} (same pattern). \texttt{Foo}'s enclosing class has a method specification (light gray color) defining the class to which the methods are added, in addition to the corresponding class specification.}
+	\label{fig:impl_spec_example}
+\end{figure}
 
 \section{Anonymous Classes and Subclass Generation}
 In Smalltalk, new classes are created by subclassing an already existing class. Squeak has special class, the \texttt{ClassBuilder}, containing all the functionality for creating the class object, the meta class object, giving the class a name, possibly migrating the old class and its instances (if an existing class was changed), and registering it in the \texttt{globals} dictionary.

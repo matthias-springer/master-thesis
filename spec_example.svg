@@ -1,0 +1,2018 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="472"
+   height="696"
+   id="svg2"
+   style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:0;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="spec_example.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1361"
+     inkscape:window-height="929"
+     id="namedview373"
+     showgrid="false"
+     inkscape:zoom="0.95906437"
+     inkscape:cx="43.625008"
+     inkscape:cy="348"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <metadata
+     id="metadata625">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="genericDefs">
+    <pattern
+       inkscape:stockid="Stripes 1:1"
+       id="Strips1_1"
+       patternTransform="translate(0,0) scale(10,10)"
+       height="1"
+       width="2"
+       patternUnits="userSpaceOnUse"
+       inkscape:collect="always">
+      <rect
+         id="rect5277"
+         height="2"
+         width="1"
+         y="-0.5"
+         x="0"
+         style="fill:black;stroke:none" />
+    </pattern>
+    <pattern
+       patternTransform="translate(264.4375,-138.5625)"
+       id="pattern7291"
+       xlink:href="#pattern6689" />
+    <pattern
+       patternTransform="translate(264.4375,-138.5625)"
+       id="pattern7287"
+       xlink:href="#pattern6685" />
+    <pattern
+       patternTransform="translate(232.00847,-143.5625)"
+       id="pattern7283"
+       xlink:href="#pattern6681" />
+    <pattern
+       patternTransform="translate(225.9375,-112.5625)"
+       id="pattern7279"
+       xlink:href="#pattern7271" />
+    <pattern
+       patternTransform="translate(193.50847,-117.5625)"
+       id="pattern7275"
+       xlink:href="#pattern7267" />
+    <pattern
+       patternTransform="translate(225.9375,-202.125)"
+       id="pattern7271"
+       xlink:href="#pattern7263" />
+    <pattern
+       patternTransform="translate(193.50847,-207.125)"
+       id="pattern7267"
+       xlink:href="#pattern7259" />
+    <pattern
+       patternTransform="translate(225.9375,-200.125)"
+       id="pattern7263"
+       xlink:href="#pattern7255" />
+    <pattern
+       patternTransform="translate(193.50847,-205.125)"
+       id="pattern7259"
+       xlink:href="#pattern7251" />
+    <pattern
+       patternTransform="translate(225.9375,-198.125)"
+       id="pattern7255"
+       xlink:href="#pattern7247" />
+    <pattern
+       patternTransform="translate(193.50847,-203.125)"
+       id="pattern7251"
+       xlink:href="#pattern7243" />
+    <pattern
+       patternTransform="translate(225.9375,-200.125)"
+       id="pattern7247"
+       xlink:href="#pattern7239" />
+    <pattern
+       patternTransform="translate(193.50847,-205.125)"
+       id="pattern7243"
+       xlink:href="#pattern7235" />
+    <pattern
+       patternTransform="translate(225.9375,-202.125)"
+       id="pattern7239"
+       xlink:href="#pattern7231" />
+    <pattern
+       patternTransform="translate(193.50847,-207.125)"
+       id="pattern7235"
+       xlink:href="#pattern7225" />
+    <pattern
+       patternTransform="translate(225.9375,-204.125)"
+       id="pattern7231"
+       xlink:href="#pattern6828" />
+    <pattern
+       patternTransform="translate(-49.218591,29.972294)"
+       id="pattern7227"
+       xlink:href="#pattern6405" />
+    <pattern
+       patternTransform="translate(193.50847,-209.125)"
+       id="pattern7225"
+       xlink:href="#pattern6824" />
+    <pattern
+       patternTransform="translate(264.9375,-204.125)"
+       id="pattern6828"
+       xlink:href="#pattern6820" />
+    <pattern
+       patternTransform="translate(232.50847,-209.125)"
+       id="pattern6824"
+       xlink:href="#pattern6816" />
+    <pattern
+       patternTransform="translate(264.9375,-206.125)"
+       id="pattern6820"
+       xlink:href="#pattern6812" />
+    <pattern
+       patternTransform="translate(232.50847,-211.125)"
+       id="pattern6816"
+       xlink:href="#pattern6808" />
+    <pattern
+       patternTransform="translate(264.9375,-208.125)"
+       id="pattern6812"
+       xlink:href="#pattern6804" />
+    <pattern
+       patternTransform="translate(232.50847,-213.125)"
+       id="pattern6808"
+       xlink:href="#pattern6800" />
+    <pattern
+       patternTransform="translate(264.9375,-210.125)"
+       id="pattern6804"
+       xlink:href="#pattern6796" />
+    <pattern
+       patternTransform="translate(232.50847,-215.125)"
+       id="pattern6800"
+       xlink:href="#pattern6792" />
+    <pattern
+       patternTransform="translate(264.9375,-212.125)"
+       id="pattern6796"
+       xlink:href="#pattern6788" />
+    <pattern
+       patternTransform="translate(232.50847,-217.125)"
+       id="pattern6792"
+       xlink:href="#pattern6784" />
+    <pattern
+       patternTransform="translate(264.9375,-214.125)"
+       id="pattern6788"
+       xlink:href="#pattern6780" />
+    <pattern
+       patternTransform="translate(232.50847,-219.125)"
+       id="pattern6784"
+       xlink:href="#pattern6776" />
+    <pattern
+       patternTransform="translate(264.9375,-216.125)"
+       id="pattern6780"
+       xlink:href="#pattern6772" />
+    <pattern
+       patternTransform="translate(232.50847,-221.125)"
+       id="pattern6776"
+       xlink:href="#pattern6768" />
+    <pattern
+       patternTransform="translate(264.9375,-218.125)"
+       id="pattern6772"
+       xlink:href="#pattern6764" />
+    <pattern
+       patternTransform="translate(232.50847,-223.125)"
+       id="pattern6768"
+       xlink:href="#pattern6760" />
+    <pattern
+       patternTransform="translate(264.9375,-220.125)"
+       id="pattern6764"
+       xlink:href="#pattern6756" />
+    <pattern
+       patternTransform="translate(232.50847,-225.125)"
+       id="pattern6760"
+       xlink:href="#pattern6752" />
+    <pattern
+       patternTransform="translate(264.9375,-222.125)"
+       id="pattern6756"
+       xlink:href="#pattern6748" />
+    <pattern
+       patternTransform="translate(232.50847,-227.125)"
+       id="pattern6752"
+       xlink:href="#pattern6744" />
+    <pattern
+       patternTransform="translate(264.9375,-224.125)"
+       id="pattern6748"
+       xlink:href="#pattern6740" />
+    <pattern
+       patternTransform="translate(232.50847,-229.125)"
+       id="pattern6744"
+       xlink:href="#pattern6736" />
+    <pattern
+       patternTransform="translate(264.9375,-226.125)"
+       id="pattern6740"
+       xlink:href="#pattern6732" />
+    <pattern
+       patternTransform="translate(232.50847,-231.125)"
+       id="pattern6736"
+       xlink:href="#pattern6728" />
+    <pattern
+       patternTransform="translate(264.9375,-228.125)"
+       id="pattern6732"
+       xlink:href="#pattern6724" />
+    <pattern
+       patternTransform="translate(232.50847,-233.125)"
+       id="pattern6728"
+       xlink:href="#pattern6720" />
+    <pattern
+       patternTransform="translate(264.9375,-230.125)"
+       id="pattern6724"
+       xlink:href="#pattern6716" />
+    <pattern
+       patternTransform="translate(232.50847,-235.125)"
+       id="pattern6720"
+       xlink:href="#pattern6712" />
+    <pattern
+       patternTransform="translate(264.9375,-232.125)"
+       id="pattern6716"
+       xlink:href="#pattern6677" />
+    <pattern
+       patternTransform="translate(232.50847,-237.125)"
+       id="pattern6712"
+       xlink:href="#pattern6673" />
+    <pattern
+       patternTransform="translate(264.4375,-228.125)"
+       id="pattern6689"
+       xlink:href="#pattern6669" />
+    <pattern
+       patternTransform="translate(264.4375,-228.125)"
+       id="pattern6685"
+       xlink:href="#pattern6665" />
+    <pattern
+       patternTransform="translate(232.00847,-233.125)"
+       id="pattern6681"
+       xlink:href="#pattern6661" />
+    <pattern
+       patternTransform="translate(264.9375,-234.125)"
+       id="pattern6677"
+       xlink:href="#pattern6657" />
+    <pattern
+       patternTransform="translate(232.50847,-239.125)"
+       id="pattern6673"
+       xlink:href="#pattern6653" />
+    <pattern
+       patternTransform="translate(226.4375,-228.125)"
+       id="pattern6669"
+       xlink:href="#pattern6649" />
+    <pattern
+       patternTransform="translate(226.4375,-228.125)"
+       id="pattern6665"
+       xlink:href="#pattern6645" />
+    <pattern
+       patternTransform="translate(194.00847,-233.125)"
+       id="pattern6661"
+       xlink:href="#pattern6641" />
+    <pattern
+       patternTransform="translate(226.9375,-234.125)"
+       id="pattern6657"
+       xlink:href="#pattern6637" />
+    <pattern
+       patternTransform="translate(194.50847,-239.125)"
+       id="pattern6653"
+       xlink:href="#pattern6633" />
+    <pattern
+       patternTransform="translate(186.9375,-228.125)"
+       id="pattern6649"
+       xlink:href="#pattern6627" />
+    <pattern
+       patternTransform="translate(186.9375,-228.125)"
+       id="pattern6645"
+       xlink:href="#pattern6623" />
+    <pattern
+       patternTransform="translate(154.50847,-233.125)"
+       id="pattern6641"
+       xlink:href="#pattern6619" />
+    <pattern
+       patternTransform="translate(187.4375,-234.125)"
+       id="pattern6637"
+       xlink:href="#pattern6615" />
+    <pattern
+       patternTransform="translate(155.00847,-239.125)"
+       id="pattern6633"
+       xlink:href="#pattern6611" />
+    <pattern
+       patternTransform="translate(184.9375,-114.0625)"
+       id="pattern6629"
+       xlink:href="#pattern5776" />
+    <pattern
+       patternTransform="translate(184.9375,-228.125)"
+       id="pattern6627"
+       xlink:href="#pattern5776" />
+    <pattern
+       patternTransform="translate(184.9375,-228.125)"
+       id="pattern6623"
+       xlink:href="#pattern5776" />
+    <pattern
+       patternTransform="translate(152.50847,-233.125)"
+       id="pattern6619"
+       xlink:href="#pattern5767" />
+    <pattern
+       patternTransform="translate(185.4375,-234.125)"
+       id="pattern6615"
+       xlink:href="#pattern6409" />
+    <pattern
+       patternTransform="translate(153.00847,-239.125)"
+       id="pattern6611"
+       xlink:href="#pattern6403" />
+    <pattern
+       patternTransform="translate(185.4375,-120.0625)"
+       id="pattern6409"
+       xlink:href="#pattern5796" />
+    <pattern
+       patternTransform="translate(-10.21859,-61.590206)"
+       id="pattern6405"
+       xlink:href="#pattern5798" />
+    <pattern
+       patternTransform="translate(153.00847,-125.0625)"
+       id="pattern6403"
+       xlink:href="#pattern5802" />
+    <pattern
+       patternTransform="translate(104.50847,-125.0625)"
+       id="pattern5802"
+       xlink:href="#pattern5767" />
+    <pattern
+       patternTransform="translate(-138.21859,22.472294)"
+       id="pattern5798"
+       xlink:href="#pattern6249" />
+    <pattern
+       patternTransform="translate(136.9375,-120.0625)"
+       id="pattern5796"
+       xlink:href="#pattern5776" />
+    <linearGradient
+       id="linearGradient5704">
+      <stop
+         id="stop5706"
+         style="stop-color:#cccccc;stop-opacity:1"
+         offset="0" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5692">
+      <stop
+         id="stop5694"
+         style="stop-color:#cccccc;stop-opacity:1"
+         offset="0" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5611">
+      <stop
+         id="stop5613"
+         style="stop-color:#cccccc;stop-opacity:1"
+         offset="0" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5605">
+      <stop
+         id="stop5607"
+         style="stop-color:#cccccc;stop-opacity:1"
+         offset="0" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5495">
+      <stop
+         id="stop5497"
+         style="stop-color:#b50808;stop-opacity:1"
+         offset="0" />
+    </linearGradient>
+    <defs
+       id="defs1">
+      <clipPath
+         id="clipPath1">
+        <path
+           d="m -7,-7 568,0 0,618 -568,0 0,-618 z"
+           id="path9" />
+      </clipPath>
+      <clipPath
+         id="clipPath2">
+        <path
+           d="M 0,0 550,0 550,17 0,17 0,0 z"
+           id="path12" />
+      </clipPath>
+      <clipPath
+         id="clipPath3">
+        <path
+           d="m -7,-7 418,0 0,358 -418,0 0,-358 z"
+           id="path15" />
+      </clipPath>
+      <clipPath
+         id="clipPath4">
+        <path
+           d="M 0,0 400,0 400,17 0,17 0,0 z"
+           id="path18" />
+      </clipPath>
+      <clipPath
+         id="clipPath5">
+        <path
+           d="m -7,-7 108,0 0,58 -108,0 0,-58 z"
+           id="path21" />
+      </clipPath>
+      <clipPath
+         id="clipPath6">
+        <path
+           d="M 0,0 0,22 90,22 90,0 z"
+           id="path24" />
+      </clipPath>
+      <clipPath
+         id="clipPath7">
+        <path
+           d="M 0,0 90,0 90,18 0,18 0,0 z"
+           id="path27" />
+      </clipPath>
+      <clipPath
+         id="clipPath8">
+        <path
+           d="m -7,-7 423,0 0,358 -423,0 0,-358 z"
+           id="path30" />
+      </clipPath>
+      <clipPath
+         id="clipPath9">
+        <path
+           d="M 0,0 405,0 405,17 0,17 0,0 z"
+           id="path33" />
+      </clipPath>
+      <clipPath
+         id="clipPath10">
+        <path
+           d="m -7,-7 168,0 0,58 -168,0 0,-58 z"
+           id="path36" />
+      </clipPath>
+      <clipPath
+         id="clipPath11">
+        <path
+           d="M 0,0 150,0 150,5 0,5 0,0 z"
+           id="path39" />
+      </clipPath>
+      <clipPath
+         id="clipPath12">
+        <path
+           d="M 0,0 150,0 150,35 0,35 0,0 z"
+           id="path42" />
+      </clipPath>
+      <clipPath
+         id="clipPath13">
+        <path
+           d="m -7,-7 178,0 0,78 -178,0 0,-78 z"
+           id="path45" />
+      </clipPath>
+      <clipPath
+         id="clipPath14">
+        <path
+           d="m 0,0 0,1 160,0 0,-1 z"
+           id="path48" />
+      </clipPath>
+      <clipPath
+         id="clipPath15">
+        <path
+           d="M 0,0 160,0 160,8 0,8 0,0 z"
+           id="path51" />
+      </clipPath>
+      <clipPath
+         id="clipPath16">
+        <path
+           d="M 0,0 160,0 160,52 0,52 0,0 z"
+           id="path54" />
+      </clipPath>
+      <clipPath
+         id="clipPath17">
+        <path
+           d="m -7,-7 173,0 0,58 -173,0 0,-58 z"
+           id="path57" />
+      </clipPath>
+      <clipPath
+         id="clipPath18">
+        <path
+           d="M 0,0 155,0 155,5 0,5 0,0 z"
+           id="path60" />
+      </clipPath>
+      <clipPath
+         id="clipPath19">
+        <path
+           d="M 0,0 155,0 155,35 0,35 0,0 z"
+           id="path63" />
+      </clipPath>
+      <clipPath
+         id="clipPath20">
+        <path
+           d="m -7,-7 158,0 0,118 -158,0 0,-118 z"
+           id="path66" />
+      </clipPath>
+      <clipPath
+         id="clipPath21">
+        <path
+           d="M 0,0 140,0 140,17 0,17 0,0 z"
+           id="path69" />
+      </clipPath>
+      <clipPath
+         id="clipPath22">
+        <path
+           d="m -7,-7 70,0 0,80 -70,0 0,-80 z"
+           id="path72" />
+      </clipPath>
+      <clipPath
+         id="clipPath23">
+        <path
+           d="m 110.4991,306.9974 175,0 0,160.0116 -175,0 0,-160.0116 z"
+           id="path75" />
+      </clipPath>
+      <clipPath
+         id="clipPath24">
+        <path
+           d="m 167,467 70,0 0,80 -70,0 0,-80 z"
+           id="path78" />
+      </clipPath>
+      <clipPath
+         id="clipPath25">
+        <path
+           d="m 167.0007,466.9994 70,0.001 -0.001,80.0001 -70,-10e-4 0.001,-80.0001 z"
+           id="path81" />
+      </clipPath>
+      <clipPath
+         id="clipPath26">
+        <path
+           d="M 40,0 0,0 0,50 40,50 40,0 z"
+           id="path84" />
+      </clipPath>
+      <clipPath
+         id="clipPath27">
+        <path
+           d="M 0,0 212,0 212,104 0,104 0,0 z"
+           id="path87" />
+      </clipPath>
+      <clipPath
+         id="clipPath28">
+        <path
+           d="M 0,0 104,0 104,142 0,142 0,0 z"
+           id="path90" />
+      </clipPath>
+      <clipPath
+         id="clipPath29">
+        <path
+           d="M 0,0 104,0 104,132 0,132 0,0 z"
+           id="path93" />
+      </clipPath>
+      <clipPath
+         id="clipPath30">
+        <path
+           d="M 0,0 104,0 104,127 0,127 0,0 z"
+           id="path96" />
+      </clipPath>
+      <clipPath
+         id="clipPath31">
+        <path
+           d="M 0,0 104,0 104,147 0,147 0,0 z"
+           id="path99" />
+      </clipPath>
+    </defs>
+    <pattern
+       id="pattern6249"
+       patternTransform="translate(-90.218593,28.472294)"
+       height="40.055412"
+       width="40.437185"
+       patternUnits="userSpaceOnUse">
+      <g
+         id="g6244"
+         transform="matrix(0.74425278,-0.66789805,0.66789805,0.74425278,39.923232,-62.821417)">
+        <rect
+           y="36"
+           x="-85"
+           height="25"
+           width="10"
+           id="rect6238"
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:3;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+        <rect
+           style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-miterlimit:3;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect6240"
+           width="10"
+           height="25"
+           x="-75"
+           y="36" />
+        <rect
+           style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:3;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect6242"
+           width="10"
+           height="25"
+           x="-65"
+           y="36" />
+      </g>
+    </pattern>
+    <linearGradient
+       x1="99.5"
+       y1="-104"
+       x2="140.5"
+       y2="-104"
+       id="linearGradient5765"
+       xlink:href="#linearGradient5704"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-52.633475,-5)" />
+    <pattern
+       id="pattern5767"
+       patternTransform="translate(152.50847,-119.0625)"
+       height="40.1875"
+       width="40.1875"
+       patternUnits="userSpaceOnUse">
+      <g
+         id="g5759"
+         transform="translate(-99.875,124.0625)">
+        <path
+           id="path5761"
+           d="m 100,-104 20,20 -20,0 z"
+           style="fill:#cccccc;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none" />
+        <path
+           id="path5763"
+           d="m 140,-104 -20,-20 -20,0 40,40 0,-20 0,0 0,0 z"
+           style="fill:url(#linearGradient5765);fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none" />
+      </g>
+    </pattern>
+    <linearGradient
+       x1="99.5"
+       y1="-104"
+       x2="140.5"
+       y2="-104"
+       id="linearGradient5774"
+       xlink:href="#linearGradient5704"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-1,0,0,1,325,-10)" />
+    <pattern
+       id="pattern5776"
+       patternTransform="translate(184.9375,-114.0625)"
+       height="40.1875"
+       width="40.1875"
+       patternUnits="userSpaceOnUse">
+      <g
+         id="g5753"
+         transform="matrix(-1,0,0,1,140.0625,124.0625)">
+        <path
+           style="fill:#cccccc;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none"
+           d="m 100,-104 20,20 -20,0 z"
+           id="path5755" />
+        <path
+           style="fill:url(#linearGradient5774);fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none"
+           d="m 140,-104 -20,-20 -20,0 40,40 0,-20 0,0 0,0 z"
+           id="path5757" />
+      </g>
+    </pattern>
+  </defs>
+  <g
+     transform="translate(91.000001,0.5)"
+     id="g137"
+     style="font-size:11px;font-weight:bold;fill:url(#Strips1_1);fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola;opacity:0.20434783">
+    <rect
+       width="90"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath5)"
+       id="rect139"
+       style="fill:url(#Strips1_1);fill-opacity:1;stroke:none" />
+  </g>
+  <rect
+     width="90"
+     height="40"
+     x="0"
+     y="0"
+     transform="translate(91.000001,0.5)"
+     clip-path="url(#clipPath5)"
+     id="rect143"
+     style="font-size:11px;font-weight:bold;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola" />
+  <line
+     y2="18"
+     x1="0"
+     clip-path="url(#clipPath5)"
+     x2="90"
+     y1="18"
+     id="line145"
+     style="font-size:11px;font-weight:bold;fill:url(#pattern7227);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola"
+     transform="translate(91.000001,0.5)" />
+  <g
+     transform="translate(91.000001,0.5)"
+     id="g147"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="33"
+       y="13"
+       clip-path="url(#clipPath7)"
+       id="text149"
+       xml:space="preserve"
+       style="stroke:none">Foo</text>
+  </g>
+  <g
+     transform="translate(291,0.5)"
+     id="g151"
+     style="font-size:11px;font-weight:bold;fill:url(#pattern7279);fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="90"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath5)"
+       id="rect153"
+       style="fill:url(#pattern7279);fill-opacity:1;stroke:none" />
+  </g>
+  <g
+     transform="translate(291,0.5)"
+     id="g155"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="90"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath5)"
+       id="rect157"
+       style="fill:none" />
+    <line
+       style="fill:none"
+       id="line159"
+       y1="18"
+       x2="90"
+       clip-path="url(#clipPath5)"
+       x1="0"
+       y2="18" />
+  </g>
+  <g
+     transform="translate(291,0.5)"
+     id="g161"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="18"
+       y="13"
+       clip-path="url(#clipPath7)"
+       id="text163"
+       xml:space="preserve"
+       style="stroke:none">Foo class</text>
+  </g>
+  <g
+     transform="translate(132,-29.5)"
+     id="g485"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;stroke-dasharray:5;stroke-dashoffset:1;font-family:sans-serif">
+    <line
+       style="fill:none"
+       id="line487"
+       y1="50"
+       x2="158"
+       clip-path="url(#clipPath27)"
+       x1="50"
+       y2="50" />
+    <line
+       style="fill:none;stroke-dasharray:none;stroke-dashoffset:0"
+       id="line489"
+       y2="44"
+       y1="50"
+       x2="146"
+       x1="158"
+       clip-path="url(#clipPath27)" />
+    <line
+       style="fill:none;stroke-dasharray:none;stroke-dashoffset:0"
+       id="line491"
+       y2="56"
+       y1="50"
+       x2="146"
+       x1="158"
+       clip-path="url(#clipPath27)" />
+  </g>
+  <path
+     d="m 0,20 549,0 0,579 -549,0 0,-599 109,0 0,20"
+     transform="matrix(0.8579235,0,0,1,0.5,96.5)"
+     clip-path="url(#clipPath1)"
+     id="path113"
+     style="font-size:11px;fill:none;stroke:#000000;stroke-width:1.07963192;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola"
+     inkscape:connector-curvature="0" />
+  <g
+     transform="translate(-43.264077,116.5)"
+     id="g117"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="199"
+       y="13"
+       clip-path="url(#clipPath2)"
+       id="text119"
+       xml:space="preserve"
+       style="stroke:none">Specification of Foo <tspan
+   id="tspan6291"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:TeX Gyre Cursor;-inkscape-font-specification:TeX Gyre Cursor">enclosing</tspan></text>
+  </g>
+  <g
+     transform="translate(30.5,316.5)"
+     id="g121"
+     style="font-size:11px;fill:#808080;fill-opacity:1;stroke:#808080;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="79"
+       height="20"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath3)"
+       id="rect123"
+       style="stroke:none" />
+    <rect
+       width="399"
+       height="319"
+       x="0"
+       y="20"
+       clip-path="url(#clipPath3)"
+       id="rect125"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(30.5,316.5)"
+     id="g127"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <path
+       d="m 0,20 399,0 0,319 L 0,339 0,0 79,0 79,20"
+       clip-path="url(#clipPath3)"
+       id="path129"
+       style="fill:none"
+       inkscape:connector-curvature="0" />
+    <path
+       d="m 389,25 -5,10 10,0 z"
+       clip-path="url(#clipPath3)"
+       id="path131"
+       style="fill:none"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     transform="translate(30.5,336.5)"
+     id="g133"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="155"
+       y="13"
+       clip-path="url(#clipPath4)"
+       id="text135"
+       xml:space="preserve"
+       style="stroke:none">Specification of ...</text>
+  </g>
+  <g
+     transform="translate(42.5,326.5)"
+     id="g165"
+     style="font-size:11px;fill:#e0e0e0;fill-opacity:1;stroke:#e0e0e0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="80"
+       height="20"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath8)"
+       id="rect167"
+       style="stroke:none" />
+    <rect
+       width="404"
+       height="319"
+       x="0"
+       y="20"
+       clip-path="url(#clipPath8)"
+       id="rect169"
+       style="stroke:none" />
+  </g>
+  <path
+     d="m 0,20 404,0 0,319 L 0,339 0,0 80,0 80,20"
+     transform="translate(42.5,326.5)"
+     clip-path="url(#clipPath8)"
+     id="path173"
+     style="font-size:11px;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola"
+     inkscape:connector-curvature="0" />
+  <path
+     d="m 394,25 -5,10 10,0 z"
+     transform="translate(42.5,326.5)"
+     clip-path="url(#clipPath8)"
+     id="path175"
+     style="font-size:11px;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola"
+     inkscape:connector-curvature="0" />
+  <g
+     transform="translate(42.5,346.5)"
+     id="g177"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="153"
+       y="13"
+       clip-path="url(#clipPath9)"
+       id="text179"
+       xml:space="preserve"
+       style="stroke:none">Specification of Foo</text>
+  </g>
+  <g
+     transform="translate(65.5,386.5)"
+     id="g181"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="150"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath10)"
+       id="rect183"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(65.5,386.5)"
+     id="g185"
+     style="font-size:11px;font-weight:bold;fill:url(#pattern7283);fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="150"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath10)"
+       id="rect187"
+       style="fill:url(#pattern7283);fill-opacity:1;stroke:#000000" />
+  </g>
+  <g
+     transform="translate(65.5,386.5)"
+     id="g189"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="16"
+       y="13"
+       clip-path="url(#clipPath12)"
+       id="text191"
+       xml:space="preserve"
+       style="stroke:none">a ClassSpecification</text>
+    <line
+       style="fill:none"
+       id="line193"
+       y1="13"
+       x2="131"
+       clip-path="url(#clipPath12)"
+       x1="16"
+       y2="13" />
+    <text
+       x="25"
+       y="31"
+       clip-path="url(#clipPath12)"
+       id="text195"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{methodDict = &quot;...&quot;}</text>
+  </g>
+  <g
+     transform="translate(262.5,386.5)"
+     id="g197"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="160"
+       height="60"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath13)"
+       id="rect199"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(262.5,386.5)"
+     id="g201"
+     style="font-size:11px;font-weight:bold;fill:url(#pattern7287);fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="160"
+       height="60"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath13)"
+       id="rect203"
+       style="fill:url(#pattern7287);fill-opacity:1" />
+  </g>
+  <g
+     transform="translate(262.5,386.5)"
+     id="g205"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="8"
+       y="13"
+       clip-path="url(#clipPath16)"
+       id="text207"
+       xml:space="preserve"
+       style="stroke:none">a MetaclassSpecification</text>
+    <line
+       style="fill:none"
+       id="line209"
+       y1="13"
+       x2="149"
+       clip-path="url(#clipPath16)"
+       x1="8"
+       y2="13" />
+    <text
+       x="26"
+       y="31"
+       clip-path="url(#clipPath16)"
+       id="text211"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{methodDict = &quot;{...}&quot;}</text>
+    <text
+       x="33"
+       y="48"
+       clip-path="url(#clipPath16)"
+       id="text213"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{classDict = &quot;{...}&quot;}</text>
+  </g>
+  <g
+     transform="translate(65.5,466.5)"
+     id="g215"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect217"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(65.5,466.5)"
+     id="g219"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect221"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(65.5,466.5)"
+     id="g223"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="13"
+       y="13"
+       clip-path="url(#clipPath19)"
+       id="text225"
+       xml:space="preserve"
+       style="stroke:none">a MethodSpecification</text>
+    <line
+       style="fill:none"
+       id="line227"
+       y1="13"
+       x2="142"
+       clip-path="url(#clipPath19)"
+       x1="13"
+       y2="13" />
+    <text
+       x="40"
+       y="31"
+       clip-path="url(#clipPath19)"
+       id="text229"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{source = &quot;'...'&quot;}</text>
+  </g>
+  <g
+     transform="translate(75.5,476.5)"
+     id="g231"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect233"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(75.5,476.5)"
+     id="g235"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect237"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(75.5,476.5)"
+     id="g239"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="13"
+       y="13"
+       clip-path="url(#clipPath19)"
+       id="text241"
+       xml:space="preserve"
+       style="stroke:none">a MethodSpecification</text>
+    <line
+       style="fill:none"
+       id="line243"
+       y1="13"
+       x2="142"
+       clip-path="url(#clipPath19)"
+       x1="13"
+       y2="13" />
+    <text
+       x="40"
+       y="31"
+       clip-path="url(#clipPath19)"
+       id="text245"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{source = &quot;'...'&quot;}</text>
+  </g>
+  <g
+     transform="translate(85.5,486.5)"
+     id="g247"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect249"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(85.5,486.5)"
+     id="g251"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect253"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(85.5,486.5)"
+     id="g255"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="13"
+       y="13"
+       clip-path="url(#clipPath19)"
+       id="text257"
+       xml:space="preserve"
+       style="stroke:none">a MethodSpecification</text>
+    <line
+       style="fill:none"
+       id="line259"
+       y1="13"
+       x2="142"
+       clip-path="url(#clipPath19)"
+       x1="13"
+       y2="13" />
+    <text
+       x="40"
+       y="31"
+       clip-path="url(#clipPath19)"
+       id="text261"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{source = &quot;'...'&quot;}</text>
+  </g>
+  <g
+     transform="translate(262.5,476.5)"
+     id="g263"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect265"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(262.5,476.5)"
+     id="g267"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect269"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(262.5,476.5)"
+     id="g271"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="13"
+       y="13"
+       clip-path="url(#clipPath19)"
+       id="text273"
+       xml:space="preserve"
+       style="stroke:none">a MethodSpecification</text>
+    <line
+       style="fill:none"
+       id="line275"
+       y1="13"
+       x2="142"
+       clip-path="url(#clipPath19)"
+       x1="13"
+       y2="13" />
+    <text
+       x="40"
+       y="31"
+       clip-path="url(#clipPath19)"
+       id="text277"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{source = &quot;'...'&quot;}</text>
+  </g>
+  <g
+     transform="translate(272.5,486.5)"
+     id="g279"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect281"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(272.5,486.5)"
+     id="g283"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect285"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(272.5,486.5)"
+     id="g287"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="13"
+       y="13"
+       clip-path="url(#clipPath19)"
+       id="text289"
+       xml:space="preserve"
+       style="stroke:none">a MethodSpecification</text>
+    <line
+       style="fill:none"
+       id="line291"
+       y1="13"
+       x2="142"
+       clip-path="url(#clipPath19)"
+       x1="13"
+       y2="13" />
+    <text
+       x="40"
+       y="31"
+       clip-path="url(#clipPath19)"
+       id="text293"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{source = &quot;'...'&quot;}</text>
+  </g>
+  <g
+     transform="translate(282.5,496.5)"
+     id="g295"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect297"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(282.5,496.5)"
+     id="g299"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect301"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(282.5,496.5)"
+     id="g303"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="13"
+       y="13"
+       clip-path="url(#clipPath19)"
+       id="text305"
+       xml:space="preserve"
+       style="stroke:none">a MethodSpecification</text>
+    <line
+       style="fill:none"
+       id="line307"
+       y1="13"
+       x2="142"
+       clip-path="url(#clipPath19)"
+       x1="13"
+       y2="13" />
+    <text
+       x="40"
+       y="31"
+       clip-path="url(#clipPath19)"
+       id="text309"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{source = &quot;'...'&quot;}</text>
+  </g>
+  <g
+     transform="translate(272.5,546.5)"
+     id="g311"
+     style="font-size:11px;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="27"
+       height="20"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath20)"
+       id="rect313"
+       style="stroke:none" />
+    <rect
+       width="139"
+       height="79"
+       x="0"
+       y="20"
+       clip-path="url(#clipPath20)"
+       id="rect315"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(272.5,546.5)"
+     id="g317"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <path
+       d="m 0,20 139,0 0,79 L 0,99 0,0 27,0 27,20"
+       clip-path="url(#clipPath20)"
+       id="path319"
+       style="fill:none"
+       inkscape:connector-curvature="0" />
+    <path
+       d="m 129,25 -5,10 10,0 z"
+       clip-path="url(#clipPath20)"
+       id="path321"
+       style="fill:none"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     transform="translate(272.5,566.5)"
+     id="g323"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="25"
+       y="13"
+       clip-path="url(#clipPath21)"
+       id="text325"
+       xml:space="preserve"
+       style="stroke:none">Specification of ...</text>
+  </g>
+  <g
+     transform="translate(282.5,556.5)"
+     id="g327"
+     style="font-size:11px;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="27"
+       height="20"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath20)"
+       id="rect329"
+       style="stroke:none" />
+    <rect
+       width="139"
+       height="79"
+       x="0"
+       y="20"
+       clip-path="url(#clipPath20)"
+       id="rect331"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(282.5,556.5)"
+     id="g333"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <path
+       d="m 0,20 139,0 0,79 L 0,99 0,0 27,0 27,20"
+       clip-path="url(#clipPath20)"
+       id="path335"
+       style="fill:none"
+       inkscape:connector-curvature="0" />
+    <path
+       d="m 129,25 -5,10 10,0 z"
+       clip-path="url(#clipPath20)"
+       id="path337"
+       style="fill:none"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     transform="translate(282.5,576.5)"
+     id="g339"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="25"
+       y="13"
+       clip-path="url(#clipPath21)"
+       id="text341"
+       xml:space="preserve"
+       style="stroke:none">Specification of ...</text>
+  </g>
+  <g
+     transform="translate(242.5,146.5)"
+     id="g355"
+     style="font-size:11px;font-weight:bold;fill:none;stroke:url(#pattern7291);stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="160"
+       height="60"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath13)"
+       id="rect357"
+       style="fill:none;stroke:url(#pattern7291)" />
+  </g>
+  <g
+     transform="translate(242.5,146.5)"
+     id="g359"
+     style="font-size:11px;font-weight:bold;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="160"
+       height="60"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath13)"
+       id="rect361"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(242.5,146.5)"
+     id="g363"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="8"
+       y="13"
+       clip-path="url(#clipPath16)"
+       id="text365"
+       xml:space="preserve"
+       style="stroke:none">a MetaclassSpecification</text>
+    <line
+       style="fill:none"
+       id="line367"
+       y1="13"
+       x2="149"
+       clip-path="url(#clipPath16)"
+       x1="8"
+       y2="13" />
+    <text
+       x="26"
+       y="31"
+       clip-path="url(#clipPath16)"
+       id="text369"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{methodDict = &quot;{...}&quot;}</text>
+    <text
+       x="33"
+       y="48"
+       clip-path="url(#clipPath16)"
+       id="text371"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{classDict = &quot;{...}&quot;}</text>
+  </g>
+  <g
+     transform="translate(32.5,146.5)"
+     id="g373"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="150"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath10)"
+       id="rect375"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(32.5,146.5)"
+     id="g377"
+     style="font-size:11px;font-weight:bold;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="150"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath10)"
+       id="rect379"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(32.5,146.5)"
+     id="g381"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="16"
+       y="13"
+       clip-path="url(#clipPath12)"
+       id="text383"
+       xml:space="preserve"
+       style="stroke:none">a ClassSpecification</text>
+    <line
+       style="fill:none"
+       id="line385"
+       y1="13"
+       x2="131"
+       clip-path="url(#clipPath12)"
+       x1="16"
+       y2="13" />
+    <text
+       x="25"
+       y="31"
+       clip-path="url(#clipPath12)"
+       id="text387"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{methodDict = &quot;...&quot;}</text>
+  </g>
+  <g
+     transform="translate(242.5,231.5)"
+     id="g389"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect391"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(242.5,231.5)"
+     id="g393"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect395"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(242.5,231.5)"
+     id="g397"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="13"
+       y="13"
+       clip-path="url(#clipPath19)"
+       id="text399"
+       xml:space="preserve"
+       style="stroke:none">a MethodSpecification</text>
+    <line
+       style="fill:none"
+       id="line401"
+       y1="13"
+       x2="142"
+       clip-path="url(#clipPath19)"
+       x1="13"
+       y2="13" />
+    <text
+       x="40"
+       y="31"
+       clip-path="url(#clipPath19)"
+       id="text403"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{source = &quot;'...'&quot;}</text>
+  </g>
+  <g
+     transform="translate(252.5,241.5)"
+     id="g405"
+     style="font-size:11px;font-weight:bold;fill:#808080;fill-opacity:1;stroke:#808080;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect407"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(252.5,241.5)"
+     id="g409"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect411"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(252.5,241.5)"
+     id="g413"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="13"
+       y="13"
+       clip-path="url(#clipPath19)"
+       id="text415"
+       xml:space="preserve"
+       style="stroke:none">a MethodSpecification</text>
+    <line
+       style="fill:none"
+       id="line417"
+       y1="13"
+       x2="142"
+       clip-path="url(#clipPath19)"
+       x1="13"
+       y2="13" />
+    <text
+       x="40"
+       y="31"
+       clip-path="url(#clipPath19)"
+       id="text419"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{source = &quot;'...'&quot;}</text>
+  </g>
+  <g
+     transform="translate(262.5,251.5)"
+     id="g421"
+     style="font-size:11px;font-weight:bold;fill:#e0e0e0;fill-opacity:1;stroke:#e0e0e0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect423"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(262.5,251.5)"
+     id="g425"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect427"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(262.5,251.5)"
+     id="g429"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="13"
+       y="13"
+       clip-path="url(#clipPath19)"
+       id="text431"
+       xml:space="preserve"
+       style="stroke:none">a MethodSpecification</text>
+    <line
+       style="fill:none"
+       id="line433"
+       y1="13"
+       x2="142"
+       clip-path="url(#clipPath19)"
+       x1="13"
+       y2="13" />
+    <text
+       x="40"
+       y="31"
+       clip-path="url(#clipPath19)"
+       id="text435"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{source = &quot;'...'&quot;}</text>
+  </g>
+  <g
+     transform="translate(20.5,231.5)"
+     id="g437"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect439"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(20.5,231.5)"
+     id="g441"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect443"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(20.5,231.5)"
+     id="g445"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="13"
+       y="13"
+       clip-path="url(#clipPath19)"
+       id="text447"
+       xml:space="preserve"
+       style="stroke:none">a MethodSpecification</text>
+    <line
+       style="fill:none"
+       id="line449"
+       y1="13"
+       x2="142"
+       clip-path="url(#clipPath19)"
+       x1="13"
+       y2="13" />
+    <text
+       x="40"
+       y="31"
+       clip-path="url(#clipPath19)"
+       id="text451"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{source = &quot;'...'&quot;}</text>
+  </g>
+  <g
+     transform="translate(30.5,241.5)"
+     id="g453"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect455"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(30.5,241.5)"
+     id="g457"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect459"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(30.5,241.5)"
+     id="g461"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="13"
+       y="13"
+       clip-path="url(#clipPath19)"
+       id="text463"
+       xml:space="preserve"
+       style="stroke:none">a MethodSpecification</text>
+    <line
+       style="fill:none"
+       id="line465"
+       y1="13"
+       x2="142"
+       clip-path="url(#clipPath19)"
+       x1="13"
+       y2="13" />
+    <text
+       x="40"
+       y="31"
+       clip-path="url(#clipPath19)"
+       id="text467"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{source = &quot;'...'&quot;}</text>
+  </g>
+  <g
+     transform="translate(40.5,251.5)"
+     id="g469"
+     style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect471"
+       style="stroke:none" />
+  </g>
+  <g
+     transform="translate(40.5,251.5)"
+     id="g473"
+     style="font-size:11px;font-weight:bold;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <rect
+       width="155"
+       height="40"
+       x="0"
+       y="0"
+       clip-path="url(#clipPath17)"
+       id="rect475"
+       style="fill:none" />
+  </g>
+  <g
+     transform="translate(40.5,251.5)"
+     id="g477"
+     style="font-size:11px;font-weight:bold;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola">
+    <text
+       x="13"
+       y="13"
+       clip-path="url(#clipPath19)"
+       id="text479"
+       xml:space="preserve"
+       style="stroke:none">a MethodSpecification</text>
+    <line
+       style="fill:none"
+       id="line481"
+       y1="13"
+       x2="142"
+       clip-path="url(#clipPath19)"
+       x1="13"
+       y2="13" />
+    <text
+       x="40"
+       y="31"
+       clip-path="url(#clipPath19)"
+       id="text483"
+       xml:space="preserve"
+       style="font-weight:normal;stroke:none">{source = &quot;'...'&quot;}</text>
+  </g>
+  <g
+     transform="translate(90.5,377.5)"
+     id="g493"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:sans-serif">
+    <line
+       style="fill:none"
+       id="line495"
+       y1="50"
+       x2="50"
+       clip-path="url(#clipPath28)"
+       x1="50"
+       y2="88" />
+    <line
+       style="fill:none"
+       id="line497"
+       y1="88"
+       x2="56"
+       clip-path="url(#clipPath28)"
+       x1="50"
+       y2="76" />
+    <line
+       style="fill:none"
+       id="line499"
+       y1="88"
+       x2="44"
+       clip-path="url(#clipPath28)"
+       x1="50"
+       y2="76" />
+  </g>
+  <g
+     transform="translate(292.5,397.5)"
+     id="g501"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:sans-serif">
+    <line
+       style="fill:none"
+       id="line503"
+       y1="50"
+       x2="50"
+       clip-path="url(#clipPath29)"
+       x1="50"
+       y2="78" />
+    <line
+       style="fill:none"
+       id="line505"
+       y1="78"
+       x2="56"
+       clip-path="url(#clipPath29)"
+       x1="50"
+       y2="66" />
+    <line
+       style="fill:none"
+       id="line507"
+       y1="78"
+       x2="44"
+       clip-path="url(#clipPath29)"
+       x1="50"
+       y2="66" />
+  </g>
+  <g
+     transform="translate(272.5,157.5)"
+     id="g509"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:sans-serif">
+    <line
+       style="fill:none"
+       id="line511"
+       y1="50"
+       x2="50"
+       clip-path="url(#clipPath30)"
+       x1="50"
+       y2="73" />
+    <line
+       style="fill:none"
+       id="line513"
+       y1="73"
+       x2="56"
+       clip-path="url(#clipPath30)"
+       x1="50"
+       y2="61" />
+    <line
+       style="fill:none"
+       id="line515"
+       y1="73"
+       x2="44"
+       clip-path="url(#clipPath30)"
+       x1="50"
+       y2="61" />
+  </g>
+  <g
+     transform="translate(57.5,137.5)"
+     id="g517"
+     style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:sans-serif">
+    <line
+       style="fill:none"
+       id="line519"
+       y1="50"
+       x2="50"
+       clip-path="url(#clipPath31)"
+       x1="50"
+       y2="93" />
+    <line
+       style="fill:none"
+       id="line521"
+       y1="93"
+       x2="56"
+       clip-path="url(#clipPath31)"
+       x1="50"
+       y2="81" />
+    <line
+       style="fill:none"
+       id="line523"
+       y1="93"
+       x2="44"
+       clip-path="url(#clipPath31)"
+       x1="50"
+       y2="81" />
+  </g>
+  <rect
+     width="150"
+     height="40.599998"
+     x="65.5"
+     y="386.29999"
+     id="rect6275"
+     style="fill:none;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:3;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+  <rect
+     width="161"
+     height="60.700001"
+     x="262"
+     y="385.70001"
+     id="rect6289"
+     style="fill:none;stroke:#000000;stroke-width:0.99999964;stroke-miterlimit:3;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+  <path
+     d="m 394,25 -5,10 10,0 z"
+     transform="translate(66.5,95.5)"
+     clip-path="url(#clipPath8)"
+     id="path6607"
+     style="font-size:11px;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:1;font-family:TeX Gyre Schola"
+     inkscape:connector-curvature="0" />
+</svg>
