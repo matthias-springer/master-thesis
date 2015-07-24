@@ -190,18 +190,22 @@ Figure~\ref{impl:lex_scope} shows how the \texttt{scope} lookup works in a sligh
 Note, that the reference to \texttt{self} (\texttt{target}) cannot be established at compile time, because it is unclear what the polymorphic receiver class is. Therefore, references to the keyword \texttt{scope} have to be replaced by a message send: \texttt{LexicalScope for: self in: enclosing}. This has the side effect that the decompiled source code (and the code shown in the debugger) looks slightly different from the code written by the programmer.
 
 \section{Class Caching}
-\todo{Cache must map self to instantiation}
-Whenever a nested class is accessed, the class accessor method checks if the class was already generated. If that is the case, the cached version if the class is returned. For this reason, every class specification with a unary selector (unparameterized class) has an instance variable \texttt{classCache}, which contains the cached class object. The system does not cache parameterized classes, as this could result in an excessive number of classes being kept around.
+\label{sec:impl_class_cache}
+Whenever a nested class is accessed, the class accessor method checks if the class was already generated. If that is the case, the cached version of the class is returned. For this reason, every class specification with a unary selector (unparameterized class) has an instance variable \texttt{classCache}, which containing cached class objects. 
 
-One can argue, that a nested weak identity key dictionary data structure could solve this problem: \texttt{classCache} is a \texttt{WeakIdentityKeyDictionary}, whose keys are the first argument. The values are again \texttt{WeakIdentityKeyDictionary}s, mapping the second argument to \texttt{WeakIdentityKeyDictionary}s. Eventually, the last argument is mapped to class objects instead of dictionaries (Figure~\ref{fig:impl_class_cache}).
+\paragraph{Caching Unparameterized Classes}
+\texttt{classCache} is a dictionary mapping enclosing class objects to nested class objects. Every unparameterized class object can only have one instantiation. However, consider, for example, the situation in Figure~\ref{fig:impl:subclass_inherited_class}. In this case, \texttt{A2} caches two instances of \texttt{B}: one for \texttt{A1 class>>B} (created and cached during the \texttt{super B} call) and one for \texttt{A2 class>>B}. The former one contains only the methods defined in \texttt{A1 class>>B}. The latter one is a subclass of the former one and contains all methods defined in \texttt{A2 class>>B}. In this example, the corresponding class specification for \texttt{A2 class>>B} has a class cache mapping \texttt{A1} to the former one and mapping \texttt{A2} to the latter one.
+
+\paragraph{Parameterized Classes}
+The system does not cache parameterized classes, as this could result in an excessive number of classes being kept around. One can argue, that a nested weak identity key dictionary data structure could solve this problem: \texttt{classCache} is a \texttt{WeakIdentityKeyDictionary}, whose keys are the first argument. The values are again \texttt{WeakIdentityKeyDictionary}s, mapping the second argument to \texttt{WeakIdentityKeyDictionary}s. Eventually, the last argument is mapped to class objects instead of dictionaries (Figure~\ref{fig:impl_class_cache}).
 \begin{figure}[!htp]
 	\includegraphics[width=\textwidth]{class_cache.pdf}
 	\centering
-	\caption{Class Cache stored in \texttt{ClassSpecification}}
+	\caption[Class cache for parameterized classes]{Class cache for parameterized classes. The cache is a nested dictionary data structure, with an additional level of nesting per parameter.}
 	\label{fig:impl_class_cache}
 \end{figure}
 
-In this case, class objects are garbage collected once there is no reference to at least one of the arguments in the system anymore. However, it depends on how exactly parameterized classes are used. If parameterized classes are used heavily, for example with \texttt{SmallInteger}s as parameters, no class would ever be garbage collected, because \texttt{SmallInteger}s are represented as tagged objects in Squeak~\cite{Bolz:2008:BFO:1482373.1482382, papetechreport}. If parameterized classes are used as mixins, this is arguably less of a problem, because the the number of base classes to which a mixin is applied is usually not excessively large. However, note, that mixin applications can easily be cached by aliasing them as an unparameterized class (Figure~\ref{fig:impl_cached_mixin_application}). We argue that mixins will most of the time be used in such a way, because writing the mixin application explicitly is more verbose and hinders readability; in addition, the programmer might want to add additional methods to the mixin application, in which case the mixin application must be subclassed or aliased as described, anyway.
+In this case, class objects are garbage collected once there is no reference to at least one of the arguments in the system anymore. However, it depends on how exactly parameterized classes are used. If parameterized classes are used heavily, for example with \texttt{SmallInteger}s as parameters (or other globally reachable objects), no class would ever be garbage collected, because \texttt{SmallInteger}s are represented as tagged objects in Squeak~\cite{Bolz:2008:BFO:1482373.1482382, papetechreport}. If parameterized classes are used as mixins, this is arguably less of a problem, because the the number of base classes to which a mixin is applied is usually not excessively large. However, note, that mixin applications can easily be cached by aliasing them as an unparameterized class (Figure~\ref{fig:impl_cached_mixin_application}). We argue that mixins will most of the time be used in such a way, because writing the mixin application explicitly is more verbose and hinders readability; in addition, the programmer might want to add additional methods to the mixin application, in which case the mixin application must be subclassed or aliased as described, anyway.
 
 \begin{figure}[!htp]
 \begin{lstlisting}
@@ -224,7 +228,7 @@ In this case, class objects are garbage collected once there is no reference to 
 
     ^ self CollectionMixin: self BaseClass
 \end{lstlisting}
-\caption{Cached Mixin Application Example}
+\caption[Cached mixin application]{Example: Cached mixin application. The mixin application is uncached, because the mixin is a parameterized class. However, the aliased mixin application \texttt{MyCollection} is cached, because it is an unparameterized class.}
 \label{fig:impl_cached_mixin_application}
 \end{figure}
 
@@ -245,7 +249,7 @@ This kind of class change is more difficult to handle than method changes. Whene
 \begin{figure}[!htp]
 	\centering
 	\includegraphics[scale=1]{inst_vars.pdf}
-	\caption{Instance Variable Indexing}
+	\caption[Example: Instance variables indexing]{Example: Instance variables indexing. Every instance variable has a zero-based index. The index of inherited instance variables is preserved.}
 	\label{fig:impl_inst_vars}
 \end{figure}
 
@@ -253,7 +257,14 @@ In Figure~\ref{fig:impl_inst_vars}, class \texttt{X} has instance variable \text
 
 What is more interesting is how instance variables are defined in our system: they are part of the class generator method (Figure~\ref{fig:impl_subclass_nested}). Therefore, the system has to execute that method a second time whenever it is changed. The method returns a new class object which must be initialized again, i.e., all methods are recompiled. Note, Squeak has the same behavior: whenever an instance variable is changed, methods in the current class and all subclasses are recompiled. 
 
-Class generator methods for unparameterized classes can just be invoked without any parameters. However, in order to update parameterized classes, the system has to cache the arguments provided to the class generator method when the class was generated. Therefore, in addition to the class cache, every class specification maintains an argument cache, mapping instantiations (classes) to an array of arguments. This argument cache is a \texttt{WeakIdentityKeyDictionary} and different from the dictionary data structure shown in Figure~\ref{fig:impl_class_cache}. That class cache would map arguments to instantiations, but this cache maps instantiations to arguments. Whenever there is no reference to an instantiation in the image anymore, the array of arguments can be garbage collected, because nobody can access the class anymore; therefore, this class does not have to be updated.
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[scale=0.7]{arg_cache.pdf}
+	\caption[Example: Argument cache]{Example: Argument cache. The cache is a dictionary mapping parameterized instantiations to an array of arguments that was used to generate the respective class.}
+	\label{fig:impl_arg_cache}
+\end{figure}
+
+Class generator methods for unparameterized classes can just be invoked without any parameters. However, in order to update parameterized classes, the system has to cache the arguments provided to the class generator method when the class was generated. Therefore, every class specification maintains an argument cache, mapping instantiations (classes) to an array of arguments. This argument cache is a \texttt{WeakIdentityKeyDictionary} and different from the dictionary data structure shown in Figure~\ref{fig:impl_class_cache}. That class cache would map arguments to instantiations. Whenever there is no reference to an instantiation in the image anymore, the array of arguments can be garbage collected, because nobody can access the class anymore; therefore, this class does not have to be updated.
 
 Note, that invoking the class generator method a second time might generate a new class. Therefore, all references to the old class have to replaced with references to the new class using the \texttt{becomeForward:} method. Also, all instances of the old class have to be migrated to the new class. This is no different from what Squeak does when an instance variable is added or removed, and not described in any more detail in this work. We encourage the reader to consult the \emph{Smalltalk Blue Book}~\cite{Goldberg:1983:SLI:273} for more information.
 
