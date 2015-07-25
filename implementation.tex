@@ -66,7 +66,7 @@ In this subsection, we consider the most likely case that a brand new class is d
 \begin{figure}[!hbp]
 	\includegraphics[width=\textwidth]{lazy_class_gen.pdf}
 	\centering
-	\caption[Nested class initialization]{Nested class initialization. Classes are generated lazily and initialized using the \msname meta model.}
+	\caption[Nested class definition initialization]{Nested class definition initialization. Classes are generated lazily and initialized using the \msname meta model.}
 	\label{fig:lazy_class_gen}
 \end{figure}
 
@@ -93,6 +93,16 @@ For a nested class, two methods are installed on the meta class object: a class 
 The selector for the class accessor method is the name of the class. The selector for the class generator method is the same selector, but with a dollar sign prefix. This ensures that the method can only be called by using meta programming from our system, and also avoids accidential name clashes with other methods. For example, if a class is named \texttt{Foo}, the class accessor method has the selector \texttt{Foo} and the class generator method has the selector \texttt{\$Foo}.
 
 \subsection{Class Extension}
+Whenever the class generator method for a nested class returns an already existing class that is already initialized, we call the nested class a class extension. Class extensions are useful to extend inherited nested classes without subclassing (see Section~\ref{sec:concept_inh_nested_cl}) and to declare extensions methods (see Section~\ref{sec:usecases_ext_meth}). 
+
+The process of class initialization for class extensions (Figure~\ref{fig:lazy_class_gen_ext}) is easier than the process for class definitions: there are no \texttt{enclosing} methods installed and no new class name is generated. The already exisiting \texttt{specification} methods are modified, such that they return an array of specification. If a class is extended multiple times, this array contains all corresponding class specifications. The first specification in the array is always the specification where the class was defined.
+
+\begin{figure}[!htp]
+	\includegraphics[width=0.8314\textwidth]{lazy_class_gen_ext.pdf}
+	\centering
+	\caption[Nested class extension initialization]{Nested class extension initialization. An already existing and initialized class is initialized.}
+	\label{fig:lazy_class_gen_ext}
+\end{figure}
 
 \section{Anonymous Classes and Subclass Generation}
 \label{sec:impl_anon_subclass}

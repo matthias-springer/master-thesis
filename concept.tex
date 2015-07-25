@@ -171,6 +171,7 @@ Consider, for example, that method \texttt{A: class>>B: class>>C: class>>foo} in
 \end{itemize}
 
 \section{Inheriting Nested Classes}
+\label{sec:concept_inh_nested_cl}
 Nested classes are accessed using methods which return the generated class. They are similar to class instance variables in a sense that nested classes belong to the enclosing class object. Therefore, a subclass of the enclosing class has its own nested class, i.e., the nested classes might have the same methods and variables declared, but they are different objects. Nested classes can be overridden in a subclass of the enclosing class, just as any regular method can be overridden. The following paragraphs give an overview of how a subclass of an enclosing class can customize the nested class.
 
 \paragraph{Override with Nested Class}
