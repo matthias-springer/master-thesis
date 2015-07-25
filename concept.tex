@@ -50,13 +50,13 @@ It is sometimes necessary to access a method's lexical scope (i.e., the enclosin
 	\label{fig:concept_keywords}
 \end{figure}
 
-\paragraph{\texttt{self} Keyword}
+\subsection{\texttt{self} Keyword}
 This keyword is used make a message send within an object. The receiver is the same object as the sender and the lookup starts at the (polymorphic) class of the receiver. If that class does not provide a corresponding method, the lookup continues in the superclass hierarchy. If no class in the superclass hierarchy has a corresponding method, a \texttt{MethodNotUnderstood} error is raised.
 
-\paragraph{\texttt{super} Keyword}
+\subsection{\texttt{super} Keyword}
 This keyword is also used to make a message send within an object. Again, the receiver is the same object as the sender, but the lookup starts at superclass of the sender's method class. Note, that \texttt{super} is bound to the superclass of the method class, not the superclass of the receiver's class. For example, in Figure~\ref{fig:concept_super_binding}, \texttt{C new bar} returns \texttt{1}, because, in \texttt{B>>bar}, \texttt{super} is bound to \texttt{A}, even though the receiver \texttt{C new} is an instance of \texttt{C}.
 
-\paragraph{\texttt{enclosing} Keyword}
+\subsection{\texttt{enclosing} Keyword}
 This keyword is used to make a message send to the class that contains the current class. Consider, for example, that we want to send a message \texttt{foo} to class \texttt{A B} within \texttt{A class>>B class>>C class>>m4} in Figure~\ref{fig:concept_nested_notation}. Either one of the following two statements works in this case.
 
 \begin{itemize}
@@ -77,31 +77,61 @@ Figure~\ref{fig:concept_lexical_thisouter} illustrates how \texttt{enclosing} is
 
 Note, that \texttt{enclosing} can be used for meta programming purposes; however, it should be avoided in general, because it can lead to fragile code that makes too many assumptions about the structure of the class nesting. A later refactoring could then lead to broken code. Probably for the same reason, Smalltalk does not have a \texttt{super} keyword that does the lookup only in the superclass\footnote{However, there is a method \texttt{Class>>superclass}.} (single-level super). \msname provides a \texttt{scope} keyword that should be used instead.
 
-\paragraph{\texttt{enclosing} Method}
-In addition to \texttt{enclosing}, every class in the system has a method \texttt{enclosing} that returns the enclosing class of the receiver\footnote{The enclosing class of an object that is not a class is its class' enclosing class.}, making it possible to send messages to enclosing classes which are more than one level away. If, for example, in Figure~\ref{fig:concept_nested_notation}, \texttt{A class>>B class>>C>>bar} wants to send the message \texttt{m1} to \texttt{A}, either one of the following two statements works.
+\subsection{\texttt{enclosing} Method}
+In addition to \texttt{enclosing}, every class in the system has a method \texttt{enclosing} that returns the enclosing class (\emph{owner}) of the receiver\footnote{The enclosing class of an object that is not a class is its class' enclosing class.}, making it possible to send messages to enclosing classes which are more than one level away. If, for example, in Figure~\ref{fig:concept_nested_notation}, \texttt{A class>>B class>>C>>bar} wants to send the message \texttt{m1} to \texttt{A}, either one of the following two statements works.
 
 \begin{itemize}
 	\item \texttt{A m1.}
 	\item \texttt{enclosing enclosing m1.}
 \end{itemize}
 
-Again, the method \texttt{enclosing} should be avoided in general, but is useful to implement parts of our system with code written in the system itself. The statement \texttt{enclosing enclosing} would be somewhat similar to a \texttt{super super} statement, which does not exist in Smalltalk.
+Again, the method \texttt{enclosing} should be avoided in general, but is useful to implement parts of our system with code written in the system itself and for meta programming. The statement \texttt{enclosing enclosing} would be somewhat similar to a \texttt{super super} statement. Arguably, this can result in verbose and complicated code, and is at the very least questionable with regards to the law of demeter. Note, that, in contrast to the \texttt{outer} keyword, the message send of \texttt{enclosing} in \texttt{enclosing} is no longer bound to the lexical scope of the method.
 
-\paragraph{\texttt{outer} Keyword}
-The method \texttt{enclosing} can be used to traverse the the lexical scope of a class. Arbitrarily many \texttt{enclosing} sends can be chained, as long as the respective receiver still has an enclosing class and is, therefore, not a top-level class. Arguably, this can result in verbose and complicated code, and is at the very least questionable with regards to the law of demeter.
-
-In addition to \texttt{enclosing}, \msname provides the \texttt{outer} keyword, bound to the method's lexical scope. Whenever a message is sent to \texttt{outer}, the message is first interpreted as a send to \texttt{enclosing}. If that message send fails, the message is sent to \texttt{enclosing enclosing}, and, eventually, to the top-level class, if no other class in the lexical scope understands the message. If even that message send is not understood, the selector is looked up in the \texttt{globals} dictionary. If the selector is absent, a \texttt{MessageNotUnderstood} error is raised.
+\subsection{\texttt{outer} Keyword}
+\label{sec:concept_outer}
+This keyword is used to make a message send to classes in the lexical scope. Whenever a message is sent to \texttt{outer}, the message is first interpreted as a send to \texttt{enclosing}. If that message send fails, the message is sent to the second-level enclosing class in the current lexical scope. Eventually, the message is sent to a top-level class, if no other class understands the message. If even that message send is not understood, the selector is looked up in the \texttt{globals} dictionary. If the selector is absent, a \texttt{MessageNotUnderstood} error is raised.
 
 \texttt{outer} is similar to \texttt{super}, with the difference that \texttt{outer} does a horizontal lookup (lexical scope) and \texttt{super} does a vertical lookup (superclass chain). Note, that messages sent to \texttt{outer} are sent to an object different from \texttt{self}.
 
-\paragraph{\texttt{scope} Keyword}
+\paragraph{Example}
+Figure~\ref{fig:concept_outer_1} illustrates how message sends to \texttt{outer} are looked up. Consider, for example, that the method \texttt{foo} in \texttt{A1 B C} calls \texttt{outer bar}. Both \texttt{A1 B C foo} and \texttt{A2 B C foo} call \texttt{A1 class>>bar} in this case, because \texttt{outer} is bound to the lexical scope of the method.
+
+Figure~\ref{fig:concept_outer_2} shows why it is important that \texttt{outer} is bound to the lexical scope. In this example, \texttt{D B2} is a subclass of \texttt{A B1}. If the \texttt{outer} lookup simply traversed the chain of enclosing classes, i.e., first lookup in \texttt{enclosing}, then \texttt{enclosing enclosing}, etc., the message send of \texttt{bar} would fail. As another consequence, a nested class might then no longer be able to access a class defined in an enclosing class if the nested class is subclassed and nested in a different enclosing class, since classes are accessed using message sends.
+
+\begin{figure}[!htp]
+\begin{subfigure}[b]{\textwidth}
+	\centering
+	\includegraphics[scale=0.75]{outer_keyword.pdf}
+	\caption{Subclassed top-level class}
+	\label{fig:concept_outer_1}
+\end{subfigure}
+
+\vspace{15pt}
+
+\begin{subfigure}[b]{\textwidth}
+	\centering
+	\includegraphics[scale=0.75]{outer_keyword_2.pdf}
+	\caption{Subclassed nested class with different enclosing class}
+	\label{fig:concept_outer_2}
+\end{subfigure}
+
+\caption[Example: \texttt{outer} keyword]{Example: \texttt{outer} keyword. Message sends to \texttt{outer} are looked up with respect to the lexical scope of the method, instead of following the chain of enclosing classes (owner hierarchy).}
+\end{figure}
+
+%The method \texttt{enclosing} can be used to traverse the the lexical scope of a class. Arbitrarily many \texttt{enclosing} sends can be chained, as long as the respective receiver still has an enclosing class and is, therefore, not a top-level class. Arguably, this can result in verbose and complicated code, and is at the very least questionable with regards to the law of demeter.
+
+%In addition to \texttt{enclosing}, \msname provides the \texttt{outer} keyword, bound to the method's lexical scope. 
+
+% If that message send fails, the message is sent to \texttt{enclosing enclosing}, and, eventually, to the top-level class, if no other class in the lexical scope understands the message. 
+
+\subsection{\texttt{scope} Keyword}
 This keyword combines \texttt{super} and \texttt{outer}: a message sent to \texttt{scope} is first treated as a \texttt{self} send. If the message is not understood, it is treated as an \texttt{outer} send.
 
 \msname essentially first looks up the methods in \texttt{self}, then in the superclass hierarchy, and then in the lexical scope. This is also how the method lookup in Java works, also known as \emph{comb semantics}~\cite{bracha2007interaction}. Newspeak uses a different lookup: it first looks for a method in the receiver's class, then in the lexical scope, and finally in superclass hierarchy~\cite{bracha:modules_as_objects}.
 
-The statement \texttt{enclosing enclosing m1} in the previous example can also be written as \texttt{scope m1}. If the method \texttt{m1} would now be moved to its enclosing class (if it had one), the lookup would still succeed. However, \texttt{scope} exposes the risk of accidentially capturing method names in superclasses or the lexical chain.
+%The statement \texttt{enclosing enclosing m1} in the previous example can also be written as \texttt{scope m1}. If the method \texttt{m1} would now be moved to its enclosing class (if it had one), the lookup would still succeed. However, \texttt{scope} exposes the risk of accidentially capturing method names in superclasses or the lexical chain.
 
-\paragraph{Implicit \texttt{scope} Receiver}
+\subsection{Implicit \texttt{scope} Receiver}
 In our system, references to globals are in fact message sends with \texttt{scope} as implicit receiver. This makes it easier for Smalltalk programmers to write code in \msname, even if they do not know about \texttt{enclosing} and \texttt{scope}. It also makes the code less verbose and easier to read.
 
 Whenever code references an identifier that is not a temporary variable, not an instance variable, and not a \emph{special} object/keyword\footnote{\texttt{self}, \texttt{super}, \texttt{thisContext}, \texttt{scope}, \texttt{outer}, \texttt{enclosing}}, the compiler replaces that identifier with a message send to \texttt{scope}.

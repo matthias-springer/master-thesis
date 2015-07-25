@@ -47,17 +47,30 @@ A method specification describes methods. It contains the source code of the met
 
 Note, that different byte code must be generated for different target classes: for example, instance variable reads and writes are compiled to parameterized\footnote{There are separate bytecodes for reading the first or second instance variable etc.} \texttt{pushRcvr:} and \texttt{popIntoRcvr:} bytecodes, where instance variables are referenced with their index\footnote{The first instance variable has index 0, second index variable has index 1, etc.}. In addition, the \texttt{outer} and the \texttt{enclosing} keyword must be bound to different method literals, depending on the lexical scope of the class.
 
-\section{Meta Model Instantiation}
-The class specifications and meta class specifications described in Section~\ref{sec:impl_meta_model} are not class objects or meta class objects. These specifications can be instantiated, producing class objects and meta class objects. This section gives an overview of how \msname generates Smalltalk classes based on class specifications. Figure~\ref{fig:lazy_class_gen} illustrates how the system generates and initializes a class (class specification instantiation). 
+\paragraph{Example}
+Figure~\ref{fig:impl_spec_example} shows an example of a class specification for a class \texttt{Foo}. There is a class specification for \texttt{Foo} and a meta class specification for \texttt{Foo class}. The enclosing class of \texttt{Foo} is not shown in the UML class diagram part. It is, however, shown in the meta Model, because the enclosing class specification has a method specification corresponding to the class specification of \texttt{Foo}.
 
-\begin{figure}
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[width=\textwidth]{spec_example_r.pdf}
+	\caption[Example: Meta model]{Example: Meta model. There is a class specification for \texttt{Foo} and a meta class specification for \texttt{Foo class} (same pattern). \texttt{Foo}'s enclosing class has a method specification (light gray color) defining the class to which the methods are added, in addition to the corresponding class specification.}
+	\label{fig:impl_spec_example}
+\end{figure}
+
+\section{Meta Model Instantiation}
+The class specifications and meta class specifications described in Section~\ref{sec:impl_meta_model} are not class objects or meta class objects. These specifications can be instantiated, producing class objects and meta class objects. This section gives an overview of how \msname generates Smalltalk classes based on class specifications. We distinguish between \emph{class definitions} and \emph{class extensions}. In the former case, the nested class is a newly-generated subclass. In the latter case, an already existing class is extended (extension methods) or aliased. 
+
+\subsection{Class Definitions}
+In this subsection, we consider the most likely case that a brand new class is defined as a nested class, i.e., the nested class is a class definition. Figure~\ref{fig:lazy_class_gen} illustrates how the system generates and initializes a class (class specification instantiation). 
+
+\begin{figure}[!hbp]
 	\includegraphics[width=\textwidth]{lazy_class_gen.pdf}
 	\centering
 	\caption[Nested class initialization]{Nested class initialization. Classes are generated lazily and initialized using the \msname meta model.}
 	\label{fig:lazy_class_gen}
 \end{figure}
 
-Whenever a class accessor method is invoked, the method first checks if the class is already cached. If that is the case, it is returned. Otherwise, the class generator method is called, probably returning an empty uninitialized class, i.e., all instance methods are still missing and only the superclass and the instance and class variables are set up correctly\footnote{The class generator method can return any class object, but it is usually a newly-created subclass.}. The following list gives an overview of the steps necessary for initializing a class.
+Whenever a class accessor method is invoked, the method first checks if the class is already cached. If that is the case, it is returned. Otherwise, the class generator method is called, returning an empty uninitialized class, i.e., all instance methods are still missing and only the superclass and the instance and class variables are set up correctly\footnote{The class generator method can return any class object, but we consider only class definitions here.}. The following list gives an overview of the steps necessary for initializing a class.
 
 \begin{enumerate}
 	\item Install \texttt{enclosing} instance method. This method returns the enclosing class (bound as a method literal). Note, that the enclosing class cannot be stored in an instance variable of the nested class, because \texttt{enclosing} should be early bound and \texttt{super enclosing} should return a class different from \texttt{self enclosing}, in case the superclass of the nested class has a different enclosing class.
@@ -72,24 +85,17 @@ Whenever a class accessor method is invoked, the method first checks if the clas
 
 Note, that class initialization is lazy. A class is only generated and initialized if the corresponding accessor method was called. All references to classes in the source code call the corresponding accessor method, making sure that the class is available when it is needed. 
 
-Class generator methods can return subclasses of other classes; the superclass is referenced by calling its accessor method. Compared to the default package-loading process in Squeak, this makes class creation easier. In Squeak, the system has to analyze which classes are subclasses of each other, in order to create classes in the correct order (superclass has to exist before subclass is created). In our system, classes are created when their accessor method is called, and if these classes depend on another superclass, that superclass is created when the class generator method calls its accessor method (if it does not already exist).
+In class definitions, class generator methods always return new subclasses of other classes\footnote{See Section~\ref{sec:impl_anon_subclass} for syntax details.}; the superclass is referenced by calling its accessor method. Compared to the default package-loading process in Squeak, this makes class creation easier. In Squeak, the system has to analyze which classes are subclasses of each other, in order to create classes in the correct order (superclass has to exist before subclass is created). In our system, classes are created when their accessor method is called, and if these classes depend on another superclass, that superclass is created when the class generator method calls its accessor method (if it does not already exist).
 
 \paragraph{Class Accessor Methods and Class Generator Methods}
 For a nested class, two methods are installed on the meta class object: a class generator method, returning the class to which methods should be added (usually a newly-created subclass), and a class accessor method, checking whether the class was already created and is in the cache or calling the class generator method, otherwise.
 
 The selector for the class accessor method is the name of the class. The selector for the class generator method is the same selector, but with a dollar sign prefix. This ensures that the method can only be called by using meta programming from our system, and also avoids accidential name clashes with other methods. For example, if a class is named \texttt{Foo}, the class accessor method has the selector \texttt{Foo} and the class generator method has the selector \texttt{\$Foo}.
 
-\paragraph{Example}
-Figure~\ref{fig:impl_spec_example} shows an example of a class specification for a class \texttt{Foo}. There is a class specification for \texttt{Foo} and a meta class specification for \texttt{Foo class}. The enclosing class of \texttt{Foo} is not shown in the UML class diagram part. It is, however, shown in the meta model part of the figure, because the enclosing class specification has a method specification corresponding to the class specification of \texttt{Foo}.
-
-\begin{figure}[!htp]
-	\centering
-	\includegraphics[width=\textwidth]{spec_example_r.pdf}
-	\caption[Example: Meta model]{Example: Meta model. There is a class specification for \texttt{Foo} and a meta class specification for \texttt{Foo class} (same pattern). \texttt{Foo}'s enclosing class has a method specification (light gray color) defining the class to which the methods are added, in addition to the corresponding class specification.}
-	\label{fig:impl_spec_example}
-\end{figure}
+\subsection{Class Extension}
 
 \section{Anonymous Classes and Subclass Generation}
+\label{sec:impl_anon_subclass}
 In Smalltalk, new classes are created by subclassing an already existing class. Squeak has a special class, the \texttt{ClassBuilder}, containing all the functionality for creating the class object, the meta class object, giving the class a name, possibly migrating the old class and its instances (if an existing class was changed), and registering it in the \texttt{globals} dictionary.
 
 \msname reuses the class builder and adds functionality for creating anonymous subclasses. Anonymous subclasses~\cite{Ducasse99evaluatingmessage} do not have a name and certain checks are omitted (e.g., if the class name starts with a capital letter). Also, anonymous subclasses are not added to the \texttt{globals} dictionary.
@@ -235,7 +241,7 @@ In this case, class objects are garbage collected once there is no reference to 
 \section{Class Updates}
 Squeak is a live programming environment with immediate feedback. When the programmers changes a class, these changes should immediately affect all instances of the class in the system, i.e., exisiting instances must be migrated to the new class~\cite{casaccio2011bootstrapping}. In that sense, Squeak and many other Smalltalk implementations~\cite{Penney:1987:CMG:38765.38817} are different from other programming languages with an ``edit/compile/run cycle''~\cite{conf/sofsem/NierstraszG10}: the programmer has the feeling that there is no difference between compile time and runtime.
 
-For this reason, our system has to ensure that changes to the source code are immediately applied to all living objects in the image. It is important to understand, that changes to parameterized class specifications can affect multiple classes (model instantiations) at runtime. Therefore, every class specification stores a weak collection of all its instantiations. When a class specification is changed, all of its instantiations can be looked up easily and adapted one by one.
+For this reason, \msname has to ensure that changes to the source code are immediately applied to all living objects in the image. It is important to understand, that changes to parameterized class specifications can affect multiple classes (model instantiations) at runtime. Therefore, every class specification stores a weak collection of all its instantiations. When a class specification is changed, all of its instantiations can be looked up easily and adapted one by one.
 
 \paragraph{Changing Instance Methods}
 Whenever an instance method is added, removed, or changed, the system retrieves the collection of all instantiations, and performs the corresponding change on the class object. This does not require creating a new class object, but merely changing the method dictionary using Squeak's meta object protocol~\cite{Goldberg:1983:SLI:273, Kiczales:1991:AMP:574212}.
@@ -244,7 +250,7 @@ Whenever an instance method is added, removed, or changed, the system retrieves 
 Changing class methods is equivalent to changing instance methods, with the only difference being that the meta class object is changed instead of the class object.
 
 \paragraph{Changing Instance Variables}
-This kind of class change is more difficult to handle than method changes. Whenever an instance variable is add or removed, some methods might have to be recompiled, because instance variables are referenced with indices in the bytecode (see also Section~\ref{sec:impl_meta_model}). 
+This kind of class change is more difficult to handle than method changes. Whenever an instance variable is added or removed, some methods might have to be recompiled, because instance variables are referenced with indices in the bytecode (see also Section~\ref{sec:impl_meta_model}). 
 
 \begin{figure}[!htp]
 	\centering
@@ -253,9 +259,9 @@ This kind of class change is more difficult to handle than method changes. Whene
 	\label{fig:impl_inst_vars}
 \end{figure}
 
-In Figure~\ref{fig:impl_inst_vars}, class \texttt{X} has instance variable \texttt{foo}, class \texttt{Y} has instance variables \texttt{foo} and \texttt{bar}, and class \texttt{Z} has instance variables \texttt{foo}, \texttt{bar}, \texttt{baz}, and \texttt{qux}. Instance variables are indexed according to the superclass hierarchy. Therefore, \texttt{foo} has index 0, \texttt{bar} has index 1, \texttt{baz} has index 2, and \texttt{qux} has index 3. These indices are used in the bytecode instead of string literals or symbols. Therefore, when instance variables are changed in \texttt{X}, all classes (methods in these classes) \texttt{X}, \texttt{Y}, and \texttt{Z} have to be recompiled. If instance variables in \texttt{Z} are changed, only \texttt{Z} has to be recompiled.
+In Figure~\ref{fig:impl_inst_vars}, class \texttt{X} has instance variable \texttt{foo}, class \texttt{Y} has instance variables \texttt{foo} and \texttt{bar}, and class \texttt{Z} has instance variables \texttt{foo}, \texttt{bar}, \texttt{baz}, and \texttt{qux}. Instance variables are indexed according to the superclass hierarchy. Therefore, \texttt{foo} has index 0, \texttt{bar} has index 1, \texttt{baz} has index 2, and \texttt{qux} has index 3. These indices are used in the bytecode instead of string literals or symbols. Therefore, when instance variables are changed in \texttt{X}, all classes (methods referencing these instance variables) \texttt{X}, \texttt{Y}, and \texttt{Z} have to be recompiled. If instance variables in \texttt{Z} are changed, only \texttt{Z} has to be recompiled.
 
-What is more interesting is how instance variables are defined in our system: they are part of the class generator method (Figure~\ref{fig:impl_subclass_nested}). Therefore, the system has to execute that method a second time whenever it is changed. The method returns a new class object which must be initialized again, i.e., all methods are recompiled. Note, Squeak has the same behavior: whenever an instance variable is changed, methods in the current class and all subclasses are recompiled. 
+What is more interesting is how instance variables are defined in our system: they are part of the class generator method (Figure~\ref{fig:impl_subclass_nested}). Therefore, the system has to execute that method a second time whenever it is changed. The method returns a new class object which must be initialized again, i.e., all methods are recompiled. Squeak has the same behavior: whenever an instance variable is changed, methods in the current class and all subclasses are recompiled. 
 
 \begin{figure}[!htp]
 	\centering
@@ -316,10 +322,21 @@ Our system is not integrated with Monticello, because Monticello does currently 
 Our system comes with its own import/export functionality and supports as only repository the file system as of now. The exported format is similar to the FileTree\footnote{https://github.com/dalehenrich/filetree} format. There is a directory for every class. Inside that directory, there are \texttt{instance} and \texttt{class} directories storing instance method and class methods, respectively. For every nested class, the corresponding \texttt{class} directory contains a source code file for the class generator method and a directory for the nested class. For every method, there is a file containing its source code with the selector of the method as file name (colons are replaced with dots)\todo{ModuleSpec should also have a MethodSpec}.
 
 \begin{figure}[!htp]
-	\centering
-	\includegraphics[width=0.75\textwidth]{source_code_ex.pdf}
-	\caption{Source code export example}
-	\label{fig:impl_source_export}
+\dirtree{%
+.1 SpaceCleanup.st.
+.1 \textbf{SpaceCleanup}.
+.2 \textbf{instance}.
+.2 \textbf{class}.
+.3 Game.st.
+.3 \textbf{Game}.
+.4 \textbf{instance}.
+.5 initialize.st.
+.5 startGameWithPlayers..st.
+.4 \textbf{class}.
+.4 open.st.
+}
+\caption{Example: Source code export}
+\label{fig:impl_source_export}
 \end{figure}
 
 Figure~\ref{fig:impl_source_export} illustrates what the exported format looks like. The top-level module is \texttt{Bomberman}. It does not have any methods on the instance side, but a regular method \texttt{open} on class side, as well as a nested class \texttt{Game}. That nested class has to instance methods \texttt{initialize} and \texttt{startGameWithPlayers:}.
