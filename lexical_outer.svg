@@ -14,7 +14,7 @@
    id="svg5802"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="New document 10">
+   sodipodi:docname="lexical_outer.svg">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -23,15 +23,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="216.45864"
-     inkscape:cy="47.173366"
+     inkscape:cx="233.69592"
+     inkscape:cy="97.680993"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="false"
+     showgrid="true"
      inkscape:window-width="1462"
      inkscape:window-height="898"
      inkscape:window-x="50"
-     inkscape:window-y="36"
+     inkscape:window-y="303"
      inkscape:window-maximized="0"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -321,7 +321,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -334,18 +334,6 @@
        transform="translate(69.142857,161.50504)"
        id="g6103"
        style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:0;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
-      <g
-         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
-         id="g53"
-         text-rendering="geometricPrecision">
-        <rect
-           style="stroke:none"
-           id="rect55"
-           y="0"
-           height="216"
-           width="456"
-           x="0" />
-      </g>
       <g
          style="font-size:11px;font-weight:bold;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1;font-family:TeX Gyre Schola"
          id="g57"
@@ -647,12 +635,16 @@
          transform="translate(382,152)"
          font-size="11">
         <text
-           style="stroke:none"
-           id="text133"
-           clip-path="url(#clipPath11)"
-           y="13"
            xml:space="preserve"
-           x="10">target</text>
+           style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:TeX Gyre Schola;-inkscape-font-specification:TeX Gyre Schola"
+           x="8.8571434"
+           y="13.85714"
+           id="text3102"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan3104"
+             x="8.8571434"
+             y="13.85714">enclosing</tspan></text>
       </g>
       <g
          style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:sans-serif"
@@ -741,37 +733,33 @@
            x1="138"
            clip-path="url(#clipPath13)" />
       </g>
-      <g
-         style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:TeX Gyre Schola"
-         id="g159"
-         text-rendering="geometricPrecision"
-         transform="translate(332,73)"
-         font-size="11">
-        <line
-           style="fill:none"
-           id="line161"
-           y1="50"
-           x2="50"
-           clip-path="url(#clipPath14)"
-           x1="50"
-           y2="98" />
-        <line
-           style="fill:none"
-           id="line163"
-           y1="98"
-           x2="56"
-           clip-path="url(#clipPath14)"
-           x1="50"
-           y2="86" />
-        <line
-           style="fill:none"
-           id="line165"
-           y1="98"
-           x2="44"
-           clip-path="url(#clipPath14)"
-           x1="50"
-           y2="86" />
-      </g>
+      <line
+         y2="98"
+         x1="50"
+         clip-path="url(#clipPath14)"
+         x2="50"
+         y1="50"
+         id="line161"
+         style="font-size:11px;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:TeX Gyre Schola"
+         transform="translate(332,73)" />
+      <line
+         y2="86"
+         x1="50"
+         clip-path="url(#clipPath14)"
+         x2="56"
+         y1="98"
+         id="line163"
+         style="font-size:11px;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:TeX Gyre Schola"
+         transform="translate(332,73)" />
+      <line
+         y2="86"
+         x1="50"
+         clip-path="url(#clipPath14)"
+         x2="44"
+         y1="98"
+         id="line165"
+         style="font-size:11px;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:TeX Gyre Schola"
+         transform="translate(332,73)" />
       <g
          style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:TeX Gyre Schola"
          id="g167"
@@ -800,6 +788,60 @@
            xml:space="preserve"
            x="9">&lt;&lt;nested&gt;&gt;</text>
       </g>
+      <line
+         transform="matrix(1,0,0,0.625,185.85714,109.60714)"
+         style="font-size:11px;fill:none;stroke:#000000;stroke-width:1.26491106;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:TeX Gyre Schola"
+         id="line3109"
+         y1="50"
+         x2="50"
+         clip-path="url(#clipPath14)"
+         x1="50"
+         y2="98" />
+      <line
+         transform="translate(185.85714,72.85714)"
+         style="font-size:11px;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:TeX Gyre Schola"
+         id="line3111"
+         y1="98"
+         x2="56"
+         clip-path="url(#clipPath14)"
+         x1="50"
+         y2="86" />
+      <line
+         transform="translate(185.85714,72.85714)"
+         style="font-size:11px;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:TeX Gyre Schola"
+         id="line3113"
+         y1="98"
+         x2="44"
+         clip-path="url(#clipPath14)"
+         x1="50"
+         y2="86" />
+      <line
+         y2="98"
+         x1="50"
+         clip-path="url(#clipPath14)"
+         x2="50"
+         y1="50"
+         id="line3115"
+         style="font-size:11px;fill:none;stroke:#000000;stroke-width:1.26491106;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:TeX Gyre Schola"
+         transform="matrix(1,0,0,0.625,16.857143,109.60714)" />
+      <line
+         y2="86"
+         x1="50"
+         clip-path="url(#clipPath14)"
+         x2="56"
+         y1="98"
+         id="line3117"
+         style="font-size:11px;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:TeX Gyre Schola"
+         transform="translate(16.857143,72.85714)" />
+      <line
+         y2="86"
+         x1="50"
+         clip-path="url(#clipPath14)"
+         x2="44"
+         y1="98"
+         id="line3119"
+         style="font-size:11px;fill:none;stroke:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;font-family:TeX Gyre Schola"
+         transform="translate(16.857143,72.85714)" />
     </g>
     <path
        inkscape:connector-curvature="0"
@@ -833,5 +875,10 @@
        id="path7294"
        d="m 80,327.36218 c 0,0 -15,-30 10,-40 25,-10 25,-10 25,-10"
        style="fill:none;stroke:#808080;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#Arrow1LendEa)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 135.69986,302.36218 315,0 0,0"
+       id="path3121"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

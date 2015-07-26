@@ -156,7 +156,7 @@ In this section, we explain how the keywords \texttt{enclosing}, \texttt{outer},
 During compilation, all references to \texttt{enclosing} are bound to the enclosing class, which is known during class initialization. Technically, every class has its own Squeak environment which binds \texttt{enclosing} to the enclosing class. Therefore, it is also possible to evaluate \texttt{enclosing} in the debugger, for example.
 
 \paragraph{Implementation of \texttt{outer}}
-During compilation, all references to \texttt{outer} are bound to an instance of \texttt{LexicalScope}. This class is a subclass of \texttt{ProtoObject}, holds a reference to the enclosing class, and contains a \texttt{doesNotUnderstand:} handler, that forwards messages to the enclosing class. If the enclosing class does not understand the message, the message is forwarded to that class' enclosing class. If at some point, a top-level class without an enclosing class is reached, the handler looks for an entry in the \texttt{globals} dictionary with the message's selector.
+During compilation, all references to \texttt{outer} are bound to an instance of \texttt{LexicalScope}. This class is a subclass of \texttt{ProtoObject}, holds references to all enclosing classes, and contains a \texttt{doesNotUnderstand:} handler, that forwards messages to the enclosing classes. If the enclosing class does not understand the message, the message is forwarded to that class' enclosing class. If at some point, a top-level class without an enclosing class is reached, the handler looks for an entry in the \texttt{globals} dictionary with the message's selector.
 
 \afterpage{%
 
@@ -185,46 +185,46 @@ During compilation, all references to \texttt{outer} are bound to an instance of
 
 As an example, let us assume that we have classes nested as shown in Figure~\ref{fig:concept_nested_notation} and that all following message sends to \texttt{outer} happen in \texttt{A class>>B class>>C class>>m4}. See Figure~\ref{impl:lex_outer} for a visualization of the lookup.
 \begin{itemize}
-	\item \texttt{outer foo}: lookup in \texttt{enclosing} (class \texttt{A B}) succeeds.
-	\item \texttt{outer B}: lookup in \texttt{enclosing} fails, but lookup in \texttt{enclosing enclosing} (class \texttt{A}) succeeds.
-	\item \texttt{outer A}: lookup in \texttt{enclosing} and \texttt{enclosing enclosing} fails, but \texttt{A} is present in the \texttt{globals} dictionary.
+	\item \texttt{outer foo}: lookup in \texttt{enclosing at: 1} (class \texttt{A B}) succeeds.
+	\item \texttt{outer B}: lookup in \texttt{enclosing at: 1} fails, but lookup in \texttt{enclosing at: 2} (class \texttt{A}) succeeds.
+	\item \texttt{outer A}: lookup in \texttt{enclosing at: 1} and \texttt{enclosing at: 2} fails, but \texttt{A} is present in the \texttt{globals} dictionary.
 	\item \texttt{outer Object}: same as before. All classes outside of our system are also present in the \texttt{globals} dictionary.
 	\item \texttt{outer D}: lookup fails and raises a \texttt{MessageNotUnderstood} error.
 \end{itemize}
 
 \paragraph{Implementation of \texttt{scope}}
-References to \texttt{scope} cannot be replaced by a constant literal during compile time. This is because the lookup involves a lookup in \texttt{self}\footnote{If \texttt{scope} is used in an instance method, the lookup starts at \texttt{self class}.}. Looking up methods in the class of the method under compilation is not sufficient, because that method might be overridden in a subclass\footnote{\texttt{self} sends are late bound.}. Therefore, we have to construct a \texttt{LexicalScope} object at runtime (instead of compile time) and pass it two objects: the enclosing class and \texttt{self}.
+References to \texttt{scope} cannot be replaced by a constant literal during compile time. This is because the lookup involves a lookup in \texttt{self}\footnote{If \texttt{scope} is used in an instance method, the lookup starts at \texttt{self class}.}. Looking up methods in the class of the method under compilation is not sufficient, because that method might be overridden in a subclass\footnote{\texttt{self} sends are late bound.}. Therefore, we have to construct a \texttt{LexicalScope} object at runtime (instead of compile time) and pass it two objects: the array of all enclosing classes (contained in \texttt{outer}) and \texttt{self}.
 
 Figure~\ref{impl:lex_scope} shows how the \texttt{scope} lookup works in a slightly modified example. Just as in the previous example, we assume that all message sends happen in \texttt{A class>>B class>>C class>>m4}. However, \texttt{m4} is invoked on class \texttt{D}, which is a subclass of class \texttt{A B C}. Therefore, \texttt{self} is bound to \texttt{D}.
 
 \begin{itemize}
 	\item \texttt{scope bar}: lookup in \texttt{self} succeeds: method \texttt{D class>>bar}.
-	\item \texttt{scope foo}: lookup in \texttt{self} fails, but lookup in \texttt{enclosing} (class \texttt{A B}) succeeds.
+	\item \texttt{scope foo}: lookup in \texttt{self} fails, but lookup in \texttt{enclosing at: 1} (class \texttt{A B}) succeeds.
 	\item The lookup for all other examples listed for \texttt{outer} (previous paragraph) yields the same result in this example.
 \end{itemize}
 
-Note, that the reference to \texttt{self} (\texttt{target}) cannot be established at compile time, because it is unclear what the polymorphic receiver class is. Therefore, references to the keyword \texttt{scope} have to be replaced by a message send: \texttt{LexicalScope for: self in: enclosing}. This has the side effect that the decompiled source code (and the code shown in the debugger) looks slightly different from the code written by the programmer.
+Note, that the reference to \texttt{self} (\texttt{target}) cannot be established at compile time, because it is unclear what the polymorphic receiver class is. Therefore, references to the keyword \texttt{scope} have to be replaced by a message send: \texttt{LexicalScope for: self in: outer}. This has the side effect that the decompiled source code (and the code shown in the debugger) looks slightly different from the code written by the programmer.
 
 \section{Class Caching}
 \label{sec:impl_class_cache}
-Whenever a nested class is accessed, the class accessor method checks if the class was already generated. If that is the case, the cached version of the class is returned. For this reason, every class specification with a unary selector (unparameterized class) has an instance variable \texttt{classCache}, which containing cached class objects. 
+Whenever a nested class is accessed, the class accessor method checks if the class was already generated. If that is the case, the cached version of the class is returned. For this reason, every class specification with a unary selector (unparameterized class) has an instance variable \texttt{classCache}, which contains cached class objects. 
 
 \paragraph{Caching Unparameterized Classes}
 \texttt{classCache} is a dictionary mapping enclosing class objects to nested class objects. Every unparameterized class object can only have one instantiation. However, consider, for example, the situation in Figure~\ref{fig:impl:subclass_inherited_class}. In this case, \texttt{A2} caches two instances of \texttt{B}: one for \texttt{A1 class>>B} (created and cached during the \texttt{super B} call) and one for \texttt{A2 class>>B}. The former one contains only the methods defined in \texttt{A1 class>>B}. The latter one is a subclass of the former one and contains all methods defined in \texttt{A2 class>>B}. In this example, the corresponding class specification for \texttt{A2 class>>B} has a class cache mapping \texttt{A1} to the former one and mapping \texttt{A2} to the latter one.
 
 \paragraph{Parameterized Classes}
 The system does not cache parameterized classes, as this could result in an excessive number of classes being kept around. One can argue, that a nested weak identity key dictionary data structure could solve this problem: \texttt{classCache} is a \texttt{WeakIdentityKeyDictionary}, whose keys are the first argument. The values are again \texttt{WeakIdentityKeyDictionary}s, mapping the second argument to \texttt{WeakIdentityKeyDictionary}s. Eventually, the last argument is mapped to class objects instead of dictionaries (Figure~\ref{fig:impl_class_cache}).
+
 \begin{figure}[!htp]
+	\begin{minipage}{\textwidth}
 	\includegraphics[width=\textwidth]{class_cache.pdf}
 	\centering
 	\caption[Class cache for parameterized classes]{Class cache for parameterized classes. The cache is a nested dictionary data structure, with an additional level of nesting per parameter.}
 	\label{fig:impl_class_cache}
-\end{figure}
-
-In this case, class objects are garbage collected once there is no reference to at least one of the arguments in the system anymore. However, it depends on how exactly parameterized classes are used. If parameterized classes are used heavily, for example with \texttt{SmallInteger}s as parameters (or other globally reachable objects), no class would ever be garbage collected, because \texttt{SmallInteger}s are represented as tagged objects in Squeak~\cite{Bolz:2008:BFO:1482373.1482382, papetechreport}. If parameterized classes are used as mixins, this is arguably less of a problem, because the the number of base classes to which a mixin is applied is usually not excessively large. However, note, that mixin applications can easily be cached by aliasing them as an unparameterized class (Figure~\ref{fig:impl_cached_mixin_application}). We argue that mixins will most of the time be used in such a way, because writing the mixin application explicitly is more verbose and hinders readability; in addition, the programmer might want to add additional methods to the mixin application, in which case the mixin application must be subclassed or aliased as described, anyway.
-
-\begin{figure}[!htp]
-\begin{lstlisting}
+	\end{minipage}
+	\begin{minipage}{\textwidth}
+	\vspace{30pt}
+	\begin{lstlisting}
 <@\textbf{MyLibrary class>>BaseClass}@>
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
     " This is the class that serves as 
@@ -246,22 +246,25 @@ In this case, class objects are garbage collected once there is no reference to 
 \end{lstlisting}
 \caption[Cached mixin application]{Example: Cached mixin application. The mixin application is uncached, because the mixin is a parameterized class. However, the aliased mixin application \texttt{MyCollection} is cached, because it is an unparameterized class.}
 \label{fig:impl_cached_mixin_application}
+\end{minipage}
 \end{figure}
+
+In this case, class objects are garbage collected once there is no reference to at least one of the arguments in the system anymore. However, it depends on how exactly parameterized classes are used. If parameterized classes are used heavily, for example with \texttt{SmallInteger}s as parameters (or other globally reachable objects), no class would ever be garbage collected, because \texttt{SmallInteger}s are represented as tagged objects in Squeak~\cite{Bolz:2008:BFO:1482373.1482382, papetechreport}. If parameterized classes are used as mixins, this is arguably less of a problem, because the the number of base classes to which a mixin is applied is usually not excessively large. However, note, that mixin applications can easily be cached by aliasing them as an unparameterized class (Figure~\ref{fig:impl_cached_mixin_application}). We argue that mixins will most of the time be used in such a way, because writing the mixin application explicitly is more verbose and hinders readability; in addition, the programmer might want to add additional methods to the mixin application, in which case the mixin application must be subclassed or aliased as described, anyway.
 
 \section{Class Updates}
 Squeak is a live programming environment with immediate feedback. When the programmers changes a class, these changes should immediately affect all instances of the class in the system, i.e., exisiting instances must be migrated to the new class~\cite{casaccio2011bootstrapping}. In that sense, Squeak and many other Smalltalk implementations~\cite{Penney:1987:CMG:38765.38817} are different from other programming languages with an ``edit/compile/run cycle''~\cite{conf/sofsem/NierstraszG10}: the programmer has the feeling that there is no difference between compile time and runtime.
 
 For this reason, \msname has to ensure that changes to the source code are immediately applied to all living objects in the image. It is important to understand, that changes to parameterized class specifications can affect multiple classes (model instantiations) at runtime. Therefore, every class specification stores a weak collection of all its instantiations. When a class specification is changed, all of its instantiations can be looked up easily and adapted one by one.
 
-\paragraph{Changing Instance Methods}
+\subsection{Changing Instance/Class Methods}
 Whenever an instance method is added, removed, or changed, the system retrieves the collection of all instantiations, and performs the corresponding change on the class object. This does not require creating a new class object, but merely changing the method dictionary using Squeak's meta object protocol~\cite{Goldberg:1983:SLI:273, Kiczales:1991:AMP:574212}.
 
-\paragraph{Changing Class Methods}
 Changing class methods is equivalent to changing instance methods, with the only difference being that the meta class object is changed instead of the class object.
 
-\paragraph{Changing Instance Variables}
-This kind of class change is more difficult to handle than method changes. Whenever an instance variable is added or removed, some methods might have to be recompiled, because instance variables are referenced with indices in the bytecode (see also Section~\ref{sec:impl_meta_model}). 
+\subsection{Changing Instance/Class Variables}
+This kind of class change is more difficult to handle than method changes. Whenever an instance/class variable is added or removed, some methods might have to be recompiled, because instance variables are referenced with indices in the bytecode (see also Section~\ref{sec:impl_meta_model}). 
 
+\paragraph{Instance Variables Indexing}
 \begin{figure}[!htp]
 	\centering
 	\includegraphics[scale=1]{inst_vars.pdf}
@@ -271,8 +274,16 @@ This kind of class change is more difficult to handle than method changes. Whene
 
 In Figure~\ref{fig:impl_inst_vars}, class \texttt{X} has instance variable \texttt{foo}, class \texttt{Y} has instance variables \texttt{foo} and \texttt{bar}, and class \texttt{Z} has instance variables \texttt{foo}, \texttt{bar}, \texttt{baz}, and \texttt{qux}. Instance variables are indexed according to the superclass hierarchy. Therefore, \texttt{foo} has index 0, \texttt{bar} has index 1, \texttt{baz} has index 2, and \texttt{qux} has index 3. These indices are used in the bytecode instead of string literals or symbols. Therefore, when instance variables are changed in \texttt{X}, all classes (methods referencing these instance variables) \texttt{X}, \texttt{Y}, and \texttt{Z} have to be recompiled. If instance variables in \texttt{Z} are changed, only \texttt{Z} has to be recompiled.
 
-What is more interesting is how instance variables are defined in our system: they are part of the class generator method (Figure~\ref{fig:impl_subclass_nested}). Therefore, the system has to execute that method a second time whenever it is changed. The method returns a new class object which must be initialized again, i.e., all methods are recompiled. Squeak has the same behavior: whenever an instance variable is changed, methods in the current class and all subclasses are recompiled. 
+\paragraph{Definition of Instance Variables}
+What is more interesting is how instance variables are defined in \msname: they are part of the class generator method (Figure~\ref{fig:impl_subclass_nested}). Therefore, the system has to execute that method a second time whenever it is changed. The method returns a new class object which must be initialized again, i.e., all methods are recompiled. Squeak has the same behavior: whenever an instance variable is changed, methods in the current class and all subclasses are recompiled. Section~\ref{sec:impl_migration} gives an overview of the steps necessary for class migration.
 
+\subsection{Changing the Target Class}
+
+\subsection{Class Migration}
+\label{sec:impl_migration}
+Whenever an instance variable or the target class in a class generator method is changed, the changed class generator method must be executed a second time and the old class object must be migrated to the new class object. In this subsection, we describe some of the pitfalls in this process.
+
+\paragraph{Class Argument Cache}
 \begin{figure}[!htp]
 	\centering
 	\includegraphics[scale=0.7]{arg_cache.pdf}
@@ -282,10 +293,59 @@ What is more interesting is how instance variables are defined in our system: th
 
 Class generator methods for unparameterized classes can just be invoked without any parameters. However, in order to update parameterized classes, the system has to cache the arguments provided to the class generator method when the class was generated. Therefore, every class specification maintains an argument cache, mapping instantiations (classes) to an array of arguments. This argument cache is a \texttt{WeakIdentityKeyDictionary} and different from the dictionary data structure shown in Figure~\ref{fig:impl_class_cache}. That class cache would map arguments to instantiations. Whenever there is no reference to an instantiation in the image anymore, the array of arguments can be garbage collected, because nobody can access the class anymore; therefore, this class does not have to be updated.
 
-Note, that invoking the class generator method a second time might generate a new class. Therefore, all references to the old class have to replaced with references to the new class using the \texttt{becomeForward:} method. Also, all instances of the old class have to be migrated to the new class. This is no different from what Squeak does when an instance variable is added or removed, and not described in any more detail in this work. We encourage the reader to consult the \emph{Smalltalk Blue Book}~\cite{Goldberg:1983:SLI:273} for more information.
+\paragraph{Class Migration}
+Invoking the class generator method a second time usually generates a new class\footnote{There are exceptions: for example, executing the method for an alias a second time does not generate a new class.}. Therefore, all references to the old class have to replaced with references to the new class using the \texttt{becomeForward:} method. Also, all instances of the old class have to be migrated to the new class. This is no different from what Squeak does when an instance variable is added or removed, and not described in any more detail in this work. We encourage the reader to consult the \emph{Smalltalk Blue Book}~\cite{Goldberg:1983:SLI:273} for more information.
 
-\paragraph{Changing Class Instance Variables}
-Changing class instance variables is equivalent to changing instance variables, with the only difference being that the meta class object is changed instead of the class object.
+At this point, we have to distinguish between class definitions and class extensions. We always migrate classes for a class generator method. However, not all class extensions are migrated. Consider, for example, the case that the programmer created an alias for \texttt{String} and changed that alias to point to \texttt{SmallInteger}. In this case, we should not migrate all instances of \texttt{String} to \texttt{SmallInteger}. The rationale behind this example is that aliases and class extensions can be applied at multiple points throughout the program. Classes should never be migrated when such a class is changed, because other (unchanged) points in the program will be affected. 
+
+There is one exception to this rule. Whenever an inherited nested class is extended in a subclass, the class should be migrated, because subclass has its own nested class that is different from the superclass' nested class, even though the nested class is defined in the superclass and extended in the subclass. Therefore, class extensions are migrated, only if the original class definition took place in the same object as the class extension in question.
+
+\begin{figure}[!htp]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\begin{lstlisting}
+<@\textbf{MyClass}@>
+    <@\textcolor{OliveGreen}{\textbf{< class >}}@>
+    ^ Object
+\end{lstlisting}
+\caption{Class extension}
+\label{fig:impl_cls_migr_ext}
+\end{subfigure}
+\qquad
+\begin{subfigure}[b]{0.45\textwidth}
+\begin{lstlisting}
+<@\textbf{MyClass}@>
+    <@\textcolor{OliveGreen}{\textbf{< class >}}@>
+    ^ Object subclass
+\end{lstlisting}
+\caption{Class definition}
+\label{fig:impl_cls_migr_def}
+\end{subfigure}
+
+\vspace{15pt}
+
+\begin{subfigure}[b]{0.45\textwidth}
+\begin{lstlisting}
+<@\textbf{MyClass}@>
+    <@\textcolor{OliveGreen}{\textbf{< class >}}@>
+    ^ super MyClass
+\end{lstlisting}
+\caption{Class extension \\ (extending inherited nested class)}
+\label{fig:impl_cls_migr_ext_nested}
+\end{subfigure}
+\qquad
+\begin{subfigure}[b]{0.45\textwidth}
+\begin{lstlisting}
+<@\textbf{MyClass}@>
+    <@\textcolor{OliveGreen}{\textbf{< class >}}@>
+    ^ super MyClass subclass
+\end{lstlisting}
+\caption{Class definition \\ (subclassing inherited nested class)}
+\label{fig:impl_cls_migr_subclass_nested}
+\end{subfigure}
+\end{figure}
+
+\paragraph{Reapplying Class Extensions}
 
 \section{Integration in Squeak}
 In this section, we describe how our system is integrated in Squeak.
