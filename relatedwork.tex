@@ -50,9 +50,47 @@ Whenever a top-level class is defined and there is already a class with that nam
 
 \subsection{Squeak Environments}
 \label{sec:rel_sq_env}
+A Squeak environment is a mapping of symbols to global objects. Squeak environments were introduced with Squeak~4.5\cite{squeak45notes} and make it possible to have multiple \texttt{globals} dictionaries, effectively establishing namespaces. In fact, \texttt{Smalltalk globals} is an environment. Every class has an \texttt{environment} instance variable determining the environment it belongs to.
+
+Environments establish an association between global identifiers and objects at compile time. For example, if the programmer writes \texttt{Object new} in a method, Squeak looks up \texttt{\#Object} in the environment of the class in which the method is compiled and adds a reference to the result of the lookup in the environment as a method literal. Environments are integrated into the Squeak code base; e.g., the debugger looks up symbols in the corresponding environment when evaluating a code snippet. However, environments lack IDE support at the moment. For example, new environments cannot be created in the system browser as of now.
+
+\paragraph{Name Policies}
+An environment can be imported into another environment. This processes copies over all name bindings from the source environment to the target environment. Subsequent changes to the source environment are not reflected in the target environment. In order to solve name conflicts during namespace imports, class names can be changed during import using name policies.
+
+\begin{itemize}
+    \item \texttt{AllNamePolicy}: Class names are not changed during import.
+    \item \texttt{ExplicitNamePolicy}: The programmer can specify an alias for every class using a dictionary.
+    \item \texttt{AddPrefixNamePolicy}: A static prefix is added to every class name during import.
+    \item \texttt{RemovePrefixNamePolicy}: A static prefix is removed from every class during import.
+\end{itemize}
+
+\paragraph{Example}
+Consider, for example, that we want to have two applications \texttt{SpaceCleanup} and \texttt{Breakout} installed in a Squeak image, and both applications provide duplicate class names (e.g. \texttt{Game}), as described in Figure~\ref{fig:use_class_clash}. The programmer has to define separate environments for SpaceCleanup and Breakout, containing only from the respective applications, and importing the system environment, such that system classes like \texttt{String} or \texttt{Morph} are available. The methods in each application can reference \texttt{Game} directly, because the corresponding environment does not contain bindings for the other application.
+
+When the programmer wants to use classes from either one of the two applications, the environment has to be imported into the environment of the classes that need to reference the application classes. If both applications are needed, a name policy must be specified to resolve conflicts. References to the classes in the application must then be replaced with the resolved class name (e.g., with prefix).
+
+\paragraph{Squeak Environments in \msname}
+Environments are used in \msname to implement the method \texttt{specification} and the keywords \texttt{enclosing} and \texttt{outer}. Every class has its own environment and these three identifiers are bound to the corresponding objects. \msname does, however, not use environments for class lookup for the following reasons.
+
+\begin{itemize}
+    \item Classes are accessed using message sends. Having early-bound classes breaks this notion conceptually, because message sends are always late bound.
+    \item Parameterized classes cannot be early bound (bound at compile time), because an instantiations of a parameterized class do not exist until the corresponding class generator method was invoked with the corresponding arguments (which are only known at runtime).
+    \item Lazy class initialization is not possible with environments, making source code imports slower, because all referenced class would be created immediately during the import procedure.
+    \item Early-bound classes make it more difficult to handle source code changes. Consider, for example, that a method references a nested class contained in the second-level enclosing class, and a class with the same name is added to the first-level enclosing class. In this case, \msname would have to recompile the method (in order to change the binding) and must, therefore, have a cache of all methods that reference a class.
+\end{itemize}
 
 \subsection{Newspeak Modules}
+Newspeak is a programming language that is inspired by Self and Smalltalk. In Newspeak, classes can be nested, establishing a hierarchical namespace. That namespace is, however, not global~\cite{bracha2008newspeak, Bracha:2011:MDR:1960275.1960310}. All references to external libraries or applications are message sends to a special \texttt{platform} object~\cite{bracha:modules_as_objects}, which is constructed by the application developer, and deserialized and imported when the application is installed. Access to external libraries and also the system libraries is only possible through \texttt{platform}. Basic language classes like \texttt{String}, as well as Squeak class that have not been transformed to Newspeak classes, are an exception: they can be accessed using \texttt{platform blackMarket}~\cite{newspeak101jan}.
 
+\paragraph{Method Lookup}
+In Newspeak, all names are late bound. Nested classes can be accessed by sending a message to the enclosing object. The receiver of a message is implicit, i.e., the programmer does not have to write \texttt{self message}, but just \texttt{message}. The lookup mechanism first looks for a corresponding method or nested class in \texttt{self}, then in the lexical scope of the method, and finally in the superclass hierarchy~\cite{bracha:modules_as_objects}. Instance variables can only be accessed through automatically-generated accessor methods.
+
+\msname supports implicit receivers only for unary messages and looks up methods using comb semantics: the lookup starts in \texttt{self}, continues in the superclass hierarchy, and finally traverses the lexical scope of the method. Non-unary selectors cannot have implicit receivers as this would change the Smalltalk syntax. For example, \texttt{message} is a valid Smalltalk statement, but \texttt{message: \#foo} is not. It is, however, a valid Newspeak statement. In \msname, we encourage programmers to make use of implicit receivers only when a class is referenced. In fact, all message sends with implicit receivers are replaced with message sends to \texttt{scope} by the compiler.
+
+\paragraph{Nested Classes}
+In Newspeak, nested classes can be defined on the class side and on the instance side. Since all names in Newspeak are late bound, all classes are in fact two mixins: one mixin for the instance side, and one mixin for the class side. Every class is essentially represented by a superclass statement and two mixins that will be applied to the evaluation of the superclass statement (and its meta class)~\cite{Bracha09newspeakprogramming}.
+
+%no need to recompile when inst vars change
 
 \section{Dependency Management}
 
@@ -67,7 +105,8 @@ Whenever a top-level class is defined and there is already a class with that nam
 %http://www.jot.fm/issues/issue_2012_04/article3.pdf
 
 \subsection{External Configuration in Newspeak}
-
+%https://www.cs.cmu.edu/~aldrich/papers/objects-essay.pdf
+%http://bracha.org/newspeak-spec.pdf 6.3.: cannot access class parameters in body
 
 \section{Readability and Understandability}
 

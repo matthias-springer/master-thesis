@@ -93,6 +93,7 @@ For a nested class, two methods are installed on the meta class object: a class 
 The selector for the class accessor method is the name of the class. The selector for the class generator method is the same selector, but with a dollar sign prefix. This ensures that the method can only be called by using meta programming from our system, and also avoids accidential name clashes with other methods. For example, if a class is named \texttt{Foo}, the class accessor method has the selector \texttt{Foo} and the class generator method has the selector \texttt{\$Foo}.
 
 \subsection{Class Extension}
+\label{sec:impl_class_ext_subsec}
 Whenever the class generator method for a nested class returns an already existing class that is already initialized, we call the nested class a class extension. Class extensions are useful to extend inherited nested classes without subclassing (see Section~\ref{sec:concept_inh_nested_cl}) and to declare extensions methods (see Section~\ref{sec:usecases_ext_meth}). 
 
 The process of class initialization for class extensions (Figure~\ref{fig:lazy_class_gen_ext}) is easier than the process for class definitions: there are no \texttt{enclosing} methods installed and no new class name is generated. The already exisiting \texttt{specification} methods are modified, such that they return an array of specification. If a class is extended multiple times, this array contains all corresponding class specifications. The first specification in the array is always the specification where the class was defined.
@@ -254,7 +255,7 @@ In this case, class objects are garbage collected once there is no reference to 
 \section{Class Updates}
 Squeak is a live programming environment with immediate feedback. When the programmers changes a class, these changes should immediately affect all instances of the class in the system, i.e., exisiting instances must be migrated to the new class~\cite{casaccio2011bootstrapping}. In that sense, Squeak and many other Smalltalk implementations~\cite{Penney:1987:CMG:38765.38817} are different from other programming languages with an ``edit/compile/run cycle''~\cite{conf/sofsem/NierstraszG10}: the programmer has the feeling that there is no difference between compile time and runtime.
 
-For this reason, \msname has to ensure that changes to the source code are immediately applied to all living objects in the image. It is important to understand, that changes to parameterized class specifications can affect multiple classes (model instantiations) at runtime. Therefore, every class specification stores a weak collection of all its instantiations. When a class specification is changed, all of its instantiations can be looked up easily and adapted one by one.
+For this reason, \msname has to ensure that changes to the source code are immediately applied to all living objects in the image. It is important to understand, that changes to parameterized class specifications can affect multiple classes (model instantiations) at runtime. Therefore, every class specification stores a weak collection of all its instantiations. This collection is in fact a \texttt{WeakIdentityKeyDictionary} and also used to cache arguments for parameterized classes (see Section~\ref{sec:impl_migration}). When a class specification is changed, all of its instantiations can be looked up easily and adapted one by one.
 
 \subsection{Changing Instance/Class Methods}
 Whenever an instance method is added, removed, or changed, the system retrieves the collection of all instantiations, and performs the corresponding change on the class object. This does not require creating a new class object, but merely changing the method dictionary using Squeak's meta object protocol~\cite{Goldberg:1983:SLI:273, Kiczales:1991:AMP:574212}.
@@ -277,13 +278,15 @@ In Figure~\ref{fig:impl_inst_vars}, class \texttt{X} has instance variable \text
 \paragraph{Definition of Instance Variables}
 What is more interesting is how instance variables are defined in \msname: they are part of the class generator method (Figure~\ref{fig:impl_subclass_nested}). Therefore, the system has to execute that method a second time whenever it is changed. The method returns a new class object which must be initialized again, i.e., all methods are recompiled. Squeak has the same behavior: whenever an instance variable is changed, methods in the current class and all subclasses are recompiled. Section~\ref{sec:impl_migration} gives an overview of the steps necessary for class migration.
 
-\subsection{Changing the Target Class}
+\subsection{Changing Target Class}
+The target class is the class that is returned by the class generator method. It is usually a new subclass. The superclass of a nested class can be changed by changing the receiver of the \texttt{subclass} message in the class generator method. Whenever the target class is changed, the class generator method must be executed a second time and the old class must be migrated to the new one. From a class migration point of view, it does not matter whether an instance variable or the target class was changed. The same class migration process follows.
 
 \subsection{Class Migration}
 \label{sec:impl_migration}
 Whenever an instance variable or the target class in a class generator method is changed, the changed class generator method must be executed a second time and the old class object must be migrated to the new class object. In this subsection, we describe some of the pitfalls in this process.
 
 \paragraph{Class Argument Cache}
+\label{sec:impl_cls_arg_cache_subsec}
 \begin{figure}[!htp]
 	\centering
 	\includegraphics[scale=0.7]{arg_cache.pdf}
@@ -291,14 +294,12 @@ Whenever an instance variable or the target class in a class generator method is
 	\label{fig:impl_arg_cache}
 \end{figure}
 
-Class generator methods for unparameterized classes can just be invoked without any parameters. However, in order to update parameterized classes, the system has to cache the arguments provided to the class generator method when the class was generated. Therefore, every class specification maintains an argument cache, mapping instantiations (classes) to an array of arguments. This argument cache is a \texttt{WeakIdentityKeyDictionary} and different from the dictionary data structure shown in Figure~\ref{fig:impl_class_cache}. That class cache would map arguments to instantiations. Whenever there is no reference to an instantiation in the image anymore, the array of arguments can be garbage collected, because nobody can access the class anymore; therefore, this class does not have to be updated.
+Class generator methods for unparameterized classes can just be invoked without any parameters. However, in order to update parameterized classes, the system has to cache the arguments provided to the class generator method when the class was generated. Therefore, every class specification maintains an argument cache, mapping instantiations (classes) to an array of arguments and the class that owns the nested class\footnote{The owner class is not necessarily the enclosing class. The enclosing class is early bound, whereas the enclosing is the class to which the class accessor selector was sent.}. This argument cache is a \texttt{WeakIdentityKeyDictionary} and different from the dictionary data structure shown in Figure~\ref{fig:impl_class_cache}. That class cache would map arguments to instantiations. Whenever there is no reference to an instantiation in the image anymore, the array of arguments can be garbage collected, because nobody can access the class anymore; therefore, this class does not have to be updated.
 
 \paragraph{Class Migration}
 Invoking the class generator method a second time usually generates a new class\footnote{There are exceptions: for example, executing the method for an alias a second time does not generate a new class.}. Therefore, all references to the old class have to replaced with references to the new class using the \texttt{becomeForward:} method. Also, all instances of the old class have to be migrated to the new class. This is no different from what Squeak does when an instance variable is added or removed, and not described in any more detail in this work. We encourage the reader to consult the \emph{Smalltalk Blue Book}~\cite{Goldberg:1983:SLI:273} for more information.
 
 At this point, we have to distinguish between class definitions and class extensions. We always migrate classes for a class generator method. However, not all class extensions are migrated. Consider, for example, the case that the programmer created an alias for \texttt{String} and changed that alias to point to \texttt{SmallInteger}. In this case, we should not migrate all instances of \texttt{String} to \texttt{SmallInteger}. The rationale behind this example is that aliases and class extensions can be applied at multiple points throughout the program. Classes should never be migrated when such a class is changed, because other (unchanged) points in the program will be affected. 
-
-There is one exception to this rule. Whenever an inherited nested class is extended in a subclass, the class should be migrated, because subclass has its own nested class that is different from the superclass' nested class, even though the nested class is defined in the superclass and extended in the subclass. Therefore, class extensions are migrated, only if the original class definition took place in the same object as the class extension in question.
 
 \begin{figure}[!htp]
 \centering
@@ -322,7 +323,7 @@ There is one exception to this rule. Whenever an inherited nested class is exten
 \label{fig:impl_cls_migr_def}
 \end{subfigure}
 
-\vspace{15pt}
+\vspace{10pt}
 
 \begin{subfigure}[b]{0.45\textwidth}
 \begin{lstlisting}
@@ -343,9 +344,29 @@ There is one exception to this rule. Whenever an inherited nested class is exten
 \caption{Class definition \\ (subclassing inherited nested class)}
 \label{fig:impl_cls_migr_subclass_nested}
 \end{subfigure}
+\caption[Example: Class migration]{Example: Class migration. In (b) and (d), a class is defined. Therefore, these classes will be migrated. In (a), a class is aliased. This class will not be migrated. In (c), a class defined in the same object (\texttt{self}) is extended so this class will be migrated. We assume that the superclass in (c) actually defines the class and does not extend a class.}
+\label{fig:impl_cls_migration_full}
 \end{figure}
 
-\paragraph{Reapplying Class Extensions}
+There is one exception to this rule. Whenever an inherited nested class is extended in a subclass, the class should be migrated, because subclass has its own nested class that is different from the superclass' nested class, even though the nested class is defined in the superclass and extended in the subclass. Therefore, class extensions are migrated, only if the original class definition took place in the same object as the class extension in question.
+
+Figure~\ref{fig:impl_cls_migration_full} shows multiple examples. Figure~\ref{fig:impl_cls_migr_ext_nested} is the interesting case. An inherited nested class is extended. We assume, that the enclosing superclass defined \texttt{MyClass}. In that case, \texttt{MyClass} is defined in the same class as it is extended: it is defined in \texttt{super MyClass} and extended in \texttt{self MyClass} (same receiver in both cases).
+
+\paragraph{Clearing Class Extension Caches}
+Whenever a class is migrated, all class extensions have to be reapplied. During class migration, \texttt{becomeForward:} is used to replace all references to the old class with references to the new class, including class caches. After class migration, all class caches for class extensions for the new class are cleared. When the migrated class is later accessed through an alias or a class extension, all extension methods are reapplied.
+
+\paragraph{Changing Class Extensions}
+Whenever the class generator method for a class extension is changed, \msname first undoes all changes to affected classes, i.e., it removes all methods that were added or replaces. It does at the moment restore replaced method. Colliding extension methods are a known problem in Smalltalk. Other techniques have been proposed, but are out of scope for this thesis (see Section~\ref{sec:future_ext_meth}). After changes to to affected classes have been undone, \msname clears the class cache. Therefore, all class extensions are reapplied when the class is accessed again through the accessor method for the class extension. In case the class extension is an extension of an inherited nested class, the migration process takes place as previously described.
+
+\paragraph{Overview}
+Figure~\ref{fig:impl_update_cycle} gives a high-level overview of the entire class migration process.
+
+\begin{figure}[!htp]
+	\centering
+	\includegraphics[width=\textwidth]{update_cycle.pdf}
+	\caption[Class migration process]{High-level overview of the class migration process. Classes and instances are only migrated if the nested class is a class definition or a class extension of an inherited nested class.}
+	\label{fig:impl_update_cycle}
+\end{figure}
 
 \section{Integration in Squeak}
 In this section, we describe how our system is integrated in Squeak.
