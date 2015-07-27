@@ -407,10 +407,10 @@ Squeak uses Monticello as a source code packaging tool. Monticello can import an
 
 SqueakSource\footnote{http://www.squeaksource.com/} used to be a remote repository for Monticello projects (groups of packages). It is now deprecated and SmalltalkHub\footnote{http://www.smalltalkhub.com/} is one possible replacement.
 
-Our system is not integrated with Monticello, because Monticello does currently not support class nesting. Many changes would be necessary in the import/export code, the user interface (e.g., merge window), and the backend repository; for example, SqueakSource allows browsing the code on its website, which does no longer work with class nesting.
+\msname is not integrated with Monticello, because Monticello does currently not support class nesting. Many changes would be necessary in the import/export code, the user interface (e.g., merge window), and the backend repository; for example, SqueakSource allows browsing the code on its website, which does no longer work with class nesting.
 
 \paragraph{Source Code Format}
-Our system comes with its own import/export functionality and supports as only repository the file system as of now. The exported format is similar to the FileTree\footnote{https://github.com/dalehenrich/filetree} format. There is a directory for every class. Inside that directory, there are \texttt{instance} and \texttt{class} directories storing instance method and class methods, respectively. For every nested class, the corresponding \texttt{class} directory contains a source code file for the class generator method and a directory for the nested class. For every method, there is a file containing its source code with the selector of the method as file name (colons are replaced with dots)\todo{ModuleSpec should also have a MethodSpec}.
+\msname comes with its own import/export functionality and supports as only repository the file system as of now. The exported format is similar to the FileTree\footnote{https://github.com/dalehenrich/filetree} format. There is a directory for every class. Inside that directory, there are \texttt{instance} and \texttt{class} directories storing instance methods and class methods, respectively. For every nested class, the corresponding \texttt{class} directory contains a source code file for the class generator method and a directory for the nested class. For every method, there is a file containing its source code with the selector of the method as file name (colons are replaced with dots).
 
 \begin{figure}[!htp]
 \dirtree{%
@@ -430,10 +430,10 @@ Our system comes with its own import/export functionality and supports as only r
 \label{fig:impl_source_export}
 \end{figure}
 
-Figure~\ref{fig:impl_source_export} illustrates what the exported format looks like. The top-level module is \texttt{Bomberman}. It does not have any methods on the instance side, but a regular method \texttt{open} on class side, as well as a nested class \texttt{Game}. That nested class has to instance methods \texttt{initialize} and \texttt{startGameWithPlayers:}.
+Figure~\ref{fig:impl_source_export} illustrates what the exported format looks like. The top-level module is \texttt{SpaceCleanup}. It does not have any methods on the instance side, but a regular method \texttt{open} on class side, as well as a nested class \texttt{Game}. That nested class has instance methods \texttt{initialize} and \texttt{startGameWithPlayers:}.
 
 \paragraph{Source Code Repository}
-At the moment, we use git and GitHub to store modules written in our system, but any other external source code management systen, such as Subversion or Mercurial, can be used. Our system does only support loading and saving, but not merging. It does also not store metadata associated with methods or classes, e.g., the author of a method or when it was changed. Instead, we rely on the underlying source code management system.
+At the moment, we use git and GitHub to store modules written in our system, but any other external source code management systen, such as Subversion or Mercurial, can be used. \msname does only support loading and saving, but not merging. It does also not store metadata associated with methods or classes, e.g., the author of a method or when it was changed. Instead, we rely on the underlying source code management system.
 
 The following list gives an overview of how to load new changes into the system.
 \begin{enumerate}

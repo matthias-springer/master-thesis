@@ -1,7 +1,9 @@
 \chapter{Related Work}
 \label{sec:related}
+In this chapter, we describe how the problems listed in Section~\ref{sec:problem} were solved in other programming languages, and compare their approaches with \msname.
 
-\section{Class Name Clashes}
+\section{Duplicate Class Names}
+In this section, we describe how other programming languages address the problem of duplicate class names. For example, this problem can occur if multiple libraries provide classes with the same name. When referencing these classes, it is then no longer obvious which class was meant.
 
 \subsection{Namespaces/Packages and Class Nesting}
 Many programming languages have a concept of namespaces or packages. Classes are typically organized in a package, which is a set of classes. Classes within a package can usually reference each other directly. However, references to classes in other packages typically require imports, aliases, or a fully qualified name. Some programming languages also support class nesting, where the enclosing class creates a namespace for all inner/nested classes.
@@ -50,7 +52,7 @@ Whenever a top-level class is defined and there is already a class with that nam
 
 \subsection{Squeak Environments}
 \label{sec:rel_sq_env}
-A Squeak environment is a mapping of symbols to global objects. Squeak environments were introduced with Squeak~4.5\cite{squeak45notes} and make it possible to have multiple \texttt{globals} dictionaries, effectively establishing namespaces. In fact, \texttt{Smalltalk globals} is an environment. Every class has an \texttt{environment} instance variable determining the environment it belongs to.
+A Squeak environment is a mapping of symbols to global objects. Squeak environments were introduced with Squeak~4.5~\cite{squeak45notes} and make it possible to have multiple \texttt{globals} dictionaries, effectively establishing namespaces. In fact, \texttt{Smalltalk globals} is an environment. Every class has an \texttt{environment} instance variable determining the environment it belongs to.
 
 Environments establish an association between global identifiers and objects at compile time. For example, if the programmer writes \texttt{Object new} in a method, Squeak looks up \texttt{\#Object} in the environment of the class in which the method is compiled and adds a reference to the result of the lookup in the environment as a method literal. Environments are integrated into the Squeak code base; e.g., the debugger looks up symbols in the corresponding environment when evaluating a code snippet. However, environments lack IDE support at the moment. For example, new environments cannot be created in the system browser as of now.
 
@@ -93,20 +95,75 @@ In Newspeak, nested classes can be defined on the class side and on the instance
 %no need to recompile when inst vars change
 
 \section{Dependency Management}
+This section gives an overview of how programmers can use external dependencies in other programming languages. Dependency management describes not only the process of how dependencies are installed and organized, but also how they can be included and referenced in an application.
 
-\subsection{Metacello}
-\label{sec:rel_metacello}
+We first describe three methods for referencing external dependencies. Afterwards, we give an overview of how dependencies are installed, stored, and organized in other programming languages.
 
-\subsection{Java Class Loader}
-
-\subsection{Separate Compilation}
+\subsection{Explicit Dependencies}
+This is the simplest form of dependency management. A dependency is referenced by writing down its fully qualified name in the source code. Consider, for example, that a Java programmer wants to write a Paintbrush application, similar to the example shown in Figure~\ref{fig:use_paintbrush}. This application requires a library for reading and writing picture/image files. An external PNG reader/writer library can be referenced by writing down its fully qualified name, e.g., \texttt{ar.com.hjg.pngj.PngReader}\footnote{PNGJ is a Java library for reading and writing PNG images.}. In this section, is it not important how we can ensure that the class \texttt{PngReader} is loaded and available (see Section~\ref{sec:rel_metacello}). What is important is that the programmer explicitly referenced the dependency. Therefore, the application is coupled to that dependency. Changing the dependency requires changing the source code of the application. Note, that referencing dependencies expliticly is not possible in programming languages without a global namespace (e.g., Newspeak).
 
 \subsection{Dependency Injection}
-%http://www.jot.fm/issues/issue_2012_04/article3.pdf
+An alternative to explicit dependencies is dependency injection. Instead of referencing dependencies explitly using their fully qualified name (or using an alias), the programmer writes down a list of all dependencies at one central position: the \emph{injector} knows about all dependencies and ensures that clients have access to dependencies when needed. Whenever a dependency is required in the source code, the programmer uses an implementation-independent interface instead of the concrete implementation (if the language is statically typed) and adds a source code annotation. The source code annotation ensures that the system \emph{injects} the dependency~\cite{Prasanna:2009:DI:1795686}. This makes dependency management easier, because they are listed at one central position, whereas they were scattered across the application in the previous example.
+
+\paragraph{Google Guice}
+Guice\footnote{\url{https://github.com/google/guice}} is a framework for dependency managment in Java. The programmer has to create a define a so-called \emph{module}\footnote{Modules in Guice are not to be confused with modules in \msname.}, which binds interfaces to implementations~\cite{Vanbrabant:2008:GGA:1373340}. Consider, for example, that there is an interface \texttt{ImageReader} that is implemented by \texttt{PngReader}. Figure~\ref{fig:rel_dep_inj_guice} shows how the programmer defines the module binding \texttt{ImageReader} to \texttt{PngReader} and uses the reader in \texttt{Paintbrush}. Note, that \texttt{Paintbrush} does not reference \texttt{PngReader} directly, but just an abstract interface. The \texttt{Paintbrush} class is decoupled from the concrete reader class. The PNG reader class could easily be replaced with a reader class reading a different file format by just modifying the module, as long as the new reader class also implements the interface \texttt{ImageReader}.
+
+\begin{figure}[!htp]
+\begin{lstlisting}
+<@\textbf{import}@> ar.com.hjg.pngj.PngReader;
+<@\textbf{import}@> com.google.inject.AbstractModule;
+<@\textbf{import}@> org.imageformats.ImageReader;
+
+<@\textbf{public class}@> PaintbrushModule <@\textbf{extends}@> AbstractModule {
+    @Override
+    <@\textbf{public void}@> configure() {
+        bind(ImageReader.<@\textbf{class}@>).to(PngReader.<@\textbf{class}@>);
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+<@\textbf{import}@> org.imageformats.ImageReader;
+
+<@\textbf{public class}@> Paintbrush {
+    @Inject
+    <@\textbf{private}@> ImageReader reader;
+
+    <@\textbf{public void}@> loadImage(String fileName) {
+        <@\textcolor{gray}{/* ... */}@>
+        Bitmap bitmap = reader.readFile(fileName);
+        <@\textcolor{gray}{/* ... */}@>
+    }
+}
+\end{lstlisting}
+
+\caption{Example: Dependency injection with Google Guice}
+\label{fig:rel_dep_inj_guice}
+\end{figure}
+
+Note, that the example in this paragraph shows only the very basic functionality of Google Guice. More advanced features are available, for example, ensuring that an injected implementation is a singleton instance. Dependency injection is also used heavily in Java test cases, to ensure that a test uses a mock implementation~\cite{Yang:2008:ESU:1395083.1395674}. Another popular dependency injection framework for Java is the Spring Framework\footnote{\url{http://projects.spring.io/spring-framework/}}.
+
+\paragraph{Seuss}
+Seuss is a framework for dependency injection in Pharo/Smalltalk~\cite{JOT:issue_2012_04/article3}. Whenever a dependency is required in a class, an instance variable and a corresponding setter method should be added. The setter method must have an \texttt{inject} pragma, telling the framework that a dependency must be injected upon instance creation. For example, if a class requires an image reader class as a dependency, the programmer could add an instance variable setter method with the \texttt{<inject: \#ImageReader>} pragma. The framework allows binding the symbol \texttt{\#ImageReader} to a concrete object at a different position in the code. 
+
+The authors of Seuss argue, that Seuss can help getting rid of static methods, which are often used as accessor methods for \emph{globally visible services}, where the corresponding class acts as a namespace. Seuss can also make test code simpler, because implicit dependencies are resolved and delegated to the injector. Furthermore, the abstract factory pattern becomes obsolete.
 
 \subsection{External Configuration in Newspeak}
 %https://www.cs.cmu.edu/~aldrich/papers/objects-essay.pdf
 %http://bracha.org/newspeak-spec.pdf 6.3.: cannot access class parameters in body
+
+\subsection{Dependency Installation}
+\label{sec:rel_metacello}
+
+\paragraph{Metacello}
+
+\paragraph{Java Class Loader}
+
+\paragraph{Maven}
+
+\paragraph{RubyGems}
+
+\paragraph{pip}
 
 \section{Readability and Understandability}
 
