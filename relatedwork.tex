@@ -6,6 +6,7 @@ In this chapter, we describe how the problems listed in Section~\ref{sec:problem
 In this section, we describe how other programming languages address the problem of duplicate class names. For example, this problem can occur if multiple libraries provide classes with the same name. When referencing these classes, it is then no longer obvious which class was meant.
 
 \subsection{Namespaces/Packages and Class Nesting}
+\label{sec:rel_ns_pkg_cls_nesting}
 Many programming languages have a concept of namespaces or packages. Classes are typically organized in a package, which is a set of classes. Classes within a package can usually reference each other directly. However, references to classes in other packages typically require imports, aliases, or a fully qualified name. Some programming languages also support class nesting, where the enclosing class creates a namespace for all inner/nested classes.
 
 \paragraph{VisualWorks Namespaces}
@@ -149,31 +150,47 @@ Seuss is a framework for dependency injection in Pharo/Smalltalk~\cite{JOT:issue
 The authors of Seuss argue, that Seuss can help getting rid of static methods, which are often used as accessor methods for \emph{globally visible services}, where the corresponding class acts as a namespace. Seuss can also make test code simpler, because implicit dependencies are resolved and delegated to the injector. Furthermore, the abstract factory pattern becomes obsolete.
 
 \subsection{External Configuration in Newspeak}
+In Newspeak, methods cannot access other top-level classes, because there is no global namespace. At the same time, there is no form of dependency injection that would provide dependencies where needed. Instead, Newspeak has the notion of a \texttt{platform}, a dictionary-like data structure containing references to all dependencies. During module/class instantiation, all dependencies should be acquired from \texttt{platform}, which is passed as an argument in the constructor, and stored in slots (instance variables), so that they can be used within modules~\cite{bracha:modules_as_objects}. This is necessary because, in contrast to \msname, class bodies (methods etc.) in Newspeak do not have access to class parameters~\cite{Bracha09newspeakprogramming}.
+
+A platform object should be bundled together with an application. It is created by the developer of an application and then serialized to disk, together with the source code of the application. Whenever a user installs the application, all dependencies are installed along with the application code. Since there is no global namespace, the platform acts as a sandbox. Different applications and platforms cannot interfere with each other.
+
+Parameterized classes in Newspeak can be used for external configuration of classes in a way that is similar to \msname. Whenever a class is paramterized and stores its arguments in slots, methods in the current class and nested classes can access these slots, because Newspeak automatically creates accessor methods for all slots. When \texttt{scope} in \msname does the method lookup, it first searches for methods in the class, and then checks if there is a parameter for the class with that name. Afterwards, it continues the lookup in the enclosing class.
 %https://www.cs.cmu.edu/~aldrich/papers/objects-essay.pdf
-%http://bracha.org/newspeak-spec.pdf 6.3.: cannot access class parameters in body
 
 \subsection{Dependency Installation}
 \label{sec:rel_metacello}
+In this section, we briefly describe dependency/package management systems for different programming languages.
 
 \paragraph{Metacello}
-
-\paragraph{Java Class Loader}
+Metacello is a package management system for Smalltalk. \todo{Add content}
 
 \paragraph{Maven}
+A Java class loader loads compiled Java classes into a running virtual machine. It can be used to load classes dynamically at runtime by specifying their names. Maven is a \emph{software project management and comprehension tool}. It stores dependencies in a repository on the file system and loads them using a Java class loader. Maven projects have a \texttt{pom.xml} configuration file that contains a listing of all dependencies required by the project. When the project is run, Maven ensures that all dependencies are available in the repository and downloads them from a remote server, otherwise. It then compiles the project and runs it.
+
+Maven is a widely-used tool, not only for open-source projects, but also for enterprise applications. In 2014, the Maven central repository hosted more than 17000 projects and more than 115000 versions in total, amounting to about 265 GB of data~\cite{Mitropoulos:2014:BCM:2597073.2597123}.
+
+Every Maven dependency declared in \texttt{pom.xml} should have a version. A version can be an exact version number (e.g., \texttt{[1.1]}) or a version range. For example, if all versions smaller or equal to \texttt{1.0} are acceptable, the programmer can write \texttt{(,1.0]}. Another example is \texttt{[1.0,2.0)}, meaning that all versions between \texttt{1.0} (including) and \texttt{2.0} (excluding) are acceptable~\cite{books/daglib/0021697}. The way Maven specifies versions is similar to \msname. However, Maven cannot load more than one version of a library at a time. There would be no way to reference a certain version of a library in the Java code, because all the programmer does is writing down the fully qualified name of a class contained in a dependency. The version number is usually not part of the fully qualified class name. In \msname, it is.
+
+Maven dependencies are transitive. If \texttt{A} requires \texttt{B}, and \texttt{B} requires \texttt{C}, then adding \texttt{A} as a dependency will automatically add \texttt{B} and \texttt{C} as dependencies. The programmer does not have to specify these dependencies explicitly.
+%todo: OSGI
 
 \paragraph{RubyGems}
+RubyGems is a package manager for Ruby. Libraries and applications are contained in \emph{gems}. Gems can be installed using the command line tool \texttt{gem} and are hosted at a central repository\footnote{\url{http://rubygems.org}}. The programmer has to \emph{require} (import) the package \texttt{rubygems} in his application. Afterwards, installed RubyGems can be imported by adding corresponding \texttt{require} statements. Specific versions of a gem can be imported by adding a \texttt{gem} statement in front of the \texttt{require} statement. For example, \texttt{gem "extlib", "\textgreater = 1.0.8"}, followed by \texttt{require "extlib"} imports the library \texttt{extlib} in a version that is guranteed to be greater or equal to \texttt{1.0.8}~\cite{rubygemsguide}. 
 
-\paragraph{pip}
+\emph{Bundler}\footnote{\url{http://bundler.io/}} is a dependency manager for RubyGems. The programmer can add a \texttt{Gemfile} to the root directory of an application. All dependencies are automatically downloaded and installed when the programmer executes the command line statement \texttt{bundle install}.
 
 \section{Readability and Understandability}
+In object-oriented, class-based programming languages, source code is typically structured on multiple levels. Classes are used to group common behavior for a set of objects. Inside a class, methods are used to divide source code into smaller, more managable pieces. In this section, we give an overview of how classes can be structured in other programming languages, in order to increase readability and understandability of source code.
 
 \subsection{Smalltalk Packages}
+In Smalltalk, packages are used as deployment units. Usually, the programmer can already tell by the name of a package, what the responsibilities of a certain package are. For example, in Figure~\ref{fig:usecase_sc_origi_fig}, all item classes are contained in the package \texttt{SpaceCleanup-Items}. Similarly, all UI-related classes are contained in \texttt{SpaceCleanup-UI}. Packages make it easier to find a certain class whose name is unknown to the programmer. They also make it easier to understand in what context a certain class is used.
 
 \subsection{Hierarchical Decomposition}
-Java, Python, Ruby, Newspeak, \ldots
+As described in Section~\ref{sec:rel_ns_pkg_cls_nesting}, many programming languages such as Java, Python, Ruby, or Newspeak, have a concept of packages, namespaces, and/or nested classes. These concepts allow for a form of hierarchical decomposition. Smalltalk packages allow the programmer to put classes in a certain packages, according to their responsibilites. The mentioned concepts make it possible to structure classes on a more accurate level. Packages, namespaces, and nested classes act as a form of information hiding, because implementation details are hidden from the programmer. Only when examining the next nested level, the programmer is confronted with  another level of details. In Section~\ref{sec:problem_hier_decomp}, we give an overview of the benefits of hierarchical decomposition.
+%Java, Python, Ruby, Newspeak, \ldots
 
-\subsection{Information Hiding with Interfaces}
-
+%\subsection{Java Interfaces}
+%Java interfaces are used to decouple code from specific implementations. Instead of mentioning a class explicitly, the programmer uses an interfaces describing all public methods of the type. Java interfaces are, therefore, a form of information hiding.
 
 \section{Code Reuse}
 
@@ -187,7 +204,7 @@ Ruby Modules, Python Multiple Inheritance, Newspeak, Jigsaw
 Squeak implementation
 
 \subsection{Java Generics}
-Java generics allow classes and interfaces to be parameterized by one or multiple classes and interfaces for type checking reasons~\cite{bracha2004generics}. Theya are often used together with collections~\cite{Parnin:2011:JGA:1985441.1985446}. Generic parameters are defined as part of the class or interface definition. When a class or interface is used, the programmer can pass classes and interfaces as arguments.
+Java generics allow classes and interfaces to be parameterized by one or multiple classes and interfaces for type checking reasons~\cite{bracha2004generics}. They are often used together with collections~\cite{Parnin:2011:JGA:1985441.1985446}. Generic parameters are defined as part of the class or interface definition. When a class or interface is used, the programmer can pass classes and interfaces as arguments.
 
 \begin{figure}[!htp]
 \begin{lstlisting}
