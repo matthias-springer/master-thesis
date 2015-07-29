@@ -1,5 +1,6 @@
 \chapter{Use Cases}
 \label{sec:usecases}
+In this chapter, we show how \msname can be used in applications and describe how it can solve the problems presented in Section~\ref{sec:problem}.
 
 \section{Avoiding Class Name Clashes}
 \begin{wrapfigure}{l}{0.55\textwidth}
@@ -9,11 +10,11 @@
 	\label{fig:use_class_clash}
 \end{wrapfigure}
 
-In this example, class nesting is used to avoid class name clashes and to give every class a unique fully qualified name. Consider, that we want two load two computer games in a single Squeak image. The first game is a bomberman game, providing classes \texttt{Game}, \texttt{Level}, \texttt{Resources} among others. The second game is a Sokoban game, and has three classes with the same name. Without our system, this would be a problem: as soon as another class with the same is installed, the old one is overwritten with the new name.
+In this example, class nesting is used to avoid class name clashes and to give every class a unique fully qualified name. Consider, that we want two load two computer games in a single Squeak image. The first game is a bomberman game (SpaceCleanup), providing classes \texttt{Game}, \texttt{Level}, \texttt{Resources} among others. The second game is a Sokoban game, and has three classes with the same name. Without our system, this would be a problem: as soon as another class with the same is installed, the old one is overwritten with the new name.
 
 With our system, two classes with the same name can coexist in the same image, as long as they are nested within different classes (Figure~\ref{fig:use_class_clash}).
 
-Note, that, for example, \texttt{Bomberman Game} and \texttt{Sokoban Game} are different classes. Whenever a class inside \texttt{Bomberman} references \texttt{Game} using the source code statement \texttt{scope Game} or \texttt{Game} (equivalent statement), the method lookup recurses in the enclosing classes, until \texttt{Game} is found in the \texttt{Bomberman} class.
+Note, that, for example, \texttt{SpaceCleanup Game} and \texttt{Sokoban Game} are different classes. Whenever a class inside \texttt{SpaceCleanup} references \texttt{Game} using the source code statement \texttt{scope Game} or \texttt{Game} (equivalent statement), the method lookup recurses in the enclosing classes, until \texttt{Game} is found in the \texttt{SpaceCleanup} class.
 
 \section{Module Versioning and Dependency Management}
 In this example, class nested is used to keep multiple different versions of the same library in one image. This is necessary if two applications require different versions of the same library. In the best case, the API of a library should not change within one major version, such that a newer library version should work with an application that was developed with an older library version. However, sometimes, application developers have to work around known bugs or rely on implementation-specific classes which are not designed to be used by library users and subject to change. In that case, application code can break when suddenly a different version of the library is used.
