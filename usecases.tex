@@ -2,19 +2,19 @@
 \label{sec:usecases}
 In this chapter, we show how \msname can be used in applications and describe how it can solve the problems presented in Section~\ref{sec:problem}.
 
-\section{Avoiding Class Name Clashes}
+\section{Avoiding Duplicate Class Names}
 \begin{wrapfigure}{l}{0.55\textwidth}
 	\includegraphics[width=0.5\textwidth]{usecase_class_clash.pdf}
 	\centering
-	\caption{Resolving class name clashes with class nesting}
+	\caption[Example: Avoiding duplicate class names]{Example: Avoiding duplicate class names. Every nested class has a unique fully qualified name.}
 	\label{fig:use_class_clash}
 \end{wrapfigure}
 
-In this example, class nesting is used to avoid class name clashes and to give every class a unique fully qualified name. Consider, that we want two load two computer games in a single Squeak image. The first game is a bomberman game (SpaceCleanup), providing classes \texttt{Game}, \texttt{Level}, \texttt{Resources} among others. The second game is a Sokoban game, and has three classes with the same name. Without our system, this would be a problem: as soon as another class with the same is installed, the old one is overwritten with the new name.
+In this example, class nesting is used to avoid class name clashes and to give every class a unique fully qualified name. Consider, that we want two load two computer games in a single Squeak image. The first game is a bomberman game (SpaceCleanup), providing classes \texttt{Game}, \texttt{Level}, \texttt{Resources} among others. The second game is a Sokoban game, and has three classes with the same name. Without \msname, this would be a problem: as soon as another class with the same name is installed, the old one is overwritten with the new one.
 
-With our system, two classes with the same name can coexist in the same image, as long as they are nested within different classes (Figure~\ref{fig:use_class_clash}).
+With \msname, two classes with the same name can coexist in the same image, as long as they are nested within different classes (Figure~\ref{fig:use_class_clash}).
 
-Note, that, for example, \texttt{SpaceCleanup Game} and \texttt{Sokoban Game} are different classes. Whenever a class inside \texttt{SpaceCleanup} references \texttt{Game} using the source code statement \texttt{scope Game} or \texttt{Game} (equivalent statement), the method lookup recurses in the enclosing classes, until \texttt{Game} is found in the \texttt{SpaceCleanup} class.
+Note, that, for example, \texttt{SpaceCleanup Game} and \texttt{Sokoban Game} are different classes. Whenever a class inside \texttt{SpaceCleanup} references \texttt{Game} using the source code statement \texttt{scope Game} or \texttt{Game} (equivalent statements), the method lookup recurses in the enclosing class, until \texttt{Game} is found in the \texttt{SpaceCleanup} class.
 
 \section{Module Versioning and Dependency Management}
 In this example, class nested is used to keep multiple different versions of the same library in one image. This is necessary if two applications require different versions of the same library. In the best case, the API of a library should not change within one major version, such that a newer library version should work with an application that was developed with an older library version. However, sometimes, application developers have to work around known bugs or rely on implementation-specific classes which are not designed to be used by library users and subject to change. In that case, application code can break when suddenly a different version of the library is used.
@@ -23,11 +23,11 @@ In this example, class nested is used to keep multiple different versions of the
 \begin{wrapfigure}{l}{0.55\textwidth}
 	\includegraphics[width=0.5\textwidth]{usecase_define_version.pdf}
 	\centering
-	\caption{Module versioning}
+	\caption[Example: Module versioning]{Example: Module versioning. A version is represented by a nested class.}
 	\label{fig:use_module_ver}
 \end{wrapfigure}
 
-Figure~\ref{fig:use_module_ver} shows how nested classes can be used for module versioning. In this example, we are developing a library for mathematical operations. The top-level class contains nested classes for every major version. Every major version can again have nested classes for minor versioning. In fact, this scheme can be used to have any kind of versioning system, as long as it is based in numbers.
+Figure~\ref{fig:use_module_ver} shows how nested classes can be used for module versioning. In this example, we are developing a library for mathematical operations. The top-level class contains nested classes for every major version. Every major version can again have nested classes for minor versioning. In fact, this scheme can be used to have any kind of versioning system, as long as it is based on numbers.
 
 Two versions of \texttt{MathLibrary} are installed in this example: version 1.1 and version 1.2. These versions can be referenced by writing \texttt{MathLibrary v1 v1} and \texttt{MathLibrary v1 v2}. Note, that even though all versions define classes with the same name, no class clashes occur. If a class in \texttt{MathLibrary} references another class in \texttt{MathLibrary}, the method lookup will look for classes in the same version of \texttt{MathLibrary}.
 
@@ -60,6 +60,24 @@ In Figure~\ref{fig:use_module_ver} the top-level class and major version should 
 	\item \texttt{Versioning>>latest}: returns the lastest version in the receiver recursively. For example, \texttt{MathLibrary latest} returns \texttt{MathLibrary v1 v2}.
 	\item \texttt{Versioning>>atLeast:}: returns the latest version recursively and asserts that its version number is greater than the parameter. For example, \texttt{MathLibrary atLeast: '1.1'} returns \texttt{MathLibrary v1 v2}, and \texttt{MathLibrary atLeast: '1.3'} throws an error.
 \end{itemize}
+
+\subsection{Squeak Versioning}
+With \msname, it is theoretically possible to run multiple versions of Squeak in one image. The basic idea is that every Squeak version is nested in a different version class. The screenshot in Figure~\ref{fig:usecase_browsers} shows two versions of the system browser running in the same image. The old system browser lacks many features, such as syntax highlighting or buttons for senders/implementors.
+
+\begin{figure}[!htp]
+\includegraphics[width=\textwidth]{usecase_browsers.png}
+\centering
+\caption[Example: Squeak system browser in different versions]{Example: Squeak system browser in different versions. The browser in the front is a modern Squeak~4.5 system browser. The browser in the back is a system browser from Squeak~2.3.}
+\label{fig:usecase_browsers}
+\end{figure}
+
+When we tried running bigger system libraries, such as Morphic, in different versions in one image, we encountered the following difficulties.
+\begin{itemize}
+    \item Many system libraries are not written in a modular way. For example, they use global state. Whenever global state is stored on other classes or in the \texttt{globals} dictionary (e.g. \texttt{Smalltalk globals at: \#World}), the library circumvents \msname.
+    \item Some classes should not exist multiple times in one image. For example, \texttt{Array} and \texttt{String} are classes that the virtual machine knows about\footnote{\texttt{SmalltalkImage>>specialObjectsArray} calls primitive 129 and returns an array of 56 unique special objects that the VM knows about.}. Whenever an argument is passed to a primitive, the virtual machine expects that it is an instance of a class it knows about. Similarly, whenever a primitive returns a value, it is an instance of the version the image knows about.
+\end{itemize}
+
+Future work might investigate how multiple Squeak versions can be run in a single image.
 
 \subsection{External Configuration}
 Parameterized classes can not only be used to build mixins, but also externally configuarable modules. The basic idea is taken from Newspeak, where all module dependencies are encapsulated in a \texttt{platform} object. This platform object is installed along with the application source code and contains all libraries that the application depends on in the correct version~\cite{bracha2008newspeak}. This has the advantage that there is no need for a global namespace and all references to external classes are resolved using the platform object, effectively making import statements obsolete. A configurable module does not need to know anything about concrete implementations of external libraries, as long as the implementations provided in the platform implement the expected interfaces.
