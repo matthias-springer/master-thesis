@@ -96,7 +96,7 @@ Parameterized classes can not only be used to build mixins, but also externally 
 In our system, methods inside parameterized classes can reference arguments provided to the class accessor method. The idea is that, instead of referencing classes in the global namespace, the programmer references these arguments. The user of the module can then decide which exact implementation he wants to use.
 
 \paragraph{Example}
-Figure~\ref{fig:use_paintbrush} shows part of the implementation of simple drawing application. \texttt{PaintbrushWith:IO:} is a parameterized top-level class which takes as arguments a matrix implementation and a file IO library. The matrix implementation is used for storing the pixels inside the application. In the simplest case, this is could be the class \texttt{Matrix} from the Squeak standard library. It could, however, also be a class which stores pixels in a compressed form (e.g., using run-length encoding), but has \texttt{at:}, \texttt{at:put:}, \texttt{rows}, and \texttt{columns} as public API methods. \texttt{ReaderWriter} must be a class or object that supports reading and writing files on a pixel-by-pixel basis. Depending on which IO class the user of the library provides to \texttt{PaintbrushWith:IO:}, the application might for example generate JPEG files or PNG files.
+Figure~\ref{fig:use_paintbrush} shows part of the implementation of a simple drawing application. \texttt{PaintbrushWith:IO:} is a parameterized top-level class which takes as arguments a matrix implementation and a file IO library. The matrix implementation is used for storing the pixels inside the application. In the simplest case, this could be the class \texttt{Matrix} from the Squeak standard library. It could, however, also be a class which stores pixels in a compressed form (e.g., using run-length encoding), but has \texttt{at:}, \texttt{at:put:}, \texttt{rows}, and \texttt{columns} as public API methods. \texttt{ReaderWriter} must be a class or object that supports reading and writing files on a pixel-by-pixel basis. Depending on which IO class the user of the library provides to \texttt{PaintbrushWith:IO:}, the application might for example generate JPEG files or PNG files.
 
 \begin{figure}[!htp]
 \begin{subfigure}[b]{\textwidth}
@@ -149,7 +149,7 @@ Figure~\ref{fig:use_paintbrush} shows part of the implementation of simple drawi
 
 It is important to understand that the implementation of \texttt{PaintbrushWith:IO:} is entirely decoupled from the pixel data structure representation and the import/export functionality. It is up to the user of \texttt{PaintbrushWith:IO:} to configure the class as needed.
 
-External configuration as shown in this example is similar to a constructor that accepts class objects as parameters and constructs and instance of the class with the class objects stored in instance variables. The difference to this approach is that, in our system, also class methods are bound to the passed arguments, because a new class object is constructed instead of an instance of a class. Furthermore, our system allows creating new nested classes with the argument as a superclass (mixins).
+External configuration as shown in this example is similar to a constructor that accepts class objects as parameters and constructs an instance of the class with the class objects stored in instance variables. The difference to this approach is that, in our system, also class methods are bound to the passed arguments, because a new class object is constructed instead of an instance of a class. Furthermore, our system allows creating new nested classes with the argument as a superclass (mixins).
 
 \section{Hierarchical Decomposition}
 \label{sec:usecase_hierach_decomp}
@@ -172,7 +172,7 @@ As an example, we took two simple computer games written in Squeak: SpaceCleanup
 \label{fig:usecase_games}
 \end{figure}
 
-Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup and the source code after we introduced class nesting. The original source code already made use of packages, which can be compared to a single level of class nesting. The refactored source code is mostly unchanged, except for class name changes. What is interesting to see is that the class structure is already much more readable by just getting rid of all namespace prefixes. We can not only get rid of class prefixes, but also suffixes. For example, the \texttt{Builder}, \texttt{Item}, and \texttt{State} suffixes are omitted. It is now also possible to group classes together that belong together logically. For example, all both level builders are nested within \texttt{SpaceCleanup Level}. Similarly, all items are nested in \texttt{SpaceCleanup Level Items} (which is also a superclass of all items), which makes sense because a level consists of tiles and every tile can have items. An item cannot be used without a tile and a tile is never used outside a level. Note, that there exist two classes with the name \texttt{Random}, but they are nested in different classes.
+Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup and the source code after we introduced class nesting. The original source code already made use of packages, which can be compared to a single level of class nesting. The refactored source code is mostly unchanged, except for class name changes. It is interesting to see is that the class structure is already much more readable by just getting rid of all namespace prefixes. We can not only get rid of class prefixes, but also suffixes. For example, \texttt{Builder}, \texttt{Item}, and \texttt{State} suffixes are omitted. It is now also possible to group classes together that belong together logically. For example, both level builders are nested within \texttt{SpaceCleanup Level}. Similarly, all items are nested in \texttt{SpaceCleanup Level Item} (which is also the superclass of all items), which makes sense because a level consists of tiles and every tile can have items. An item cannot be used without a tile and a tile is never used outside a level. Note, that there exist two classes with the name \texttt{Random}, but they are nested in different classes.
 
 \begin{figure}
 \begin{subfigure}[b]{0.45\textwidth}
@@ -277,7 +277,7 @@ Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup
 \label{fig:usecase_sc_space}
 \end{figure}
 
-Figure~\ref{fig:usecase_breakout_game} shows the original source code of Breakout, as well as a refactored version. We did not change the source code, except for class names. All block-related classes are stored as nested classes in the class \texttt{Breakout Block}, which is also used to represent regular blocks in the game, that can be destroyed using \texttt{Racket}. \texttt{Breakout Block Boundary} represents a special block used for the design undestroyable borders of the game. All power ups are represented as classes and stored as nested classes in the abstract superclass \texttt{Breakout Powerup}. The structure of the refactored version is much clearer, because the original version did not take advantage of packages, probably due to the relatively small number of classes.
+Figure~\ref{fig:usecase_breakout_game} shows the original source code of Breakout, as well as a refactored version. We did not change the source code, except for class names. All block-related classes are stored as nested classes in the class \texttt{Breakout Block}, which is also used to represent regular blocks in the game, that can be destroyed using \texttt{Racket}. \texttt{Breakout Block Boundary} represents a special block used for the undestroyable border of the game. All power ups are represented as nested classes in the abstract superclass \texttt{Breakout Powerup}. The structure of the refactored version is much clearer, because the original version did not take advantage of packages, probably due to the relatively small number of classes.
 
 \begin{figure}[!htp]
 \begin{subfigure}[b]{0.45\textwidth}
@@ -339,15 +339,15 @@ Figure~\ref{fig:usecase_breakout_game} shows the original source code of Breakou
 \label{fig:usecase_breakout_game}
 \end{figure}
 
-example: large project, where parts of the code can now be understood, given that we have hierarchical nesting. could be an example where grouping according to multiple criteria is needed (would result in n x m packages)
+%example: large project, where parts of the code can now be understood, given that we have hierarchical nesting. could be an example where grouping according to multiple criteria is needed (would result in n x m packages)
 
 \section{Mixin Modularity with Parameterized Classes}
-Parameterized classes can be used to build mixins. Mixins are not a special feature of this system: they are an application of our system and come for free by just having class nesting as described in the previous sections; they are an immediate consequence of parameterized classes. A mixin is a function that takes as an input a class and outputs a subclass with additional behavior~\cite{bracha1992programming, Bettini:2004:CCH:967900.968200}, i.e., it is a class transformator (also called \emph{abstract subclass}~\cite{Bracha:1990:MI:97945.97982}). 
+Parameterized classes can be used to build mixins. Mixins are not a special feature of this system: they are an application of \msname and come for free by just having class nesting as described in the previous sections; they are an immediate consequence of parameterized classes. A mixin is a function that takes as an input a class and outputs a subclass with additional behavior~\cite{bracha1992programming, Bettini:2004:CCH:967900.968200}, i.e., it is a class transformator (also called \emph{abstract subclass}~\cite{Bracha:1990:MI:97945.97982}). 
 
-A mixin can be implemented by writing a class generator method with one parameter which is the input class. The method creates a subclass of that input class and returns it. Associated with that parameterized class generator methods is a set of instance-side methods and a set of class-side methods. These are the methods that will be added when applying the mixin.
+A mixin can be implemented by writing a class generator method with one parameter which is the input class. The method creates a subclass of that input class and returns it. Associated with that parameterized class generator method is a set of instance-side methods and a set of class-side methods. These are the methods that will be added when applying the mixin.
 
 \paragraph{Recursive Mixin Application}
-A mixin can make sure another mixin is applied upon its application. This is done creating a subclass of a mixin application in the class generator method. Consequently, the system first creates a subclass of the base class, adds the methods of the inner mixin, then creates a subclass of the resulting class, and finally adds the methods of the outer mixin.
+A mixin can make sure another mixin is applied upon its application. This is done by creating a subclass of a mixin application in the class generator method. Consequently, the system first creates a subclass of the base class, adds the methods of the inner mixin, then creates a subclass of the resulting class, and finally adds the methods of the outer mixin.
 
 \paragraph{Example}
 Figure~\ref{fig:concept_mixins} shows an example of parameterized classes and how they can be used to build mixins.
@@ -361,15 +361,15 @@ Figure~\ref{fig:concept_mixins} shows an example of parameterized classes and ho
 
 Two class generator methods \texttt{A M1:} and \texttt{A M2:} are defined, which take as input a base class and output a subclass with additional behavior. \texttt{A M1M2} is an application of both both mixins. \texttt{A M1M2}'s superclass is \emph{some} \texttt{A M2:}, whose superclass is \emph{some} \texttt{A M1:}, whose superclass is \texttt{Object}. Note, that \texttt{A M1:} and \texttt{A M2:} are not specific classes: we use this notation as a name for \emph{some} application of \texttt{A class>>M1:} and \texttt{A class>>M2:}, respectively. Therefore, even if two classes have the same name, they are not necessarily the same class if they names contain a colon.
 
-Note, that evaluating \texttt{A M1: Object} multiple times returns different class object, since parameterized classes are not cached. However, \texttt{A M1M2} is cached, because it is a unary method. Therefore, calling \texttt{A M1M2} multiple times always returns the same class object.
+Note, that evaluating \texttt{A M1: Object} multiple times returns different class objects, since parameterized classes are not cached. However, \texttt{A M1M2} is cached, because it is a unary method. Therefore, calling \texttt{A M1M2} multiple times always returns the same class object.
 
 The notation used in \texttt{A class>>M1M2} can be a bit confusing at first. That method first applies \texttt{A M1:} to \texttt{Object}, and then \texttt{A M2:}; however, in the source code, \texttt{A M2:} appears before \texttt{A M1:}. For readability reasons, and to support more features like pre-include hooks and post-include hooks, we present the Class Generator Pattern in Section~\ref{sec:usecase_classgen}.
 
 \section{Unparameterized Class Generator Pattern}
 \label{sec:usecase_classgen}
-The syntax used for mixin application has a few shortcomings. For example, the statements \texttt{self A: (self B: Object))} means that mixin \texttt{B:} is applied to \texttt{Object}, and then mixin \texttt{A:} is applied to that result. The problem is that the source code statement does not reflect the order of mixin applications: the statement has to be interpreter from right to left. Another problem is that \texttt{A:} and \texttt{B:} are parameterized classes and parameterized classe cannot be referenced using an implicit \texttt{scope} receiver. Therefore, the programmer always has to write an explicit receiver.
+The syntax used for mixin application has a few shortcomings. For example, the statements \texttt{self A: (self B: Object))} means that mixin \texttt{B:} is applied to \texttt{Object}, and then mixin \texttt{A:} is applied to that result. The problem is that the source code statement does not reflect the order of mixin applications: the statement has to be interpreted from right to left. Another problem is that \texttt{A:} and \texttt{B:} are parameterized classes and parameterized classe cannot be referenced using an implicit \texttt{scope} receiver. Therefore, the programmer always has to write \texttt{scope} explicitly.
 
-Both problems can be solved by wrapping the mixin in an unparameterized class and adding a helper method to \texttt{Class}. We assume that name of the parameterized nested class is always \texttt{Mixin:}. Then, the helper method \texttt{<<} can be defined as shown in Figure~\ref{fig:usecase_class_lele}.
+Both problems can be solved by wrapping the mixin in an unparameterized class and adding a helper method to \texttt{Class}. We assume that the name of the parameterized nested class is always \texttt{Mixin:}. Then, the helper method \texttt{<<} can be defined as shown in Figure~\ref{fig:usecase_class_lele}.
 
 \begin{figure}[!htp]
 \begin{lstlisting}
@@ -381,7 +381,7 @@ Both problems can be solved by wrapping the mixin in an unparameterized class an
 \end{figure}
 
 \paragraph{Example}
-Figure~\ref{fig:usecase_unparam_class_gen} shows two mixins and a base class: \texttt{CollectionLogic} is a mixin that adds the methods \texttt{allSatisfy:} and \texttt{anySatisfy:}, and \texttt{CollectionFilter} is a mixin that adds the methods \texttt{detect:} and \texttt{select:}. All of these four methods can be implemented based on \texttt{do:}, which iterates through all elements of a collection. Consequently, these four methods are written in such a way, meaning that both mixins can be applied classes providing at lease this method.
+Figure~\ref{fig:usecase_unparam_class_gen} shows two mixins and a base class: \texttt{CollectionLogic} is a mixin that adds the methods \texttt{allSatisfy:} and \texttt{anySatisfy:}, and \texttt{CollectionFilter} is a mixin that adds the methods \texttt{detect:} and \texttt{select:}. All of these four methods can be implemented based on \texttt{do:}, which iterates through all elements of a collection. Both mixins can be applied to classes providing at least that method. %Consequently, these four methods are written in such a way, meaning that both mixins can be applied classes providing at lease this method.
 
 \begin{figure}[!htp]
 \begin{subfigure}[b]{\textwidth}
@@ -423,10 +423,10 @@ Figure~\ref{fig:usecase_unparam_class_gen} shows two mixins and a base class: \t
 \label{fig:usecase_unparam_class_gen}
 \end{figure}
 
-\texttt{CollectionLogic} and \texttt{CollectionFilter} are wrappers around mixins, making it possible to access them like any unparameterized class. When a mixin is applied using the \texttt{<<} syntax, the receiver is sent to the \texttt{Mixin:} method. Therefore, the name of the actual mixin must always be \texttt{Mixin:}, as long as, \texttt{<<} is implemented as shown in Figure~\ref{fig:usecase_class_lele}. Note, that \texttt{<<} inverses the order of receiver and argument, which is why the statement in \texttt{FullCollection} can be read from left to right: first \texttt{CollectionFilter} and then \texttt{CollectionLogic} is applied to \texttt{MyCollection}.
+\texttt{CollectionLogic} and \texttt{CollectionFilter} are wrappers around mixins, making it possible to access them like any unparameterized class. When a mixin is applied using the \texttt{<<} syntax, the receiver is used as an argument for the \texttt{Mixin:} method. Therefore, the name of the actual mixin must always be \texttt{Mixin:}, as long as, \texttt{<<} is implemented as shown in Figure~\ref{fig:usecase_class_lele}. Note, that \texttt{<<} inverses the order of receiver and argument, which is why the statement in \texttt{FullCollection} can be read from left to right: first \texttt{CollectionFilter} and then \texttt{CollectionLogic} is applied to \texttt{MyCollection}.
 
 \paragraph{Pre-Include Hooks and Post-Include Hooks}
-The unparameterized class generator pattern allows the definition of pre-include hooks and post-include hooks. A pre-include hook is a method defined on the mixin wrapper, which is executed before the mixin was applied, with the base class as an argument. Similarly, a post-commit hook is executed after the mixin was applied, with the resulting class as an argument. 
+The unparameterized class generator pattern allows the definition of pre-include hooks and post-include hooks. A pre-include hook is a method defined on the mixin wrapper, which is executed before the mixin was applied, with the base class as an argument. Similarly, a post-include hook is executed after the mixin was applied, with the resulting class as an argument. 
 
 Note, that the programmer can already write arbitrary code at the point where the mixin is applied. However, pre-include hooks and post-include hooks are provided by the mixin itself, and not by the user of a mixin.
 
@@ -453,12 +453,12 @@ Note, that the programmer can already write arbitrary code at the point where th
 \label{fig:usecase_prepostincl}
 \end{figure}
 
-Figure~\ref{fig:usecase_prepostincl} shows how these hooks are implemented. Mixins with a pre-include hook or a post-include hook should be a subclass of the abstract class \texttt{Mixin}. This class provides empty \texttt{before:} and \texttt{after:} methods which should be overridden in subclasses and contain the pre-include hook or post-include hook.
+Figure~\ref{fig:usecase_prepostincl} shows how these hooks are implemented. Mixins with a pre-include hook or a post-include hook should be a subclass of the abstract class \texttt{Mixin}. This class provides empty \texttt{before:} and \texttt{after:} methods which should be overridden in subclasses and contain the pre-include hook and/or post-include hook.
 
-In the previous paragraph, the unparameterized class generator pattern was presented as a tool to increase code readability. With regards to include hooks, this pattern is more: it is necessary to have some kind of wrapping. Include hooks shold not be defined on the mixin function itself, because all methods defined on the mixin function are added during mixin application. This is usually not desirable.
+In the previous paragraph, the unparameterized class generator pattern was presented as a tool to increase code readability. With regards to include hooks, this pattern is more: it is necessary to have some kind of wrapping. Include hooks should not be defined on the mixin function itself, because all methods defined on the mixin function are added during mixin application. This is usually not desirable.
 
 \section{Mixins as Composable Pieces of Behavior}
-Mixins, as described in the last two sections, are class transformators. Given an existing class, they out a new subclass with additional or changed behavior. In Figure~\ref{fig:usecase_unparam_class_gen}, we started with \texttt{MyCollection}, a class containing only the \texttt{do:} method, and added additional behavior to it, resulting in the class \texttt{FullCollection}. 
+Mixins, as described in the last two sections, are class transformators. Given an existing class, they output a new subclass with additional or changed behavior. In Figure~\ref{fig:usecase_unparam_class_gen}, we started with \texttt{MyCollection}, a class containing only the \texttt{do:} method, and added additional behavior to it, resulting in the class \texttt{FullCollection}. 
 
 Here is another point of view on the same situation: combine behavior from \texttt{CollectionFilter} and \texttt{CollectionLogic}, add an implementation of \texttt{do:}, and call it \texttt{FullCollection} (Figure~\ref{fig:mixin_composable}).
 
@@ -484,7 +484,7 @@ Here is another point of view on the same situation: combine behavior from \text
 \label{fig:mixin_composable}
 \end{figure}
 
-For readability reasons, our implementation provides a simplified notation that combines this kind of mixin application and subclassing (Figure~\ref{fig:usecase_subcl_mixin}). This new notation first applied mixins, and creates a subclass of the result afterwards. Note, that the notation reflects the order of subclassing: at first, \texttt{Mixin1} is applied, then \texttt{Mixin2}, then \texttt{Mixin3}, and finally a subclass is created with the additional methods defined on \texttt{NewClass}.
+For readability reasons, our implementation provides a simplified notation that combines this kind of mixin application and subclassing (Figure~\ref{fig:usecase_subcl_mixin}). This new notation first applies mixins, and creates a subclass of the result afterwards. Note, that the notation reflects the order of subclassing: at first, \texttt{Mixin1} is applied, then \texttt{Mixin2}, then \texttt{Mixin3}, and finally a subclass is created with the additional methods defined on \texttt{NewClass}.
 
 \begin{figure}[!htp]
 \begin{subfigure}[b]{0.45\textwidth}
@@ -520,7 +520,7 @@ For readability reasons, our implementation provides a simplified notation that 
 The idea of mixins used as composable units of behavior is similar to traits~\cite{traitsschaerli}. However, there are some minor differences.
 \begin{itemize}
     \item Mixins are not flat, but create an inheritance hierarchy. E.g., \texttt{FullCollection superclass} returns an application of \texttt{CollectionLogic class>>Mixin:} and not \texttt{Object}.
-    \item No explicit conflict resolution is required. Traits raise an error whenever a method is added multiple times and the conflict is not resolved manually in the resulting class. The last applied mixin, on the other hand, overwrites predefined methods with the same name, but allows calling the original implementation using \texttt{super}.
+    \item No explicit conflict resolution is required. Traits raise an error whenever a method is added multiple times and the conflict is not resolved manually in the resulting class. The last applied mixin, on the other hand, overwrites predefined methods with the same name, and allows calling the original implementation using \texttt{super}.
 \end{itemize}
 
 
@@ -528,11 +528,11 @@ The idea of mixins used as composable units of behavior is similar to traits~\ci
 
 \section{Extension Methods}
 \label{sec:usecases_ext_meth}
-There are cases, in which the functionality of an already class in a different module must be extended or changed. For example, this is the case when a bug in another library must be fixed. The programmer typically writes a method that replaces the existing one with the bug. Sometimes, extension methods are also used add additional behavior. For example, the \texttt{Morphic} package adds the convenience method \texttt{asStringMorph} to \texttt{String}. Sometimes it is sufficient to create a subclass of the class in question, and add the changed behavior only to the subclass. However, there are cases where the application code is not in control of instance creation.
+There are cases, in which the functionality of an already existing class in a different module must be extended or changed. For example, this is the case when a bug in another library must be fixed. The programmer typically writes a method that replaces the existing one with the bug. Sometimes, extension methods are also used add additional behavior. For example, the \texttt{Morphic} package adds the convenience method \texttt{asStringMorph} to \texttt{String}. Sometimes it is sufficient to create a subclass of the class in question, and add the changed behavior only to the subclass. However, there are cases where the application code is not in control of instance creation.
 
-An extension method can be added in our system by creating a nested classes whose class generator method returns an already existing class instead of a new subclass.
+An extension method can be added in \msname by creating a nested class whose class generator method returns an already existing class instead of a new subclass (class extension).
 
-Consider, for example, that we want to add a method \texttt{asString} to the top-level class \texttt{CachedCollection} in Figure~\ref{fig:usecase_unparam_class_gen}. Figure~\ref{fig:use_ext_meth} shows how do define a method returning the string concatenation of all elements in the collection.
+Consider, for example, that we want to add a method \texttt{asString} to the top-level class \texttt{FullCollection} in Figure~\ref{fig:usecase_subcl_mixin}. Figure~\ref{fig:use_ext_meth} shows how to define a method returning the string concatenation of all elements in the collection.
 
 \begin{figure}[!htp]
 \begin{lstlisting}
