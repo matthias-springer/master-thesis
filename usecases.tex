@@ -50,7 +50,9 @@ Whenever an application requires a class from a library in a certain version, th
 \label{fig:use_alias}
 \end{figure}
 
-Figure~\ref{fig:use_alias} shows how class alias can be used to specify module versions at a single point in the code. The programmers defines a method\texttt{MathLibrary} returning the module in the required version. In \texttt{MyApplication>>rectArea:extent:}, the reference to \texttt{MathLibrary} will be replaced with \texttt{scope MathLibrary}, which will call the aliased method. Note, that in \texttt{MyApplication>>MathLibrary}, we have to reference the library with \texttt{Repository MathLibrary}, forcing the lookup to start at the root of our system. Otherwise, the method \texttt{MathLibrary} would call itself.
+Figure~\ref{fig:use_alias} shows how class aliases can be used to specify module versions at a single point in the code. The programmers defines a method \texttt{MathLibrary} returning the module in the required version. In \texttt{MyApplication>>rectArea:extent:}, the reference to \texttt{MathLibrary} will be replaced with \texttt{scope MathLibrary}, which will call the aliased method. Note, that in \texttt{MyApplication>>MathLibrary}, we have to reference the library with \texttt{Repository MathLibrary}, forcing the lookup to start at the root of our system. Otherwise, the method \texttt{MathLibrary} would call itself.
+
+Classes aliases, as described in this paragraph, are similar to import statements in other programming languages, and are a form of internal dependency management.
 
 \paragraph{Helper Methods}
 In Figure~\ref{fig:use_module_ver} the top-level class and major version should be a subclass of the class \texttt{Versioning}, a class provided by our system. This class contains convenience methods making it easier to work with version containers. The following list gives an overview of the helper methods \texttt{Versioning} provides.
