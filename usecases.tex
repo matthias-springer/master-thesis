@@ -31,6 +31,13 @@ Figure~\ref{fig:use_module_ver} shows how nested classes can be used for module 
 
 Two versions of \texttt{MathLibrary} are installed in this example: version 1.1 and version 1.2. These versions can be referenced by writing \texttt{MathLibrary v1 v1} and \texttt{MathLibrary v1 v2}. Note, that even though all versions define classes with the same name, no class clashes occur. If a class in \texttt{MathLibrary} references another class in \texttt{MathLibrary}, the method lookup will look for classes in the same version of \texttt{MathLibrary}.
 
+\paragraph{New Versions}
+In case the programmer wants to add a new version, \msname will in future releases provide a mechanism to copy a base version and give it a new name. The copied base version can then be modified. Already released versions should not be changed in the future. Instead, a new version should be released.
+
+For development purposes, it is useful to have a special version called \texttt{dev}. Programmers can collaboratively work on this version. Once the version should be released, the programmer can make a copy of the entire class and give it a new name: the new version number.
+
+\msname does at the moment not support delta updates. A new version is always an entire copy of an application, even if just a few methods changed. We might consider delta updates in future releases of \msname, such that a new version is essentially the previous version and a set of changed methods/classes. Of course, this requires having the entire application history installed in the image.
+
 \subsection{Aliasing Module Versions}
 Whenever an application requires a class from a library in a certain version, the application can either write down the fully qualified name of the class or create an alias. For example, the fully qualified name of the class \texttt{Calculus} in \texttt{MathLibrary} version 1.2 is \texttt{MathLibrary v1 v2 Calculus}. However, it is very likely that an application requires more than just one class from a library. In this case, an alias should be defined, because it keeps the required version number at a single point in the code (making it easy to change the version) and results in less verbose code.
 
@@ -55,13 +62,15 @@ Figure~\ref{fig:use_alias} shows how class aliases can be used to specify module
 Classes aliases, as described in this paragraph, are similar to import statements in other programming languages, and are a form of internal dependency management.
 
 \paragraph{Helper Methods}
-In Figure~\ref{fig:use_module_ver} the top-level class and major version should be a subclass of the class \texttt{Versioning}, a class provided by our system. This class contains convenience methods making it easier to work with version containers. The following list gives an overview of the helper methods \texttt{Versioning} provides.
+In Figure~\ref{fig:use_module_ver}, the top-level class and major version should be a subclass of the class \texttt{Versioning}, a class provided by our system. This class contains convenience methods making it easier to work with version containers. The following list gives an overview of the helper methods \texttt{Versioning} provides.
 
 \begin{itemize}
 	\item \texttt{Versioning>>myLatest}: returns the latest version contained as a nested class in the receiver. For example, \texttt{MathLibrary myLatest} returns \texttt{MathLibrary v1}.
 	\item \texttt{Versioning>>latest}: returns the lastest version in the receiver recursively. For example, \texttt{MathLibrary latest} returns \texttt{MathLibrary v1 v2}.
 	\item \texttt{Versioning>>atLeast:}: returns the latest version recursively and asserts that its version number is greater than the parameter. For example, \texttt{MathLibrary atLeast: '1.1'} returns \texttt{MathLibrary v1 v2}, and \texttt{MathLibrary atLeast: '1.3'} throws an error.
 \end{itemize}
+
+In order to get the latest installed version with major version \texttt{1}, the programmer could write \texttt{MathLibrary v1 latest}. Future versions of \msname might automatically download and install missing versions, instead of throwing an error message.
 
 \subsection{Squeak Versioning}
 With \msname, it is theoretically possible to run multiple versions of Squeak in one image. The basic idea is that every Squeak version is nested in a different version class. The screenshot in Figure~\ref{fig:usecase_browsers} shows two versions of the system browser running in the same image. The old system browser lacks many features, such as syntax highlighting or buttons for senders/implementors.
@@ -333,7 +342,7 @@ Figure~\ref{fig:usecase_breakout_game} shows the original source code of Breakou
 example: large project, where parts of the code can now be understood, given that we have hierarchical nesting. could be an example where grouping according to multiple criteria is needed (would result in n x m packages)
 
 \section{Mixin Modularity with Parameterized Classes}
-Parameterized classes can be used to build mixins. Mixins are not a special feature of this system: they are an application of our system and come for free by just having class nesting as described in the previous sections; they are an immediate consequence of parameterized classes. A mixin is a function that takes as an input a class and outputs a subclass with additional behavior, i.e., it is a class transformator. 
+Parameterized classes can be used to build mixins. Mixins are not a special feature of this system: they are an application of our system and come for free by just having class nesting as described in the previous sections; they are an immediate consequence of parameterized classes. A mixin is a function that takes as an input a class and outputs a subclass with additional behavior~\cite{bracha1992programming, Bettini:2004:CCH:967900.968200}, i.e., it is a class transformator (also called \emph{abstract subclass}~\cite{Bracha:1990:MI:97945.97982}). 
 
 A mixin can be implemented by writing a class generator method with one parameter which is the input class. The method creates a subclass of that input class and returns it. Associated with that parameterized class generator methods is a set of instance-side methods and a set of class-side methods. These are the methods that will be added when applying the mixin.
 
