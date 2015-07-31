@@ -1,6 +1,6 @@
 \chapter{Nested Class Modularity in Squeak}
 \label{sec:concept}
-In this chapter, we describe the main concept of this work: classes as class members. Similar concepts are part of programming languages like Java, Ruby, Python, and Newspeak. Our concept follows closely the Newspeak notion of nested classes, but without making invasive changes to the Smalltalk programming language.
+In this chapter, we describe the main concept of this work: classes as class members. Similar concepts are part of programming languages like Java, Ruby, Python, and Newspeak. Our concept follows closely the Newspeak notion of nested classes, but without making invasive changes to the Smalltalk programming language or the underlying virtual machine.
 
 \section{Nested Classes}
 In Smalltalk, every object is an instance of a class, defining the object's instance variables and the messages it understands. Consequently, a class is also an instance of its so-called meta class. Every meta class is an instance of \texttt{Metaclass} (Figure~\ref{fig:impl_squeak_meta}). In the remainder of this work, we denote the meta class of a class \texttt{C} by \texttt{C class}. Every Smalltalk image has a \texttt{globals} dictionary\footnote{Squeak also supports \emph{environments}, effectively making it possible to compile methods in the context of another \texttt{globals} dictionary. See Section~\ref{sec:rel_sq_env} for more details.}, mapping symbols to class objects, so that references to classes can be resolved at compile time. This implies that all references to classes are early bound.
@@ -12,7 +12,7 @@ In Smalltalk, every object is an instance of a class, defining the object's inst
 	\label{fig:concept_nested_notation}
 \end{wrapfigure}
 
-\msname extends the Smalltalk class organization as follows: in addition to regular methods, we introduce the concept of \emph{class generator methods}. Such a method generates a class and is associated with a set $I$ of instance methods and a set $C$ of class methods. Whenever the method is invoked, the system first executes the method body, then adds $I$ to the resulting class and $C$ to the resulting meta class, and finally returns the resulting class. For performance reasons, \msname also caches the result, meaning that a class is not generated twice.
+\msname extends the Smalltalk class organization as follows: in addition to regular methods, we introduce the concept of \emph{class generator methods}. Such a method generates a class and is associated with a set $I$ of instance methods and a set $C$ of class methods. Whenever the method is invoked, the system first executes the method body, then adds $I$ to the resulting class and $C$ to the resulting meta class, and finally returns the resulting class. For performance reasons, \msname also caches the result, meaning that a class is only generated once\footnote{Parameterized classes are an exception.}.
 
 \paragraph{Details}
 Class generator methods are only allowed as class-side methods. Instance-side class generator methods seem to provide neglectable benefits and make the implementation of our system more complicated. We discuss instance-side class generator methods in more detail in the Section~\ref{sec:future_inst_side}.
@@ -35,13 +35,7 @@ Top-level classes are called \emph{modules}. All other classes are called \emph{
 %\end{figure}
 
 \section{Accessing the Lexical Scope}
-\begin{wrapfigure}{l}{0.5\textwidth}
-	\includegraphics[scale=0.75]{super_binding.pdf}
-	\centering
-	\caption[Example: Binding of \texttt{super}]{Example: Binding of \texttt{super}. The method lookup starts at the superclass of the calling method's class.}
-	\label{fig:concept_super_binding}
-\end{wrapfigure}
-It is sometimes necessary to access a method's lexical scope (i.e., the enclosing classes), in order to send messages to enclosing classes. For this reason, our system introduces new keywords, in addition to \texttt{self} and \texttt{super}, which are already present in every Smalltalk dialect. Figure~\ref{fig:concept_keywords} gives an overview of all method lookup-related keywords in the system.
+Within a method, it might be necessary to access the lexical scope (i.e., the enclosing classes), in order to send messages to enclosing classes. For example, a method might want to reference a class defined in an enclosing class. For this reason, \msname introduces new keywords, in addition to \texttt{self} and \texttt{super}, which are already present in every Smalltalk dialect. This is a point where we extended the programming language. Figure~\ref{fig:concept_keywords} gives an overview of all method lookup-related keywords in the system.
 
 \begin{figure}[!htp]
 	\centering
@@ -53,11 +47,18 @@ It is sometimes necessary to access a method's lexical scope (i.e., the enclosin
 \subsection{\texttt{self} Keyword}
 This keyword is used make a message send within an object. The receiver is the same object as the sender and the lookup starts at the (polymorphic) class of the receiver. If that class does not provide a corresponding method, the lookup continues in the superclass hierarchy. If no class in the superclass hierarchy has a corresponding method, a \texttt{MethodNotUnderstood} error is raised.
 
+\begin{wrapfigure}{l}{0.5\textwidth}
+	\includegraphics[scale=0.75]{super_binding.pdf}
+	\centering
+	\caption[Example: Binding of \texttt{super}]{Example: Binding of \texttt{super}. The method lookup starts at the superclass of the calling method's class.}
+	\label{fig:concept_super_binding}
+\end{wrapfigure}
+
 \subsection{\texttt{super} Keyword}
 This keyword is also used to make a message send within an object. Again, the receiver is the same object as the sender, but the lookup starts at the superclass of the sender's method class. Note, that \texttt{super} is bound to the superclass of the method class, not the superclass of the receiver's class. For example, in Figure~\ref{fig:concept_super_binding}, \texttt{C new bar} returns \texttt{1}, because, in \texttt{B>>bar}, \texttt{super} is bound to \texttt{A}, even though the receiver \texttt{C new} is an instance of \texttt{C}.
 
 \subsection{\texttt{enclosing} Keyword}
-This keyword is used to make a message send to the class that contains the current class. Consider, for example, that we want to send a message \texttt{foo} to class \texttt{A B} within \texttt{A class>>B class>>C class>>m4} in Figure~\ref{fig:concept_nested_notation}. Either one of the following two statements works in this case\footnote{The enclosing class of an object that is not a class is its class' enclosing class.}.
+This keyword is an implementation artifact. It can be used for meta programming purposes, but should be avoided in general. It is used to make a message send to the class that contains the current class. Consider, for example, that we want to send a message \texttt{foo} to class \texttt{A B} within \texttt{A class>>B class>>C class>>m4} in Figure~\ref{fig:concept_nested_notation}. Either one of the following two statements works in this case\footnote{The enclosing class of an object that is not a class is its class' enclosing class.}.
 
 \begin{itemize}
 	\item \texttt{A B foo.}
@@ -132,7 +133,7 @@ This keyword combines \texttt{super} and \texttt{outer}: a message sent to \text
 %The statement \texttt{enclosing enclosing m1} in the previous example can also be written as \texttt{scope m1}. If the method \texttt{m1} would now be moved to its enclosing class (if it had one), the lookup would still succeed. However, \texttt{scope} exposes the risk of accidentially capturing method names in superclasses or the lexical chain.
 
 \subsection{Implicit \texttt{scope} Receiver}
-In \msname, references to globals are in fact message sends with \texttt{scope} as implicit receiver. This makes it easier for Smalltalk programmers to write code in \msname, even if they do not know about \texttt{enclosing} and \texttt{scope}. It also makes the code less verbose and easier to read.
+In \msname, references to globals are in fact message sends with \texttt{scope} as implicit receiver. This should make it easier for Smalltalk programmers to write code in \msname, even if they do not know about \texttt{enclosing} and \texttt{scope}. It also makes the code less verbose and easier to read.
 
 Whenever code references an identifier that is not a temporary variable, not an instance variable, and not a \emph{special} object/keyword\footnote{\texttt{self}, \texttt{super}, \texttt{thisContext}, \texttt{scope}, \texttt{outer}, \texttt{enclosing}}, the compiler replaces that identifier with a message send to \texttt{scope}.
 
@@ -150,12 +151,12 @@ Consider, for example, that we want to reference class \texttt{A B} within \text
 In this example, we used the implicit \texttt{scope} receiver for class lookup, which is in our opinion the most useful case. However, any unary method in \texttt{self}, the lexical scope, or the superclass hierarchy can in fact be looked up this way. One can argue that this is bad practice and should be forbidden for methods that are not class generator methods. However, it is allowed in Newspeak and other programming languages like Java, and seems to work well. Note, that only unary messages can have an implicit \texttt{scope} receiver, since we would have to change the Smalltalk syntax, otherwise.
 
 \section{Parameterized Classes}
-All examples shown in the previous sections use unparameterized classes, i.e., class generator methods are always unary. Class generator methods can, however, also have binary selectors or selectors with a higher arity. For memory conservation reasons, these classes are then no longer cached.
+In \msname, classes are accessed using message sends. Since messages can have parameters, it seems natural to have parameterized class accessor methods, and, therefore, parameterized classes. All examples shown in the previous sections use unparameterized classes, i.e., class generator methods are always unary. Class generator methods can, however, also have binary selectors or selectors with a higher arity. For memory conservation reasons, these classes are then no longer cached.
 
 \begin{wrapfigure}{l}{0.5\textwidth}
 	\includegraphics[scale=0.75]{nested_notation_params.pdf}
 	\centering
-	\caption[Example: Parameterized classes]{Example: Parameterized classes. A class can have parameters accessible with message sends	 to \texttt{enclosing}.}
+	\caption[Example: Parameterized classes]{Example: Parameterized classes. A class can have parameters accessible with message sends to \texttt{enclosing}.}
 	\label{fig:concept_param_classes}
 \end{wrapfigure}
 

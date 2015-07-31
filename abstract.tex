@@ -26,7 +26,7 @@ We present the concept, the implementation, and an evaluation of \msname, a modu
 
 Top-level classes (modules) are globals and nested classes can be accessed using message sends to the corresponding enclosing class. Class nesting effectively establishes a global and hierarchical namespace, and allows for modular decomposition, resulting in better understandability, if applied properly. 
 
-Classes can be parameterized, allowing for external configuration of classes, a form of dependency management. Furthermore, parameterized classes go hand in hand with mixin modularity. Mixins are a form of inter-class code reuse and based on single inheritance. Traits, another form of inter-class code reuse with explicit conflict resolution can be implemented on top of mixins.
+Classes can be parameterized, allowing for external configuration of classes, a form of dependency management. Furthermore, parameterized classes go hand in hand with mixin modularity. Mixins are a form of inter-class code reuse and based on single inheritance. 
 
 We show how \msname can be used to solve the problem of duplicate classes in different modules, to provide a versioning and dependency management mechanism, and to improve understandability through hierarchical decomposition.
 \end{abstract}
@@ -36,7 +36,7 @@ Diese Arbeit beschreibt das Konzept, die Implementierung und die Evaluierung von
 
 Klassen auf oberster Ebene (\emph{top-level} Klassen) sind globale Objekte. Auf verschachtelte Klassen kann zugegriffen werden, indem eine Nachricht mit dem Namen der Klasse an die entsprechende äußere Klasse gesendet wird. Durch das Verschachteln von Klassen entsteht ein globaler, hierarchischer Namensraum, welcher es erlaubt, Programme modular aufzuteilen. Dadurch kann die Verständlichkeit der Programmstruktur verbessert werden.
 
-Klassen können parametrisiert sein. Dadurch können Klassen von außen konfiguiert werden (eine Form von \emph{dependency management}). Außerdem ergibt sich durch parametrisierte Klassen die Möglichkeit, Mixins zu implementieren. Mixins sind Ansammlungen von Methoden, die bei mehreren Klassen eingebettet werden können, und auf Einfachvererbung abgebildet werden. Traits können ebenfalls mit parametrisierten Klassen implementiert werden. Bei Traits handelt es sich um Ansammlungen von Methoden, die in mehrere Klassen eingebettet werden können, aber eine explizite Konfliktauflösung erfordern.
+Klassen können parametrisiert sein. Dadurch können Klassen von außen konfiguiert werden (eine Form von \emph{dependency management}). Außerdem ergibt sich durch parametrisierte Klassen die Möglichkeit, Mixins zu implementieren. Mixins sind Ansammlungen von Methoden, die bei mehreren Klassen eingebettet werden können, und auf Einfachvererbung abgebildet werden. 
 
 Mit \msname ist es möglich, Klassen mit gleichem Namen in verschiedenen Modulen zu haben. Außerdem stellt \msname ein Versionierungssystem und ein Verfahren zur Verwaltung  von Abhängigkeiten (Bibliotheken etc.) bereit. Darüber hinaus kann mit hierarchischer Dekomposition die Verständlichkeit von Programmtext und dessen Struktur verbessert werden.
 \end{zusammenfassung}
