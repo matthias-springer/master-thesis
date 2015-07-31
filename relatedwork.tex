@@ -214,7 +214,7 @@ Ruby Modules, Python Multiple Inheritance, Newspeak, Jigsaw
 Squeak implementation
 
 \subsection{Java Generics}
-Java generics allow classes and interfaces to be parameterized by one or multiple classes and interfaces for type checking reasons~\cite{bracha2004generics}. They are often used together with collections~\cite{Parnin:2011:JGA:1985441.1985446}. Generic parameters are defined as part of the class or interface definition. When a class or interface is used, the programmer can pass classes and interfaces as arguments.
+Java generics allow classes and interfaces to be parameterized by one or multiple classes and interfaces for type checking reasons~\cite{bracha2004generics, Bracha03addinggenerics}. They are often used together with collections~\cite{Parnin:2011:JGA:1985441.1985446}. Generic parameters are defined as part of the class or interface definition. When a class or interface is used, the programmer can pass classes and interfaces as arguments.
 
 \begin{figure}[!htp]
 \begin{lstlisting}
@@ -247,3 +247,6 @@ One shortcoming of Java generics is type erasure: generic type information is on
 In \msname, a new class is created every time a parameterized accessor method is executed. Furthermore, arguments passed to the accessor method are available at runtime using message sends to \texttt{scope}.
 
 \subsection{C++ Templates}
+C++ templates allow classes to be parameterized with generic types. In contrast to Java generics, C++ generates a copy of the template, whenever it is used with a concrete type~\cite{vandevoorde2002cpp}. Consequently, every instantiation of a C++ templated class generates a new class, whereas all instantiations of a Java generic class are the same class (type erasure).
+
+C++ templates are similar to parameterized classes in \msname in a sense that a new class is generated whenever a template/parameterized class is instantiated. However, new classes in \msname can be generated at runtime, whereas C++ templates are generated statically at compile time, as if they were a preprocessor transformation.
