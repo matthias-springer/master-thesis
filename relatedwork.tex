@@ -204,10 +204,34 @@ As described in Section~\ref{sec:rel_ns_pkg_cls_nesting}, many programming langu
 \section{Code Reuse}
 
 \subsection{Multiple Inheritance}
-In programming languages with multiple inheritance, a class can be a subclass of more than just one superclass. Examples of programming languages supporting multiple inheritance are C++, Eiffel, or Python. Multiple inheritance is controversial because of the \emph{diamond problem}: imagine that a class inherits from two classes and both classes provide the same method. Which implementation should be used in the subclass? In C++, this problem is solved by specifying explicitly, which implementation to use. In Python, the order of superclasses matters (C3 linearization).
+\label{sec:rel_mult_inhh}
+In programming languages with multiple inheritance, a class can be a subclass of more than just one superclass. Examples of programming languages supporting multiple inheritance are C++, Eiffel, or Python. Multiple inheritance is controversial because of the \emph{diamond problem}: imagine that a class inherits from two classes and both classes provide the same method. Which implementation should be used in the subclass? In C++, this problem is solved by specifying explicitly, which implementation to use. In Python, the order of superclasses matters and the superclass hierarchy is flattened to a single inheritance graph (C3 linearization~\cite{pythonmro23}).
 
 \subsection{Mixins}
-Ruby Modules, Python Multiple Inheritance, Newspeak, Jigsaw
+Mixins are an alternative to multiple inheritance. A class can inherits from a single class, but multiple mixins can be mixed into the inheritance hierarchy. Mixins can also be seen as abstract subclasses, class transformators, or class functions. Mixins can be implemented in programming languages using one of the following three mechanisms.
+
+\paragraph{Explicit Programming Language Support}
+The programming language provides an explicit mixin construct (as part of the syntax), effectively making mixins part of the language definition.
+
+In Ruby, modules can be used as mixins. When a module is included in a class (using the \texttt{include} statement), the module is added to the inheritance chain as a superclass. Consequently, when a mixed-in method calls \texttt{super}, the lookup searches for methods in the list of previously mixed-in modules, and then in the superclass. However, the \texttt{superclass} method skips mixed-in modules.
+
+Flatt et al. propose an extension of the Java programming language, introducing a \texttt{mixin} notation (extension of the Java syntax)~\cite{Flatt:1998:CM:268946.268961}.
+
+\paragraph{Class Nesting and Virtual Superclasses}
+Whenever a programming language supports instance-side class nesting (non-static member classes) and virtual superclasses, the programmers gets mixins for free: create a container class \texttt{C} with an instance-side nested class \texttt{C.I}. The superclass of \texttt{C.I} is provided to instances of \texttt{C} as a constructor argument. \texttt{C.I} can then act as a mixin or class-to-class transformator by writing \texttt{(new C(superclass)).I}.
+
+Java supports class nesting but does not support mixins, because superclasses are not virtual, i.e., the superclass must be known at compile time. Newspeak supports mixins through instance-side nested classes and virtual superclasses. In \msname, classes can currently not be defined as instance-side members. Earlier versions \msname supported this feature (see Section~\ref{sec:future_inst_side}) and mixins could be implemented as described. At the moment, mixins can only be written using parameterized classes. 
+
+\paragraph{Parameterized Classes}
+
+\paragraph{Linearization of Multiple Inheritance}
+As described in Section~\ref{sec:rel_mult_inhh}, method resolution in programming languages with multiple inheritance can be ambiguous. Some programming languages have complicated rules for determining which method to use. Others require the programmer to resolve conflicts manually. Another solution to this problem is linearization: the superclass graph is flattened to a single inheritance graph (e.g., C3 linearization~\cite{pythonmro23}).
+
+Multiple inheritance together with linearization can be used to implement mixins. In CLOS, mixins can be represented as classes~\cite{Smaragdakis:1998:ILD:646155.679703}. A mixin application is a new class whose superclasses are the mixin and the base class. Inside methods, \texttt{call-next-method} can be used to make super calls. For example, a mixin defined with \texttt{(defclass Mixin () ())} can be mixed into the base class \texttt{(defclass Base () ())} with \texttt{(defclass Mixin-application (Mixin Base) ())}. The method lookup will first look for methods in the mixins and then in the base class.
+
+Python is another programming language that uses linearization of multiple inheritance. Mixins can be implemented in a similar way.
+
+%Ruby Modules, Python Multiple Inheritance, Newspeak, Jigsaw
 
 \subsection{Traits}
 \label{sec:rel_traits}
