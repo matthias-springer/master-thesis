@@ -238,7 +238,15 @@ Python is another programming language that uses linearization of multiple inher
 
 \subsection{Traits}
 \label{sec:rel_traits}
-Squeak implementation
+Traits are a form of code reuse and similar to Mixins. A trait is a ``composable unit of behavior''~\cite{traitsschaerli} (collection a methods). One or multiple traits can be applied when a class is defined. Traits do usually not change the superclass hierarchy. Instead, all trait methods are copied into the target class, i.e. traits can be ``compiled away''~\cite{Nierstrasz06flatteningtraits}. Conflicts (duplicate methods) have to be resolved in manually by providing a method in the target class for every conflicting method. Such a method could call the implementation of either one of the traits.
+
+Traits are available in both Pharo and Squeak. In Pharo, traits were used to modularize parts of the system kernel and the collections library. Similar adaptions have been proposed for Squeak~\cite{PHDschaerli}. Featherweight-Trait Java is an extension of the Java programming language supporting traits~\cite{Nierstrasz06flatteningtraits}. Traits in Pharo and Squeak support removing methods from a trait upon composition, as well as renaming methods in a trait.
+
+Schaerli et al. propose traits as an alternative to mixins. They argue that conflict resolution is easier with Traits and that class hierarchies built by mixins are fragile~\cite{Schaerli_classes_is}.
+
+Traits can be implemented in \msname on top of mixins. Mixins evolve out of class nesting in a natural way, which is, however, not the case for traits. For example, meta programming is necessary to call a trait method within a resolved method. Futhermore, meta programming is necessary to detect whether method conflicts arrised during trait composition. Traits were implemented by adding a post-include hook to mixins, which is where \msname checks if methods are conflicting. 
+
+Traitor\footnote{\url{https://github.com/txus/traitor}} is a library that adds support for Traits to Ruby. It is implemented by adding a \emph{method missing handler} and a collection of traits to every class. Whenever a message is not understood, the handler first checks for method conflicts and then goes through all traits applied to the class. Traits could be implemented in \msname in a similar way by adding a \texttt{doesNotUnderstand:} handler. The benefit of this approach is that the superclass hierarchy is not changed. One disadvantage is that the programmer cannot define another \texttt{doesNotUnderstand:}, since it would overwrite the handler defined by the library.
 
 \subsection{Java Generics}
 Java generics allow classes and interfaces to be parameterized by one or multiple classes and interfaces for type checking reasons~\cite{bracha2004generics, Bracha03addinggenerics}. They are often used together with collections~\cite{Parnin:2011:JGA:1985441.1985446}. Generic parameters are defined as part of the class or interface definition. When a class or interface is used, the programmer can pass classes and interfaces as arguments.
