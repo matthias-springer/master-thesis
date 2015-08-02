@@ -263,6 +263,7 @@ Whenever an instance method is added, removed, or changed, the system retrieves 
 Changing class methods is equivalent to changing instance methods, with the only difference being that the meta class object is changed instead of the class object.
 
 \subsection{Changing Instance/Class Variables}
+\label{sec:impl_ch_inst_cl_vars}
 This kind of class change is more difficult to handle than method changes. Whenever an instance/class instance variable is added or removed, some methods might have to be recompiled, because instance variables are referenced with indices in the bytecode (see also Section~\ref{sec:impl_meta_model}). 
 
 \paragraph{Instance Variables Indexing}

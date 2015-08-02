@@ -1,10 +1,27 @@
 \chapter{Future Work}
 \label{sec:future}
+In this section, we give an overview of possible areas of future work. We also point of deficiencies of \msname that we want to address in future versions.
 
-\section{Class as Instance-side Members}
+\section{Classes as Instance-side Members}
 \label{sec:future_inst_side}
+Java and Newspeak support nested classes as instance-side members (non-static member classes). Earlier versions \msname included support for instance-side nested classes, but this caused difficulties in the implementation. 
 
-\section{Bytecode Transformation instead of Recompilation}
+\begin{itemize}
+	\item \emph{Method lookup:} Classes can now be enclosed in instances instead of classes. We are not sure whether a message send to \texttt{enclosing}, \texttt{outer}, or \texttt{scope} should also lookup methods on the class side whenever a message was not understood on the instance side. It would certainly be good style to nest classes that do not need access to instance-specific state as class class-side members. These classes should then be accessible within an instance using an implicit receiver send or the \texttt{scope} keyword.
+	\item \emph{\texttt{outer}/\texttt{enclosing} cannot be early bound:} These keyword might have to start their lookup in an instance. Therefore, these keywords cannot be bound as literals, which are stored in methods and, therefore, shared among all instances.
+	\item \emph{Possible memory issues:} In contrast to Java, \msname would generate a new class every time an instance-side member class is accessed. This could lead to memory and performance issues.
+\end{itemize}
+
+In addition to these difficulties, we are currently unclear about what the exact benefits of instance-side nested classes are. They can be used to build mixins, but the we achieve the same functionality with parameterized classes (see Section~\ref{sec:rel_mixins1}). In Java, non-static member classes are used to implement interface adapters that need access to the enclosing instance~\cite{Bloch:2008:EJ:1377533} (see Section~\ref{sec:rel_ns_pkg_cls_nesting}). This is, however, the only pattern for non-static member classes we could find in literature, and the same functionality can be achieved by implementing the adapter as a class-side nested class with an instance variable holding a reference to the adaptee.
+
+As a consequence, we removed support for instance-side nested classes, but we might add it again at a later point of time, if it needed.
+
+\section{Bytecode Transformation}
+Whenever a nested class specification is instantiated in \msname, all methods in the specification are complied in the target class. When using parameterized classes, this process happens multiple times, once for every target class. However, the bytecode is almost the same for every target class and differs only for reads/writes to instance variables (see Section~\ref{sec:impl_ch_inst_cl_vars}). In addition, \texttt{enclosing} and \texttt{outer} must be bound to different literals.
+
+This process could be optimized by caching compiled methods and replacing affected bytecodes and literals during instantiation. For example, instead of recompiling the entire method, all references to instance variables could be replaced with bytecodes with the correct indices in a linear pass through the compiled method.
+
+In Newspeak, slots (instance variables) cannot be accessed directly. They are always accessed through automatically-generated accessor methods. Therefore, all references to slots are message sends. Consequently, the bytecode of a method for two different instantiations is always the same.
 
 \section{Adding Instance Variables}
 

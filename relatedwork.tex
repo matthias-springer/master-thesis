@@ -171,7 +171,9 @@ Parameterized classes in Newspeak can be used for external configuration of clas
 In this section, we briefly describe dependency/package management systems for different programming languages.
 
 \paragraph{Metacello}
-Metacello is a package management system for Smalltalk. \todo{Add content}
+Metacello\footnote{\url{https://github.com/dalehenrich/metacello-work}} is a package management system for Smalltalk (multiple dialects). It can be used to load applications and libraries into a system and supports various backends, such as Monticello or github. Every Metacello project is represented by a \emph{configuration class} and consists of a set of versions, modelled as instance methods of the configuration. Every versin is a set of packages in a certain version (Monticello version). The configuration class also contains URLs to remote repositories and other dependent projects~\cite{metacellodraft}.
+
+Whenever a project is loaded, Metacello retrieves all packages from the (remote) repositories specified in the configuration class in the requested versions. Already existing classes already exist during filein. It is not possible to install multiple versions of a Metacello project side by side.
 
 \paragraph{Maven}
 A Java class loader loads compiled Java classes into a running virtual machine. It can be used to load classes dynamically at runtime by specifying their names. Maven is a \emph{software project management and comprehension tool}. It stores dependencies in a repository on the file system and loads them using a Java class loader. Maven projects have a \texttt{pom.xml} configuration file that contains a listing of all dependencies required by the project. When the project is run, Maven ensures that all dependencies are available in the repository and downloads them from a remote server, otherwise. It then compiles the project and runs it.
@@ -202,13 +204,15 @@ As described in Section~\ref{sec:rel_ns_pkg_cls_nesting}, many programming langu
 %Java interfaces are used to decouple code from specific implementations. Instead of mentioning a class explicitly, the programmer uses an interfaces describing all public methods of the type. Java interfaces are, therefore, a form of information hiding.
 
 \section{Code Reuse}
+In this section, we give an overview of how other programming languages promote code reuse. Composition and inheritance are the most basic form of code reuse in class-based programming languages. We focus on concepts that are similar to the ones used in \msname.
 
 \subsection{Multiple Inheritance}
 \label{sec:rel_mult_inhh}
 In programming languages with multiple inheritance, a class can be a subclass of more than just one superclass. Examples of programming languages supporting multiple inheritance are C++, Eiffel, or Python. Multiple inheritance is controversial because of the \emph{diamond problem}: imagine that a class inherits from two classes and both classes provide the same method. Which implementation should be used in the subclass? In C++, this problem is solved by specifying explicitly, which implementation to use. In Python, the order of superclasses matters and the superclass hierarchy is flattened to a single inheritance graph (C3 linearization~\cite{pythonmro23}).
 
 \subsection{Mixins}
-Mixins are an alternative to multiple inheritance. A class can inherits from a single class, but multiple mixins can be mixed into the inheritance hierarchy. Mixins can also be seen as abstract subclasses, class transformators, or class functions. Mixins can be implemented in programming languages using one of the following three mechanisms.
+\label{sec:rel_mixins1}
+Mixins are an alternative to multiple inheritance. A class can inherits from a single class, but multiple mixins can be mixed into the inheritance hierarchy. Mixins can also be seen as abstract subclasses, class transformators, or class functions. Mixins can be implemented in programming languages using one of the following mechanisms.
 
 \paragraph{Explicit Programming Language Support}
 The programming language provides an explicit mixin construct (as part of the syntax), effectively making mixins part of the language definition.
@@ -233,6 +237,9 @@ As described in Section~\ref{sec:rel_mult_inhh}, method resolution in programmin
 Multiple inheritance together with linearization can be used to implement mixins. In CLOS, mixins can be represented as classes~\cite{Smaragdakis:1998:ILD:646155.679703}. A mixin application is a new class whose superclasses are the mixin and the base class. Inside methods, \texttt{call-next-method} can be used to make super calls. For example, a mixin defined with \texttt{(defclass Mixin () ())} can be mixed into the base class \texttt{(defclass Base () ())} with \texttt{(defclass Mixin-application (Mixin Base) ())}. The method lookup will first look for methods in the mixins and then in the base class.
 
 Python is another programming language that uses linearization of multiple inheritance. Mixins can be implemented in a similar way.
+
+\paragraph{Meta Programming}
+Mixins can be implemented using meta programming. For example, in Smalltalk, a customized \texttt{doesNotUnderstand:} handler could delete all failed message sends to a list of mixins stored as an instance variable. This approach provides only ``\emph{interface inheritance} instead of \emph{class inheritance}''~\cite{montlick1996implementing}.
 
 %Ruby Modules, Python Multiple Inheritance, Newspeak, Jigsaw
 
