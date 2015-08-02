@@ -47,17 +47,19 @@ Whenever an application requires a class from a library in a certain version, th
     ^ Repository MathLibrary v1 v2
 
 <@\textbf{MyApplication>>rectArea:}@> origin <@\textbf{extent:}@> extent
-    ^ MathLibrary polygonArea: { 
+    ^ MathLibrary Geometry polygonArea: { 
         origin x @ origin y.
         (origin x + extent x) @ y.
         (origin x + extent x) @ (origin y + extent y).
         origin x @ (origin y + extent y) }
 \end{lstlisting}
-\caption{Defining class aliases}
+\caption[Example: Class alias]{Example: Class alias. \texttt{MathLibrary} is an alias pointing to a certain version.}
 \label{fig:use_alias}
 \end{figure}
 
 Figure~\ref{fig:use_alias} shows how class aliases can be used to specify module versions at a single point in the code. The programmers defines a method \texttt{MathLibrary} returning the module in the required version. In \texttt{MyApplication>>rectArea:extent:}, the reference to \texttt{MathLibrary} will be replaced with \texttt{scope MathLibrary}, which will call the aliased method. Note, that in \texttt{MyApplication>>MathLibrary}, we have to reference the library with \texttt{Repository MathLibrary}, forcing the lookup to start at the root of our system. Otherwise, the method \texttt{MathLibrary} would call itself.
+
+Aliases should be defined as deep (nested) as possible to avoid \emph{poluting} the namespace. Aliases to other modules should be defined in the module (top-level class) to get a quick overview of all dependencies. For example, if a class \texttt{MyApplication A B C} requires \texttt{MathLibrary v1 v2 Calculus}, then an alias to \texttt{MathLibrary v1 v2} should be defined in \texttt{MyApplication} and an alias to \texttt{MathLibrary Calculus} could be defined in \texttt{MyApplication A B C} using the previously defined alias.
 
 Classes aliases, as described in this paragraph, are similar to import statements in other programming languages, and are a form of internal dependency management.
 
@@ -143,7 +145,7 @@ Figure~\ref{fig:use_paintbrush} shows part of the implementation of a simple dra
 \end{lstlisting}
 \caption{Source code for configurable application}
 \end{subfigure}
-\caption{Parameterized classes for external module configuration}
+\caption[Example: External configuration]{Example: External configuration. Parameterized classes can be instantiated using arguments (dependencies). All dependencies can be accessed with message sends to \texttt{scope} or implicit receiver sends.}
 \label{fig:use_paintbrush}
 \end{figure}
 
@@ -168,7 +170,7 @@ As an example, we took two simple computer games written in Squeak: SpaceCleanup
     \includegraphics[width=\textwidth]{screen_breakout.jpeg}
     \caption{Breakout}
 \end{subfigure}
-\caption{Example games as subjects for hierarchical decomposition}
+\caption[Screenshots of SpaceCleanup and Breakout]{Screenshots of SpaceCleanup and Breakout. These games are implemented in Squeak and serve as an example for hierarchical decomposition.}
 \label{fig:usecase_games}
 \end{figure}
 
