@@ -41,11 +41,21 @@ Smalltalk extension methods break modularity. It is not possible to compose two 
 
 Other programming languages (e.g., Ruby) have a concept similar to extension methods in Smalltalk. A variety of alternatives to extension methods have been proposed. In the rest of this chapter, we give a brief overview of some of them. Future versions of \msname might incorporate one of these alternatives.
 
-\paragraph{Class Boxes}
+\paragraph{Classboxes}
+A classbox is a container of classes and methods. Classes can either be defined or imported into a classbox (from another classbox). Within a classbox, additional methods can be added or replaced on imported classes (\emph{local rebinding}). Code executed in the context of certain classbox has a modified method lookup: the system tries to lookup methods defined in the classbox first, and then proceeds with the ordinary method lookup (receiver class and superclass hierarchy)~\cite{bergel:inria-00533446}.
+
+A classbox effectively acts as a sort of sandbox. Every classbox can define its own extensions methods for imported classes. Duplicate extension methods are not a problem as long as they are defined in different classboxes. 
+
+Implementations of classboxes exist for Squeak~\cite{bergel:inria-00533446} and Java. Classbox/J is a Java implementation which does not only allow redefining fields and methods but also member classes (nested/inner classes)~\cite{Bergel:2005:CCS:1094811.1094826}.
 
 \paragraph{Ruby Refinements}
 
 \paragraph{Context-oriented Programming}
+Context-oriented programming (COP) is a mechanism to modularize heterogeneous crosscutting concerns~\cite{Hirschfeld08context-orientedprogramming}. In layer-based context oriented programming, crosscutting concerns are grouped in layers. A layer is a set of partial method definitions (possibly from different classes). Every partial method definition belongs to exactly one base method. Whenever a layer is active, the system executes the partial methods defined in the layer instead of the corresponding base methods. Multiple layers can be active at the same time, effectively building a layer composition stack. A partial method can contain a \texttt{proceed} statement, which will call the next partial method, i.e., the partial method defined in the next layer on the layer composition stack. If there is no next layer defining a partial method for the corresponding base method, the system will call the base method.
+
+Every module could group its extension methods in a separate layer, activate that layer whenever code from the module is run, and deactivate the layer afterwards. Most COP implementations support scoped layer activation~\cite{Appeltauer:2009:CCP:1562112.1562118}, which essentially activates a layer, then runs a method or function/block closure, and then deactivates the layer again.
+
+With context-oriented programming, duplicate extension methods are no longer a problem, as long as they are contained in different layers as partial method definitions.
 
 \paragraph{Worlds}
 
