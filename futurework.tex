@@ -23,11 +23,6 @@ This process could be optimized by caching compiled methods and replacing affect
 
 In Newspeak, slots (instance variables) cannot be accessed directly. They are always accessed through automatically-generated accessor methods. Therefore, all references to slots are message sends. Consequently, the bytecode of a method for two different instantiations is always the same.
 
-\section{Adding Instance Variables}
-
-\section{Undo Changes}
-Remove added methods from old class if definition is changed (extension methds).
-
 \section{Squeak Integration}
 As of now, the integration of \msname in Squeak is still limited. For example, the new class browser does not have any refactoring tools yet. Furthermore, all Squeak classes should be migrated to classes in \msname, eventually, making \texttt{Repository} (a separate \texttt{globals} dictionary for \msname) obsolete.
 
@@ -49,6 +44,7 @@ A classbox effectively acts as a sort of sandbox. Every classbox can define its 
 Implementations of classboxes exist for Squeak~\cite{bergel:inria-00533446} and Java. Classbox/J is a Java implementation which does not only allow redefining fields and methods but also member classes (nested/inner classes)~\cite{Bergel:2005:CCS:1094811.1094826}.
 
 \paragraph{Ruby Refinements}
+In Ruby, all classes and modules are open for extensions. At any position in the program, existing classes can be modified, possibly breaking other code. Refinements are a way to confine class/module extensions to certain classes. A refinement can be defined as part of a module. Whenever the module is included, the refinement is active for code written in the including class~\cite{Carlson:2015:RC:1212915}. Other code is not affected.
 
 \paragraph{Context-oriented Programming}
 Context-oriented programming (COP) is a mechanism to modularize heterogeneous crosscutting concerns~\cite{Hirschfeld08context-orientedprogramming}. In layer-based context oriented programming, crosscutting concerns are grouped in layers. A layer is a set of partial method definitions (possibly from different classes). Every partial method definition belongs to exactly one base method. Whenever a layer is active, the system executes the partial methods defined in the layer instead of the corresponding base methods. Multiple layers can be active at the same time, effectively building a layer composition stack. A partial method can contain a \texttt{proceed} statement, which will call the next partial method, i.e., the partial method defined in the next layer on the layer composition stack. If there is no next layer defining a partial method for the corresponding base method, the system will call the base method.
@@ -57,10 +53,18 @@ Every module could group its extension methods in a separate layer, activate tha
 
 With context-oriented programming, duplicate extension methods are no longer a problem, as long as they are contained in different layers as partial method definitions.
 
-\paragraph{Worlds}
-
+%\paragraph{Worlds}
 %better way is needed (e.g., class boxes, refinements, COP, world (paper viewpoints), monkey patching). return already existing class in generator method
 
+\section{Extending Inherited Nested Classes without Subclassing}
+The way inherited nested classes can be extended without subclassing has two deficiencies. Firstly, there is currently no notation to add new instance variables to the extended class, because the subclass statement is part of the corresponding method in the superclass. Secondly, nested classes of already extended classes cannot be further extended, because a \texttt{super} call would not call the original class accessor method. Instead, the method lookup would start in the superclass of extended class (which is the same class as the not yet extended class).
+
+It is still unclear, if extending inherited nested classes without subclassing should be forbidden in favor of the variant \emph{with subclassing}. Other programming languages like Jx do this by default~\cite{Nystrom:2004:SEV:1028976.1028986}. Extending inherited nested classes with subclassing would solve the problems described above and is already possible. However, forbidding \emph{extending without subclassing} is difficult without restricting the ability to write extension methods, which is technically a very similar concept.
+
 \section{Dependency Management}
+Nested classes in \msname can be used to store modules in different versions. There is at the moment no convenient way to share modules with other developers, except for exporting the module and importing it again. Future versions of \msname might have a central remote repository from which modules are automatically downloaded (similar to a Maven repository) if a module is referenced that is available in the image. The corresponding functionality could be part of a \texttt{doesNotUnderstand:} handler in \texttt{Repository}, which is the data structure holding references to all modules installed in the image.
+
+There are also ideas for a better integration of the underlying source code management system (e.g., git) in \msname. If \msname is aware of commits, it can not only be used to run applications in certain versions, but also to run applications at a certain commit. Whether the source code management system should be completely reimplemented in \msname or be external and under control of \msname is still open to discussion.
+
 % automatically download dependencies
 % generate list of all dependencies
