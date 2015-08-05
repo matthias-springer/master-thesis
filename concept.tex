@@ -90,14 +90,14 @@ Again, the method \texttt{enclosing} should be avoided in general, but is useful
 
 \subsection{\texttt{outer} Keyword}
 \label{sec:concept_outer}
-This keyword is used to make a message send to classes in the lexical scope. Whenever a message is sent to \texttt{outer}, the message is first interpreted as a send to \texttt{enclosing}. If that message send fails, the message is sent to the second-level enclosing class in the current lexical scope. Eventually, the message is sent to a top-level class, if no other class understands the message. If even that message send is not understood, the selector is looked up in the \texttt{globals} dictionary. If the selector is absent, a \texttt{MessageNotUnderstood} error is raised.
+This keyword is used to make a message sends to classes in the lexical scope. Whenever a message is sent to \texttt{outer}, the message is first interpreted as a send to \texttt{enclosing}. If that message send fails, the message is sent to the second-level enclosing class in the current lexical scope. Eventually, the message is sent to a top-level class, if no other class understands the message. If even that message send is not understood, the selector is looked up in the \texttt{globals} dictionary. If the selector is absent, a \texttt{MessageNotUnderstood} error is raised.
 
 \texttt{outer} is similar to \texttt{super}, with the difference that \texttt{outer} does a horizontal lookup (lexical scope) and \texttt{super} does a vertical lookup (superclass chain). Note, that messages sent to \texttt{outer} are sent to an object different from \texttt{self}.
 
 \paragraph{Example}
-Figure~\ref{fig:concept_outer_1} illustrates how message sends to \texttt{outer} are looked up. Consider, for example, that the method \texttt{foo} in \texttt{A1 B C} calls \texttt{outer bar}. Both \texttt{A1 B C foo} and \texttt{A2 B C foo} call \texttt{A1 class>>bar} in this case, because \texttt{outer} is bound to the lexical scope of the method.
+Figure~\ref{fig:concept_outer_1} illustrates how message sends to \texttt{outer} are looked up. Consider, for example, that the method \texttt{render} in \texttt{SpaceCleanup class>>Level class>>Tile} calls \texttt{outer Resources tileBackground}. The method \texttt{SpaceCleanup class>>Level class>>Tile>>render} as well as the method \texttt{UberSpaceCleanup class>> Level class>>Tile>>render} call \texttt{SpaceCleanup Resources tileBackground} in this case, because \texttt{outer} is bound to the lexical scope of the method.
 
-Figure~\ref{fig:concept_outer_2} shows why it is important that \texttt{outer} is bound to the lexical scope. In this example, \texttt{D B2} is a subclass of \texttt{A B1}. If the \texttt{outer} lookup simply traversed the chain of enclosing classes of the (late bound) receiver class, i.e., first lookup in \texttt{self enclosing}, then \texttt{self enclosing enclosing}, etc., the message send of \texttt{bar} would fail in \texttt{D B2 C foo}. As another consequence, a nested class might then no longer be able to access a class defined in an enclosing class if the nested class is subclassed and nested in a different enclosing class, since classes are accessed using message sends.
+Figure~\ref{fig:concept_outer_2} shows why it is important that \texttt{outer} is bound to the lexical scope. In this example, \texttt{SpaceCleanupTest DummyLevel} is a subclass of \texttt{SpaceCleanup Level}. If the \texttt{outer} lookup simply traversed the chain of enclosing classes of the (late bound) receiver class, i.e., first lookup in \texttt{self enclosing}, then \texttt{self enclosing enclosing}, etc., the message send of \texttt{Resources} would fail in \texttt{SpaceCleanupTest class>>DummyLevel class>>Tile>>render}, because \texttt{SpaceCleanupTest} does not understand \texttt{Resources}.
 
 \begin{figure}[!htp]
 \begin{subfigure}[b]{\textwidth}
@@ -137,21 +137,26 @@ In \msname, references to globals are in fact message sends with \texttt{scope} 
 
 Whenever code references an identifier that is not a temporary variable, not an instance variable, and not a \emph{special} object/keyword\footnote{\texttt{self}, \texttt{super}, \texttt{thisContext}, \texttt{scope}, \texttt{outer}, \texttt{enclosing}}, the compiler replaces that identifier with a message send to \texttt{scope}.
 
-Consider, for example, that we want to reference class \texttt{A B} within \texttt{A class>>B class>>C>>bar} in Figure~\ref{fig:concept_nested_notation}. Either one of the following two statements works in this case.
+Consider, for example, that we want to reference class \texttt{SpaceCleanup Resources} within \texttt{SpaceCleanup class>>Level class>>Tile>>render} in Figure~\ref{fig:concept_nested_notation}. Either one of the following two statements works in this case.
 
 \begin{itemize}
-	\item \texttt{A B.}
-	\item \texttt{enclosing.}
-	\item \texttt{enclosing enclosing B.}
-	\item \texttt{outer B.}
-	\item \texttt{scope B.}
-	\item \texttt{B.}
+	\item \texttt{SpaceCleanup Resources.}
+	\item \texttt{enclosing enclosing Resources.}
+	\item \texttt{outer Resources.}
+	\item \texttt{scope Resources.}
+	\item \texttt{Resources.}
 \end{itemize}
 
-In this example, we used the implicit \texttt{scope} receiver for class lookup, which is in our opinion the most useful case. However, any unary method in \texttt{self}, the lexical scope, or the superclass hierarchy can in fact be looked up this way. One can argue that this is bad practice and should be forbidden for methods that are not class generator methods. However, it is allowed in Newspeak and other programming languages like Java, and seems to work well. Note, that only unary messages can have an implicit \texttt{scope} receiver, since we would have to change the Smalltalk syntax, otherwise.
+In this example, we used the implicit \texttt{scope} receiver for class lookup, which is in our opinion the most useful case. However, any unary method in \texttt{self}, the lexical scope, or the superclass hierarchy can be looked up this way. We think that this is bad practice and should be used only for class generator methods\footnote{It might be forbidden in future versions of \msname.}. It is allowed in Newspeak and other programming languages like Java, but these programming languages support implicit receivers by default. In Smalltalk, this is not the case and looks \emph{unfamiliar}. Classes are, however, just globals in Smalltalk and we emulate the notation for accessing them with an implicit \texttt{scope} receiver in \msname. 
+
+Note, that only unary messages can have an implicit \texttt{scope} receiver, since we would have to change the Smalltalk syntax, otherwise.
 
 \section{Parameterized Classes}
 In \msname, classes are accessed using message sends. Since messages can have parameters, it seems natural to have parameterized class accessor methods, and, therefore, parameterized classes. All examples shown in the previous sections use unparameterized classes, i.e., class generator methods are always unary. Class generator methods can, however, also have binary selectors or selectors with a higher arity. For memory conservation reasons, these classes are then no longer cached.
+
+Parameterized classes can be used to make modules externally configurable or to implement mixins. We will present some conrete use cases in Section~\ref{sec:usecases}.
+
+The arguments passed to a parameterized class generator method are considered when a message is sent to \texttt{enclosing}. At first, the system tries to send the message to the enclosing class. If that fails, \msname checks if the selector corresponds to one of the parameter names in the enclosing class' class generator method.
 
 \begin{wrapfigure}{l}{0.5\textwidth}
 	\includegraphics[scale=0.75]{nested_notation_params.pdf}
@@ -159,10 +164,6 @@ In \msname, classes are accessed using message sends. Since messages can have pa
 	\caption[Example: Parameterized classes]{Example: Parameterized classes. A class can have parameters accessible with message sends to \texttt{enclosing}.}
 	\label{fig:concept_param_classes}
 \end{wrapfigure}
-
-Parameterized classes can be used to make modules externally configurable or to implement mixins. We will present some conrete use cases in Section~\ref{sec:usecases}.
-
-The arguments passed to a parameterized class generator method are considered when a message is sent to \texttt{enclosing}. At first, the system tries to send the message to the enclosing class. If that fails, \msname checks if the selector corresponds to one of the parameter names in the enclosing class' class generator method.
 
 Consider, for example, that method \texttt{A: class>>B: class>>C: class>>foo} in Figure~\ref{fig:concept_param_classes} contains the following statements.
 \begin{itemize}
