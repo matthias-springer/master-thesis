@@ -8,7 +8,7 @@ In pure Smalltalk, classes are the highest level of modular units. Classes are f
 Smalltalk is, as most object-oriented and class-based programming languages, amenable to well-established software design patterns~\cite{Gamma:1995:DPE:186897}, making it easier to write maintainable and understandable code.
 
 \section{Duplicate Class Names}
-In Squeak, there can only be only one class with a certain name. Whenever the programmer tries to add another class with the same name, a conflict occurs. When source code is loaded into the system with the Monticello source control system or manually, the system asks the programmer if the already existing class should be replaced. As a workaround, it is good practice to add unique namespace prefixes to all class names within an application. 
+In Squeak, there can be only one class with a certain name. Whenever the programmer tries to add another class with the same name, a conflict occurs. When source code is loaded into the system with the Monticello source control system or manually, the system asks the programmer if the already existing class should be replaced. As a workaround, it is good practice to add unique namespace prefixes to all class names within an application. 
 
 Squeak has packages~\cite{Nierstrasz:2009:SE:1816759}, but these are not used as namespaces. Their purpose is to make it easier to find existing classes (like method protocols). They are also used as deployment units. The programmer does usually not load single classes into the system. Instead, packages (groups of classes) are loaded. 
 
@@ -40,14 +40,14 @@ Squeak environments provide a way to have multiple classes with the same name in
 .2 \textit{BroView}.
 .2 BroWelcomeView.
 }
-\caption[Breakout class structure]{Breakout class structure. All classes have the \texttt{Bro} namespace prefix and are contained in the package \texttt{BroBreakout}.}
+\caption[Example: Breakout class structure]{Example: Breakout class structure. All classes have the \texttt{Bro} namespace prefix and are contained in the package \texttt{BroBreakout}.}
 \label{fig:conc_breakout}
 \end{figure}
 
 Consider the game Breakout (Figure~\ref{fig:conc_breakout}, see also Section~\ref{sec:usecase_hierach_decomp}). This application uses \texttt{Bro} as a prefix for all classes. If we would not use namespace prefixes, generic class names like \texttt{Block} or \texttt{Ball} would be likely to collide with other classes. On the other hand, if all application and library developers adhere to this convention, it is unlikely that class name clashes occur.
 
 \section{Dependency Managment}
-Dependency management describes the task of keeping track of dependencies and ensuring that required dependencies are available within the application in question. We distinguish between two cases of dependency management: internal dependency management, i.e., the application specifies all dependencies, and external dependency managment (\emph{external configuration}), i.e., user of the application specifies dependencies. But before managing dependencies, we need a versioning concept that allows us to represent library versions in an image.
+Dependency management describes the task of keeping track of dependencies and ensuring that required dependencies are available within the application/library in question. We distinguish between two cases of dependency management: internal dependency management, i.e., the application specifies all dependencies, and external dependency managment (\emph{external configuration}), i.e., users/clients of the application specify dependencies. But before managing dependencies, we need a versioning concept that allows us to represent library versions in an image.
 
 \paragraph{Versioning}
 There are situations when it is useful to have multiple versions of the same library in one image; for example, if there are two different applications installed and both require the same library, but in different versions. Old versions of a library might have bugs that an application has to work around. An application might then not work with a newer library, where the bug is fixed. Furthermore, the public API of a library might have changed with new versions, especially if it is a new major version.
@@ -55,21 +55,21 @@ There are situations when it is useful to have multiple versions of the same lib
 Therefore, we need a versioning mechanism in \msname, that helps us storing and referencing different versions of the same application or library in one image. Part of this mechanism must be a way to develop new library versions, and a mechanism to reference a certain version.
 
 \paragraph{Internal Dependency Management}
-In this case, every application or library specifies itself which dependencies (and their versions) it depends on. The application effectively maintains the list of dependencies itself. Consequently, the application is coupled to its dependencies and cannot be used with different versions or implementations without changing its source code.
+In this case, every application or library specifies itself which dependencies (and their versions) it depends on. The application effectively maintains the list of dependencies itself. Consequently, the application is coupled with its dependencies and cannot be used with different versions or implementations without changing its source code.
 
-A form of internal dependency managment is \emph{dependency injection}, a mechanism that is heavily used in the Java world~\cite{Prasanna:2009:DI:1795686}. What a class specifies is that it requires some dependency implementing a certain interface, but not what exact dependency it is or in what version. Dependency injection is also known as \emph{inversion of control}~\cite{fowlerioc}, because it inverts the control of dependencies: it is shifted from the classes using a dependency to the \emph{injector}, a component that is usually part of the application and knows about all dependencies. The benefit of this approach is that all dependencies are managed at a central position in the application.
+A form of internal dependency managment is \emph{dependency injection}, a mechanism that is heavily used in the Java world~\cite{Prasanna:2009:DI:1795686}. What a class specifies is that it requires \emph{some} dependency implementing a certain interface, but not what exact dependency it is or in what version. Dependency injection is also known as \emph{inversion of control}~\cite{fowlerioc}, because it inverts the control of dependencies: it is shifted from the classes using a dependency to the \emph{injector}, a component that is usually part of the application and knows about all dependencies. The benefit of this approach is that all dependencies are managed at a central position in the application.
 
 \paragraph{External Configuration}
-In this case, the dependency management is delegated to the client/user of an application or library. What the application specifies is that is requires some dependency implementing a certain interface, but not what exact dependency it is or in what version. Conrete dependencies are provided by the client. External configuration is useful for dependencies with variation points, i.e., modules that can be used with different dependencies, based on the use case. For example, an application might want to use a graph library with an adjacency list instead of an adjacency matrix data structure, if it operates on sparse graphs; both implement the same interface. Another example is an image editing library that needs some dependency for exporting images to the file system, but it is up to the client to decide which file format to use. 
+In this case, the dependency management is delegated to the client/user of an application or library. What the application specifies is that it requires some dependency implementing a certain interface, but not what exact dependency it is or in what version. Conrete dependencies are provided by the client. External configuration is useful for dependencies with variation points, i.e., modules that can be used with different dependencies, based on the use case. For example, an application might want to use a graph library with an adjacency list instead of an adjacency matrix data structure, if it operates on sparse graphs; both implement the same interface. Another example is an image editing library that needs \emph{some} dependency for exporting images to the file system, but it is up to the client to decide which file format to use. 
 
-External configuration is beneficial for modularity, because it supports loose coupling of application and dependencies. This, in turn, promotes understandability, maintainablity, and exchangability (code reuse), because an application cannot rely on implementation details of a loosely bound dependency.
+External configuration is beneficial for modularity, because it supports loose coupling of applications and dependencies. This, in turn, promotes understandability, maintainablity, and exchangability (code reuse), because an application cannot rely on implementation details of a loosely bound dependency.
 
 \paragraph{Dependency Management in Squeak}
 In Squeak, there can currently only be one version of a library or application installed at a time. Monticello is used as a source code management system and loads new versions of the source code into an image. Metacello is a package management system (see Section~\ref{sec:rel_metacello}), similar to Maven in Java. Every Metacello package has a configuration class containing a list of external dependencies and internal packages to load for every version, along with the location of an external repository where the packages should be loaded from~\cite{metacellodraft}.
 
 External configuration can be simulated in Smalltalk by writing class constructors that accept other dependencies as parameters. These dependencies should then be stored in instance variables and only be accessed using these instance variables. However, this technique has two pitfalls. Firstly, dependencies have to be forwarded to all other classes, resulting in boilerplate code. Secondly, only instance methods can benefit from external configuration, because class methods are shared among instances (configurations) of the class and do not have access to instance variables.
 
-\msname needs a structured way to reference dependencies. The source code should not be filled with references to external dependencies. It should be easy to replace one dependency with another one or to change the version number of a dependent module.
+\msname needs a structured way to reference dependencies. The source code should not be filled with references to external dependencies. It should be easy to replace one dependency with another one or to change the version number of a dependent module. Furthermore, running two applications requiring he same library in different versions in one image should not be a problem.
 
 \section{Hierarchical Decomposition}
 \label{sec:problem_hier_decomp}
@@ -146,7 +146,7 @@ Consider the game SpaceCleanup, which is a simple bomberman clone (Figure~\ref{f
 .2 ScuControls.
 .2 ScuGameInformation.
 }
-\caption[SpaceCleanup class organization]{SpaceCleanup class organization. All classes have the \texttt{Scu} namespace prefix and are grouped in five packages, according to their responsibilities.}
+\caption[Example: SpaceCleanup class organization]{Example: SpaceCleanup class organization. All classes have the \texttt{Scu} namespace prefix and are grouped in five packages, according to their responsibilities.}
 \label{fig:prob_space_cleanup_org}
 \end{figure}
 
