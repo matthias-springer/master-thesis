@@ -9,5 +9,32 @@ However, these benefits come at a price. Even though Newspeak evolved out of Squ
 
 In contrast, \msname's class browser was designed to look similar to Squeak's system browser, so that it is easy to use for Squeak developers. We tried to limit the number of new concepts, such that code written in \msname should look familiar to Smalltalk developers. For example, there is no new syntax or user interface element for defining classes and instance variables. Instead, nested classes are defined through class generator methods which appear as and are in fact Smalltalk methods. We think that \msname exhibits a good balance between modularity and usability. After all, the goal of this project was not to implement a new modular programming language but to bring modularity concepts to Squeak.
 
+\section{Modularity in \msname}
+In Section~\ref{sec:problem}, we presented three modularity problems in Squeak. In Matriona, we addressed these deficiencies as follows.
+
+\begin{itemize}
+	\item \emph{Duplicate Class Names:} Classes can be nested in Matriona, establishing a hierarchical namespace. Classes nested in different enclosing classes are allowed to have the same name and can coexist.
+	\item \emph{Dependency Management:} Parameterized classes allow for a form a external configuration, where the user/client of a class can specify which implementation to use. Multiple versions of the same module can be loaded and used at the same time by making versioning information part of the hierarchical namespace, effectively solving the problem of versioning conflicts.
+	\item \emph{Hierarchical Decomposition:} \msname's hierarchical namespace makes it possible to reflect modular decomposition in a way that is more than just one level deep (in comparison to Smalltalk packages). In addition, by defining a new lexical scope with every level of nesting, classes can have the same name as long as they are nested in different classes, making project prefixes obsolete, which supports readability of the code.
+\end{itemize}
+
+We claim that \msname is a modular with respect to Meyer's modularity requirements~\cite{myers1978composite} (see Section~\ref{sec:meyermod}).
+\begin{itemize}
+	\item \emph{Decomposability:} Nested classes make it possible to delegate responsibilites to nested classes, whose only purpose can be to serve their enclosing classes.
+	\item \emph{Composability:} Nested classes are first-class object, making it possible to pass \emph{class trees} around. As in any object-oriented programming language, composition of objects can be used to create more complex artifacts. Mixins are a form of code reuse and facilitate modular composability, as they can be used to encapsulate  behavior and can be applied to any class.
+	\item \emph{Understandability:} Nested classes promote understandability if modular decomposition is applied properly. It is then easier to find a certain piece of functionality in the code, by using the nested class hierarchy as a decision graph. Nested classes can also be used to hide low-level or implementation-specific code from the reader.
+	\item \emph{Continuity:} By encapsulating behavior common to multiple classes in a mixin, only that mixin has to be modified when changing the behavior in question.
+	\item \emph{Protection:} \msname does not introduce any new features promoting modular protection. However, external configuration of classes encourages the programmer to make as few assumptions about concrete implementations of dependencies as possible. Whenever implementation-specific behavior of dependencies changes, the class is less likely to malfunction.
+\end{itemize}
+
+\newpage
+
+We think that \msname is a module system in the Smalltalk spirit with respect to Dan Ingalls' \emph{Design Principles Behind Smalltalk}~\cite{Inga81a} (see Section~\ref{sec:intro_squeak_prog}) as follows.
+\begin{itemize}
+	\item \emph{Personal Mastery:} Nested classes are the only new concept in \msname, making it easy to learn how to use \msname. In addition, we claim that the hierarchical namespace established through class nesting makes it easier to write code that is understandable (\emph{comprehensible}) for a single individual.
+	\item \emph{Factoring:} The concept of factoring goes hand in hand with Meyer's definition of modular composability and is supported through object-oriented composition and mixins.
+	\item \emph{Modularity:} In our opinion, \msname is modular with respect to Meyer's modularity requirements as described above.
+	\item \emph{Good Design:} The single fundamental concept behind \msname is class nesting. Parameterized classes and mixins evolve out of class nesting in a natural way.
+\end{itemize}
 
 %comparison with Newspeak: many ideas taken from it, but too complex
