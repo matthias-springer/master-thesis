@@ -170,7 +170,7 @@ As an example, we took two simple computer games written in Squeak: SpaceCleanup
     \includegraphics[width=\textwidth]{screen_breakout.jpeg}
     \caption{Breakout}
 \end{subfigure}
-\caption[Screenshots of SpaceCleanup and Breakout]{Screenshots of SpaceCleanup and Breakout. These games are implemented in Squeak and serve as an example for hierarchical decomposition.}
+\caption[Screenshots: SpaceCleanup and Breakout]{Screenshots of SpaceCleanup and Breakout. These games are implemented in Squeak and serve as an example for hierarchical decomposition.}
 \label{fig:usecase_games}
 \end{figure}
 
@@ -275,7 +275,7 @@ Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup
 \caption{Original project structure}
 \label{fig:usecase_sc_origi_fig}
 \end{subfigure}
-\caption{SpaceCleanup game implementation with/without hierarchical decomposition}
+\caption[Example: Hierarchical decomposition of SpaceCleanup]{Example: Hierarchical decomposition. SpaceCleanup game implementation with/without hierarchical decomposition.}
 \label{fig:usecase_sc_space}
 \end{figure}
 
@@ -337,7 +337,7 @@ Figure~\ref{fig:usecase_breakout_game} shows the original source code of Breakou
 }
 \caption{Original project structure}
 \end{subfigure}
-\caption{Breakout game implementation with/without hierarchical decomposition}
+\caption[Example: Hierarchical decomposition of Breakout]{Example: Hierarchical decomposition. Breakout game implementation with/without hierarchical decomposition.}
 \label{fig:usecase_breakout_game}
 \end{figure}
 
@@ -357,7 +357,7 @@ Figure~\ref{fig:concept_mixins} shows an example of parameterized classes and ho
 \begin{figure}[!htp]
     \centering
     \includegraphics[scale=0.75]{nested_mixins.pdf}
-    \caption{Implementation of Mixins with Nested Classes}
+    \caption[Implementation of Mixins]{Implementation of Mixins. A mixin is a parameterized class, whose class generator method takes a base class and returns a subclass of the base class.}
     \label{fig:concept_mixins}
 \end{figure}
 
@@ -378,7 +378,7 @@ Both problems can be solved by wrapping the mixin in an unparameterized class an
 <@\textbf{Class>><< aMixin}@>
     ^ aMixin Mixin: self
 \end{lstlisting}
-\caption{Helper method on \texttt{Class} for unparameterized mixin wrapper classes}
+\caption[Helper method for unparameterized class generator pattern]{Helper method on \texttt{Class} for unparameterized mixin wrapper classes}
 \label{fig:usecase_class_lele}
 \end{figure}
 
@@ -421,7 +421,7 @@ Figure~\ref{fig:usecase_unparam_class_gen} shows two mixins and a base class: \t
 \end{lstlisting}
 \caption{Definition and application of mixins}
 \end{subfigure}
-\caption{Unparameterized class generator pattern}
+\caption[Example: Unparameterized class generator pattern]{Example: Unparameterized class generator pattern. \texttt{CollectionLogic} and \texttt{CollectionFilter} are unparameterized class generators, i.e. mixins that can be applied using the \texttt{<<} method.}
 \label{fig:usecase_unparam_class_gen}
 \end{figure}
 
@@ -451,7 +451,7 @@ Note, that the programmer can already write arbitrary code at the point where th
 	\includegraphics[scale=1]{abstract_mixin_classgen.pdf}
 	\caption{Mixin wrapper base class}
 \end{subfigure}
-\caption{Implementation of pre-incude hooks and post-include hooks for mixins}
+\caption[Implementation of mixin include hooks]{Implementation of pre-include hooks and post-include hooks for mixins}
 \label{fig:usecase_prepostincl}
 \end{figure}
 
@@ -553,7 +553,7 @@ Consider, for example, that we want to add a method \texttt{asString} to the top
     ^ String streamContents: [ :stream |
         self do: [ :each | stream nextPutAll: each asString ] ]
 \end{lstlisting}
-\caption{Extension methods using nested classes}
+\caption[Example: Extension methods using nested classes]{Example: Extension methods using nested classes. \texttt{FullCollection} is an alias to an already existing class which is extended when the alias' class accessor method is invoked for the first time.}
 \label{fig:use_ext_meth}
 \end{figure}
 
