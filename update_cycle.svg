@@ -31,7 +31,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="update_cycle.pdf">
+   sodipodi:docname="update_cycle.svg">
   <metadata
      id="metadata397">
     <rdf:RDF>
@@ -40,7 +40,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,17 +53,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1411"
-     inkscape:window-height="914"
+     inkscape:window-width="1493"
+     inkscape:window-height="986"
      id="namedview395"
      showgrid="true"
-     inkscape:zoom="1.0332954"
-     inkscape:cx="186.329"
-     inkscape:cy="334.0068"
+     inkscape:zoom="2.0665908"
+     inkscape:cx="200.36177"
+     inkscape:cy="527.56229"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg2">
+     inkscape:current-layer="g4577">
     <inkscape:grid
        type="xygrid"
        id="grid3580" />
@@ -414,7 +414,10 @@
        clip-path="url(#clipPath10)"
        y="26"
        xml:space="preserve"
-       x="8">cls := invoke class generator</text>
+       x="8"
+       transform="translate(-2.5371172,0)"><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:TeX Gyre Cursor;-inkscape-font-specification:TeX Gyre Cursor"
+   id="tspan3166">cls</tspan> := invoke class generator</text>
     <text
        style="stroke:none"
        id="text127"
@@ -489,7 +492,10 @@
        clip-path="url(#clipPath10)"
        y="26"
        xml:space="preserve"
-       x="11">becomeForward: + migrate</text>
+       x="11"
+       transform="translate(-3.5779141,0)"><tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:TeX Gyre Cursor;-inkscape-font-specification:TeX Gyre Cursor"
+   id="tspan3168">becomeForward:</tspan> + migrate</text>
     <text
        style="stroke:none"
        id="text145"
@@ -545,7 +551,10 @@
        clip-path="url(#clipPath10)"
        y="34"
        xml:space="preserve"
-       x="6">remove cls from other caches</text>
+       x="6"
+       transform="translate(-1.8860781,0)">remove <tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:TeX Gyre Cursor;-inkscape-font-specification:TeX Gyre Cursor"
+   id="tspan3170">cls</tspan> from other caches</text>
   </g>
   <g
      style="font-size:11px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;font-family:sans-serif"
@@ -1188,15 +1197,15 @@
        clip-path="url(#clipPath18)"
        id="text4579"
        style="stroke:none"
-       transform="translate(110,-45)">yes</text>
+       transform="translate(110,-45)">yes (definition)</text>
     <text
-       transform="translate(375,-45)"
+       transform="translate(315,-45)"
        style="stroke:none"
        id="text4581"
        clip-path="url(#clipPath18)"
        y="13"
        xml:space="preserve"
-       x="11">no</text>
+       x="11">no (extension)</text>
   </g>
   <g
      font-size="11"
