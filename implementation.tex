@@ -160,7 +160,6 @@ During compilation, all references to \texttt{enclosing} are bound to the enclos
 During compilation, all references to \texttt{outer} are bound to an instance of \texttt{LexicalScope}. This class is a subclass of \texttt{ProtoObject}, holds references to all enclosing classes in the lexical scope, and contains a \texttt{doesNotUnderstand:} handler, that forwards messages to the enclosing classes. If the enclosing class does not understand the message, the message is forwarded to the next enclosing class\footnote{The lexical scope of a method can only be determined by analyzing the structure of the meta model. For more details, see Section~\ref{sec:app_lexical_scope}.}. If at some point, a top-level class without an enclosing class is reached, the handler looks for an entry in the \texttt{globals} dictionary with the message's selector.
 
 \afterpage{%
-
 \begin{figure}[!htp]
 \vspace{50pt}
 \begin{subfigure}[b]{\textwidth}
@@ -169,7 +168,6 @@ During compilation, all references to \texttt{outer} are bound to an instance of
 	\caption{\texttt{LexicalScope} for \texttt{outer} keyword}
 	\label{impl:lex_outer}
 \end{subfigure}
-
 \vspace{35pt}
 
 \begin{subfigure}[b]{\textwidth}
@@ -184,23 +182,23 @@ During compilation, all references to \texttt{outer} are bound to an instance of
 \clearpage
 }
 
-As an example, let us assume that we have classes nested as shown in Figure~\ref{fig:concept_nested_notation} and that all following message sends to \texttt{outer} happen in \texttt{A class>>B class>>C class>>m4}. See Figure~\ref{impl:lex_outer} for a visualization of the lookup.
+As an example, let us assume that we have classes nested as shown in Figure~\ref{fig:concept_nested_notation} and that all following message sends to \texttt{outer} happen in some method of \texttt{SpaceCleanup class>>Level class>>Tile}. See Figure~\ref{impl:lex_outer} for a visualization of the lookup.
 \begin{itemize}
-	\item \texttt{outer foo}: lookup in \texttt{enclosing at: 1} (class \texttt{A B}) succeeds.
-	\item \texttt{outer B}: lookup in \texttt{enclosing at: 1} fails, but lookup in \texttt{enclosing at: 2} (class \texttt{A}) succeeds.
-	\item \texttt{outer A}: lookup in \texttt{enclosing at: 1} and \texttt{enclosing at: 2} fails, but \texttt{A} is present in the \texttt{globals} dictionary.
+	\item \texttt{outer Tile}: lookup in \texttt{enclosing at: 1} (class \texttt{SpaceCleanup Level}) succeeds.
+	\item \texttt{outer open}: lookup in \texttt{enclosing at: 1} fails, but lookup in \texttt{enclosing at: 2} (class \texttt{SpaceCleanup}) succeeds.
+	\item \texttt{outer SpaceCleanup}: lookup in \texttt{enclosing at: 1} and \texttt{enclosing at: 2} fails, but \texttt{SpaceCleanup} is present in the \texttt{globals} dictionary.
 	\item \texttt{outer Object}: same as before. All classes outside of our system are also present in the \texttt{globals} dictionary.
-	\item \texttt{outer D}: lookup fails and raises a \texttt{MessageNotUnderstood} error.
+	\item \texttt{outer NoSuchClass}: lookup fails and raises a \texttt{MessageNotUnderstood} error.
 \end{itemize}
 
 \paragraph{Implementation of \texttt{scope}}
 References to \texttt{scope} cannot be replaced by a constant literal during compile time. This is because the lookup involves a lookup in \texttt{self}\footnote{If \texttt{scope} is used in an instance method, the lookup starts at \texttt{self class}.}. Looking up methods in the class of the method under compilation is not sufficient, because that method might be overridden in a subclass\footnote{\texttt{self} sends are late bound.}. Therefore, we have to construct a \texttt{LexicalScope} object at runtime (instead of compile time) and pass it two objects: the array of all enclosing classes (contained in \texttt{outer}) and \texttt{self}.
 
-Figure~\ref{impl:lex_scope} shows how the \texttt{scope} lookup works in a slightly modified example. Just as in the previous example, we assume that all message sends happen in \texttt{A class>>B class>>C class>>m4}. However, \texttt{m4} is invoked on class \texttt{D}, which is a subclass of class \texttt{A B C}. Therefore, \texttt{self} is bound to \texttt{D}.
+Figure~\ref{impl:lex_scope} shows how the \texttt{scope} lookup works in a slightly modified example. Just as in the previous example, we assume that all message sends happen in some method of \texttt{SpaceCleanup class>>Level class>>Tile}. However, the method is invoked on class \texttt{UberTile}, which is a subclass of class \texttt{SpaceCleanup class>>Level class>>Tile}. Therefore, \texttt{self} is bound to \texttt{UberTile}.
 
 \begin{itemize}
-	\item \texttt{scope bar}: lookup in \texttt{self} succeeds: method \texttt{D class>>bar}.
-	\item \texttt{scope foo}: lookup in \texttt{self} fails, but lookup in \texttt{enclosing at: 1} (class \texttt{A B}) succeeds.
+	\item \texttt{scope new}: lookup in \texttt{self}/\texttt{self class} (superclass) succeeds: \\ method \texttt{Behavior class>>new} (creates a new instance of \texttt{UberTile}).
+	\item \texttt{scope Tile}: lookup in \texttt{self} fails, but lookup in \texttt{enclosing at: 1} (class \texttt{SpaceCleanup Level}) succeeds.
 	\item The lookup for all other examples listed for \texttt{outer} (previous paragraph) yields the same result in this example.
 \end{itemize}
 

@@ -60,6 +60,19 @@ Python supports inner classes, but only for readability and understandability re
 
 Whenever a top-level class is defined and there is already a class with that name in the same module, the new class replaces the existing one.
 
+\paragraph{BETA}
+BETA is a statically-typed ``programming language in the Simula tradition''~\cite{LehrmannMadsen:1993:OPB:221048, Kristensen:2007:WWB:1238844.1238854}. BETA does not distinguish between methods and classes, but provides a single abstraction mechanism (\emph{unification}), called the \emph{pattern}. Every pattern has a \emph{object descriptor}, which consists of a list of attribute declarations, optionally a \emph{do-part}, optionally an \emph{enter-part}, and optionally an \emph{exit-part}. 
+
+Patterns can be instantiated, similarly to classes in other programming languages. Instantiated patterns (objects) can be executed, i.e., the do-part is executed. The enter-part serves as a declaration of parameters for the do-part and the exit-part can be used to declare output parameters.
+
+The idea behind unification of classes and methods is that classes can be instantiated, resulting in objects, and methods can be instantiated, resulting in activation records (stack frames).
+
+BETA supports pattern inheritance. In contrast to other programming languages, methods cannot be overwritten in subclasses, but extended. BETA always invokes the base method, which can make an \texttt{inner} call in order to invoke the definition of the subpattern. The rationale behind this design decision is the Liskov substitution principle~\cite{Liskov:1994:BNS:197320.197383}: if the base type is in control of invoking extended behavior, it is easier to ensure that program invariants hold true, even if an instance of a subpattern is used instead of the base pattern. Goldberg et al. argue that both \texttt{super} and \texttt{inner} can be useful in a programming language~\cite{OOPSLA-2004-GoldbergFF}.
+
+In BETA, patterns can be nested. The type of attribute can be either a primitive type (e.g. \texttt{integer}) or another pattern, similarly to class nesting in Newspeak and \msname. Pattern nesting can be used to group patterns that belong together logically~\cite{abstrAndModBETA} and to define interfaces: an interface is a pattern with only virtual attributes. Another pattern can implement that interface by providing a nested pattern which is a subpattern of the interface pattern and extends the interface's nested patterns with concrete implementations~\cite{betaTowardsUnified}.
+
+Nested patterns can be virtual. A virtual pattern can be extended in subpatterns of the enclosing pattern, similarly to subclassing inherited nested classes in \msname. In contrast to \msname, an extended virtual pattern must always be a subtype of the base pattern and cannot be redefined (overwritten)~\cite{madsen1993overview}.
+
 \subsection{Squeak Environments}
 \label{sec:rel_sq_env}
 A Squeak environment is a mapping of symbols to global objects. Squeak environments were introduced with Squeak~4.5~\cite{squeak45notes} and make it possible to have multiple \texttt{globals} dictionaries, effectively establishing namespaces. In fact, \texttt{Smalltalk globals} is an environment. Every class has an \texttt{environment} instance variable determining the environment it belongs to.

@@ -165,7 +165,7 @@ The arguments passed to a parameterized class generator method are considered wh
 	\label{fig:concept_param_classes}
 \end{wrapfigure}
 
-Consider, for example, that method \texttt{A: class>>B: class>>C: class>>foo} in Figure~\ref{fig:concept_param_classes} contains the following statements.
+Consider, for example, that method \texttt{A: class>>B: class>>C: class>>foo} (see Figure~\ref{fig:concept_param_classes}) contains the following statements.
 \begin{itemize}
 	\item \texttt{scope p3}: method lookup succeeds in \texttt{A: class>>B: class>>C:} and returns the class parameter \texttt{p3}.
 	\item \texttt{scope p2}: method lookup succeeds in \texttt{A: class>>B:} and calls the method \texttt{p2}, which shadows the class parameter \texttt{p2}.
