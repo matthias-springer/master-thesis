@@ -39,7 +39,7 @@ Figure~\ref{fig:app_det_lex_scope_algo} shows the algorithm for determining the 
 
     [ <@\textcolor{gray}{currentMetaClassSpec}@> parent isNil ] whileFalse: [
         <@\textcolor{gray}{currentMetaClassSpec}@> := <@\textcolor{gray}{currentMetaClassSpec}@> parent.
-        <@\textcolor{gray}{enclosingClasses}@> add: (<@\textcolor{gray}{currentCls }@> := 
+        <@\textcolor{gray}{enclosingClasses}@> add: (<@\textcolor{gray}{currentCls}@> := 
             (<@\textcolor{gray}{currentMetaClassSpec}@> theClassSpec theMethodSpec 
                 instantiations at: <@\textcolor{gray}{currentCls}@>) first) ].
 
@@ -53,6 +53,24 @@ The next enclosing classes can be found by following the parent relationship and
 
 \section{Traits}
 \label{sec:app_traits}
+In Section~\ref{sec:use_cases_traits}, we gave an overview of how traits can be implemented with nested classes and include hooks, but did not describe how to invoke a trait method within the resolution code of a conflicting method.
+
+In \msname, traits are implemented as mixins, which are wrapped in unparameterized classes (\emph{unparameterized class generator patttern}, see Section~\ref{sec:usecase_classgen}). Figure~\ref{fig:algo_trait_res} shows how trait method can be invoked. The programmer has to call the method \texttt{trait:perform:withArguments:} and has to provide the trait (i.e., the unparameterized class generator), the message symbol, and a collection of arguments. \msname then goes through all superclasses of the receiver, in order to find the mixed-in trait. \texttt{ProtoObject} provides a functionality which can then be used to execute the corresponding \texttt{CompiledMethod} object in the context of \texttt{self}.
+
+\begin{figure}[!htp]
+\begin{lstlisting}
+<@\textbf{Object>>trait:}@> classGenerator <@\textbf{perform:}@> symbol <@\textbf{withArguments:}@> args
+    <@\textcolor{gray}{| trait |}@>
+    <@\textcolor{gray}{trait}@> := self class allSuperclasses detect: [ <@\textcolor{gray}{:cls}@> |
+        <@\textcolor{gray}{cls}@> specification includes: 
+            (classGenerator specification classAt: #Mixin:) ].
+    ^ self withArgs: args executeMethod: <@\textcolor{gray}{trait}@>>>symbol
+\end{lstlisting}
+\caption[Algorithm: Resolving trait conflicts]{Algorithm: Resolving trait conflicts. This method can be used to invoke a method implementation in a specific trait.}
+\label{fig:algo_trait_res}
+\end{figure}
+
+Note, that it is important to lookup the mixed-in trait in the superclass hierarchy of the receiver. Every mixed-in trait (\emph{trait instantiation}) provides the same methods, but whenever instance variables are accessed, the bytecode of two instantiations of the same trait method can differ (see Section~\ref{sec:impl_ch_inst_cl_vars}).
 
 %%% Local Variables: 
 %%% mode: latex

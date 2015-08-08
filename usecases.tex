@@ -527,6 +527,7 @@ The idea of mixins used as composable units of behavior is similar to traits~\ci
 
 
 \section{Traits}
+\label{sec:use_cases_traits}
 Traits are similar to mixins and allow behavior to be shared among multiple classes. They can be implemented with class nesting and parameterized classes. The basic idea is to have a parameterized class for every trait, adding trait methods to the target class, but without subclassing it first. Every trait has a pre-include hook and post-include hook. The pre-include hook creates a set of all selectors for the target class. The post-include hook checks if a method was overwritten when it was applied by comparing the set of selectors with the selectors provided by the inner parameterized class. If that is the case, the trait replaces that method with a method that throws an error message, telling the programmer that the conflict has to be resolved. The method provided by the trait is aliased with a selector containing the trait name. In a resolved method (which overwrites the method that throws the conflict error), the programmer can call aliased trait methods.
 
 The idea of traits is not yet fully fledged out at the moment. This section is meant to give a rough idea of what else could be done with \msname (see Section~\ref{sec:app_traits} for details). The described approach still has a few shortcomings.
