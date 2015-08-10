@@ -24,8 +24,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="228.72586"
+     inkscape:zoom="1.979899"
+     inkscape:cx="165.33879"
      inkscape:cy="129.68419"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -230,14 +230,14 @@
        sodipodi:linespacing="125%"
        id="text3825"
        y="674.36218"
-       x="115.19437"
+       x="108.72922"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:TeX Gyre Schola;-inkscape-font-specification:TeX Gyre Schola"
        xml:space="preserve"><tspan
          style="font-weight:bold;-inkscape-font-specification:TeX Gyre Schola Bold"
          y="674.36218"
-         x="115.19437"
+         x="108.72922"
          id="tspan3827"
-         sodipodi:role="line">Bomb</tspan></text>
+         sodipodi:role="line">Bucket</tspan></text>
     <rect
        y="652.36218"
        x="80"
@@ -264,7 +264,7 @@
     <path
        inkscape:connector-curvature="0"
        id="path3837"
-       d="m 115,677.36218 60,0"
+       d="m 107.5,677.36218 75,0"
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <text
        xml:space="preserve"
