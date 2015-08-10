@@ -1,6 +1,6 @@
 \chapter{Summary}
 \label{sec:summary}
-We presented \msname, a module system for Squeak/Smalltalk. \msname is inspired by Newspeak and based on class nesting. Top-level classes are part Smalltalk globals and nested classes can be accessed by sending the class' name as a message to the enclosing class. Nested classes effectively establish a hierarchical namespace, similar to Java pacakages, Ruby modules, or Newspeak nested classes. In contrast to Newspeak, \msname's namespace is global. In Newspeak, however, every module has its own separate namespace and can access dependencies only through a \texttt{platform} object.
+We presented \msname, a module system for Squeak/Smalltalk. \msname is inspired by Newspeak and based on class nesting. Top-level classes are Smalltalk globals and nested classes can be accessed by sending the class' name as a message to the enclosing class. Nested classes effectively establish a hierarchical namespace, similar to Java pacakages, Ruby modules, or Newspeak nested classes. In contrast to Newspeak, \msname's namespace is global. In Newspeak, however, every module has its own separate namespace and can access dependencies only through a \texttt{platform} object.
 
 \section{Modularity in Newspeak}
 Arguably, Newspeak is even more modular than \msname. For example, it does not have a global namespace, which is a form of global state. Furthermore, Newspeak has a concept of method visibility, making it possible to enforce an interface by declaring only API methods as public methods. 
@@ -13,15 +13,15 @@ In contrast, \msname's class browser was designed to look similar to Squeak's sy
 In Section~\ref{sec:problem}, we presented three modularity problems in Squeak. In Matriona, we addressed these deficiencies as follows.
 
 \begin{itemize}
-	\item \emph{Duplicate Class Names:} Classes can be nested in Matriona, establishing a hierarchical namespace. Classes nested in different enclosing classes are allowed to have the same name and can coexist.
+	\item \emph{Duplicate Class Names:} Classes can be nested in Matriona, establishing a hierarchical namespace. Classes nested in different enclosing classes are allowed to have the same name and can coexist, making project prefixes obsolete, which supports readability of the code.
 	\item \emph{Dependency Management:} Parameterized classes allow for a form a external configuration, where the user/client of a class can specify which implementation to use. Multiple versions of the same module can be loaded and used at the same time by making versioning information part of the hierarchical namespace, effectively solving the problem of versioning conflicts.
-	\item \emph{Hierarchical Decomposition:} \msname's hierarchical namespace makes it possible to reflect modular decomposition in a way that is more than just one level deep (in comparison to Smalltalk packages). In addition, by defining a new lexical scope with every level of nesting, classes can have the same name as long as they are nested in different classes, making project prefixes obsolete, which supports readability of the code.
+	\item \emph{Hierarchical Decomposition:} \msname's hierarchical namespace makes it possible to reflect modular decomposition in a way that is more than just one level deep (in comparison to Smalltalk packages).
 \end{itemize}
 
-We claim that \msname is a modular with respect to Meyer's modularity requirements~\cite{myers1978composite} (see Section~\ref{sec:meyermod}).
+We claim that \msname is modular with respect to Meyer's modularity requirements~\cite{myers1978composite} (see Section~\ref{sec:meyermod}).
 \begin{itemize}
 	\item \emph{Decomposability:} Nested classes make it possible to delegate responsibilites to nested classes, whose only purpose can be to serve their enclosing classes.
-	\item \emph{Composability:} Nested classes are first-class object, making it possible to pass \emph{class trees} around. As in any object-oriented programming language, composition of objects can be used to create more complex artifacts. Mixins are a form of code reuse and facilitate modular composability, as they can be used to encapsulate  behavior and can be applied to any class.
+	\item \emph{Composability:} Nested classes are first-class objects, making it possible to pass \emph{class trees} around. As in any object-oriented programming language, composition of objects can be used to create more complex artifacts. Mixins are a form of code reuse and facilitate modular composability, as they can be used to encapsulate  behavior and can be applied to any class.
 	\item \emph{Understandability:} Nested classes promote understandability if modular decomposition is applied properly. It is then easier to find a certain piece of functionality in the code, by using the nested class hierarchy as a decision graph. Nested classes can also be used to hide low-level or implementation-specific code from the reader.
 	\item \emph{Continuity:} By encapsulating behavior common to multiple classes in a mixin, only that mixin has to be modified when changing the behavior in question.
 	\item \emph{Protection:} \msname does not introduce any new features promoting modular protection. However, external configuration of classes encourages the programmer to make as few assumptions about concrete implementations of dependencies as possible. Whenever implementation-specific behavior of dependencies changes, the class is less likely to malfunction.

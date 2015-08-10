@@ -15,7 +15,7 @@ In this section, we describe in more detail how \msname determines the collectio
 \label{fig:app_cls_diagr}
 \end{figure}
 
-Figure~\ref{fig:app_lex_scope} shows the relevant part of the meta model for determining the lexical scope of \texttt{foo}. Every class specification has a reference to its meta class specification and vice versa. For every class specification, there is a corresponding corresponding method specification holding the class cache and the \texttt{instantiations} dictionary which also acts as the argument cache (see Section~\ref{sec:impl_migration}).
+Figure~\ref{fig:app_lex_scope} shows the relevant parts of the meta model for determining the lexical scope of \texttt{foo}. Every class specification has a reference to its meta class specification and vice versa. For every class specification, there is a corresponding corresponding method specification holding the class cache and the \texttt{instantiations} dictionary which also acts as the argument cache (see Section~\ref{sec:impl_migration}).
 
 \begin{figure}[!htp]
 \includegraphics[width=\textwidth]{lexical_scope_app_ex.pdf}
@@ -55,7 +55,7 @@ The next enclosing classes can be found by following the parent relationship and
 \label{sec:app_traits}
 In Section~\ref{sec:use_cases_traits}, we gave an overview of how traits can be implemented with nested classes and include hooks, but did not describe how to invoke a trait method within the resolution code of a conflicting method.
 
-In \msname, traits are implemented as mixins, which are wrapped in unparameterized classes (\emph{unparameterized class generator patttern}, see Section~\ref{sec:usecase_classgen}). Figure~\ref{fig:algo_trait_res} shows how trait method can be invoked. The programmer has to call the method \texttt{trait:perform:withArguments:} and has to provide the trait (i.e., the unparameterized class generator), the message symbol, and a collection of arguments. \msname then goes through all superclasses of the receiver, in order to find the mixed-in trait. \texttt{ProtoObject} provides a functionality which can then be used to execute the corresponding \texttt{CompiledMethod} object in the context of \texttt{self}.
+In \msname, traits are implemented as mixins, which are wrapped in unparameterized classes (\emph{unparameterized class generator pattern}, see Section~\ref{sec:usecase_classgen}). Figure~\ref{fig:algo_trait_res} shows how trait methods can be invoked. The programmer has to call the method \texttt{trait:perform:withArguments:} and has to provide the trait (i.e., the unparameterized class generator), the message symbol, and a collection of arguments. \msname then goes through all superclasses of the receiver, in order to find the mixed-in trait. \texttt{ProtoObject} provides a functionality which can then be used to execute the corresponding \texttt{CompiledMethod} object in the context of \texttt{self}.
 
 \begin{figure}[!htp]
 \begin{lstlisting}
