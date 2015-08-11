@@ -226,20 +226,20 @@ The system does not cache parameterized classes, as this could result in an exce
 	\begin{lstlisting}
 <@\textbf{MyLibrary class>>BaseClass}@>
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
-    " This is the class that serves as 
-      an input for the mixin in this example. "
+    <@\textcolor{gray}{" This is the class that serves as }@>
+      <@\textcolor{gray}{an input for the mixin in this example. "}@>
 	
 
 <@\textbf{MyLibrary class>>CollectionMixin:}@> base
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
-    " This class is uncached because it is parameterized "
+    <@\textcolor{gray}{" This class is uncached because it is parameterized "}@>
 
     ^ base subclass
 
 
 <@\textbf{MyLibrary class>>MyCollection}@>
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
-    " This is the cached mixin application. "
+    <@\textcolor{gray}{" This is the cached mixin application. "}@>
 
     ^ self CollectionMixin: self BaseClass
 \end{lstlisting}
@@ -413,17 +413,18 @@ SqueakSource\footnote{\url{http://www.squeaksource.com/}} used to be a remote re
 
 \begin{figure}[!htp]
 \dirtree{%
-.1 SpaceCleanup.st.
-.1 \textbf{SpaceCleanup}.
-.2 \textbf{instance}.
-.2 \textbf{class}.
-.3 Game.st.
-.3 \textbf{Game}.
-.4 \textbf{instance}.
-.5 initialize.st.
-.5 startGameWithPlayers..st.
-.4 \textbf{class}.
-.4 open.st.
+.1 \textbf{(root directory)}.
+.2 SpaceCleanup.st.
+.2 \textbf{SpaceCleanup}.
+.3 \textbf{instance}.
+.3 \textbf{class}.
+.4 Game.st.
+.4 \textbf{Game}.
+.5 \textbf{instance}.
+.6 initialize.st.
+.6 startGameWithPlayers..st.
+.5 \textbf{class}.
+.5 open.st.
 }
 \caption{Example: Source code export}
 \label{fig:impl_source_export}

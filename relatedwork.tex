@@ -273,23 +273,23 @@ Java generics allow classes and interfaces to be parameterized by one or multipl
 
 \begin{figure}[!htp]
 \begin{lstlisting}
-class Array<T> {
+<@\textbf{class}@> Array<T> {
     T[] storage;
 
-    public List(int size) {
-        storage = /* ??? */;
+    <@\textbf{public}@> List(<@\textbf{int}@> size) {
+        storage = <@\textcolor{gray}{/* ??? */}@>;
     }
 
-    T get(int index) {
-        return storage[index];
+    T get(<@\textbf{int}@> index) {
+        <@\textbf{return}@> storage[index];
     }
 
-    void set(int index, T value) {
+    <@\textbf{void}@> set(<@\textbf{int}@> index, T value) {
         storage[index] = value;
     }
 }
 
-Array<String> arr = new Array<String>(100);
+Array<String> arr = <@\textbf{new}@> Array<String>(100);
 \end{lstlisting}
 \caption[Example: Generic array implementation using Java generics]{Example: Generic array implementation using Java generics. Due to type erasure, it is not obvious, how to allocate an array whose base type is a generic parameter.}
 \label{fig:rel_java_generics}
