@@ -226,22 +226,22 @@ The system does not cache parameterized classes, as this could result in an exce
 	\begin{lstlisting}
 <@\textbf{MyLibrary class>>BaseClass}@>
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
-    <@\textcolor{gray}{" This is the class that serves as }@>
-      <@\textcolor{gray}{an input for the mixin in this example. "}@>
+    <@\textcolor{gray}{\textit{" This is the class that serves as }}@>
+      <@\textcolor{gray}{\textit{an input for the mixin in this example. "}}@>
 	
 
 <@\textbf{MyLibrary class>>CollectionMixin:}@> base
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
-    <@\textcolor{gray}{" This class is uncached because it is parameterized "}@>
+    <@\textcolor{gray}{\textit{" This class is uncached because it is parameterized "}}@>
 
     ^ base subclass
 
 
 <@\textbf{MyLibrary class>>MyCollection}@>
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
-    <@\textcolor{gray}{" This is the cached mixin application. "}@>
+    <@\textcolor{gray}{\textit{" This is the cached mixin application. "}}@>
 
-    ^ self CollectionMixin: self BaseClass
+    ^ <@\textbf{self}@> CollectionMixin: <@\textbf{self}@> BaseClass
 \end{lstlisting}
 \caption[Cached mixin application]{Example: Cached mixin application. The mixin application is uncached, because the mixin is a parameterized class. However, the aliased mixin application \texttt{MyCollection} is cached, because it is an unparameterized class.}
 \label{fig:impl_cached_mixin_application}
@@ -402,6 +402,7 @@ What is still an issue is that the debugger shows slightly different source code
 Whenever the source code is changed in the debugger, the corresponding method specification is changed, causing all instantiations to be updated.
 
 \section{Source Code Management}
+\label{sec:impl_scm_chap}
 Squeak uses Monticello as a source code packaging tool. Monticello can import and export code on a per-package basis. It can supports file system directories, HTTP URLs, and FTP URLs as repositories (i.e., the place where the code is loaded from and stored at). Whenever the programmer wants to get a new version of the source code, two options are available: packages can be loaded which will overwrite all local changes, and packages can be merged which will preserve local changes and only update new methods and classes. In case of merge conflicts, the programmer has to decide which version to load (old method or new method).
 
 SqueakSource\footnote{\url{http://www.squeaksource.com/}} used to be a remote repository for Monticello projects (groups of packages). It is now deprecated and SmalltalkHub\footnote{\url{http://www.smalltalkhub.com/}} is one possible replacement.

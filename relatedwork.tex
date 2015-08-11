@@ -153,9 +153,9 @@ Guice\footnote{\url{https://github.com/google/guice}} is a framework for depende
     <@\textbf{private}@> ImageReader reader;
 
     <@\textbf{public void}@> loadImage(String fileName) {
-        <@\textcolor{gray}{/* ... */}@>
+        <@\textcolor{gray}{\textit{/* ... */}}@>
         Bitmap bitmap = reader.readFile(fileName);
-        <@\textcolor{gray}{/* ... */}@>
+        <@\textcolor{gray}{\textit{/* ... */}}@>
     }
 }
 \end{lstlisting}
@@ -277,7 +277,7 @@ Java generics allow classes and interfaces to be parameterized by one or multipl
     T[] storage;
 
     <@\textbf{public}@> List(<@\textbf{int}@> size) {
-        storage = <@\textcolor{gray}{/* ??? */}@>;
+        storage = <@\textcolor{gray}{\textit{/* ??? */}}@>;
     }
 
     T get(<@\textbf{int}@> index) {

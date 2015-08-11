@@ -66,5 +66,18 @@ Nested classes in \msname can be used to store modules in different versions. Th
 
 There are also ideas for a better integration of the underlying source code management system (e.g., git) in \msname. If \msname is aware of commits, it can not only be used to run applications in certain versions, but also to run applications at a certain commit. Whether the source code management system should be completely reimplemented in \msname or be external and under control of \msname is still open to discussion.
 
+\section{Language-supported Version Control}
+In \msname, different versions of the same module are represented as different nested classes. The same mechanism could be used to integrate revision-based version control systems in Squeak/Smalltalk~\cite{springerniephaus}. Every revision/commit would then be represented by a separate nested class. \msname would ensure that nested classes are created automatically based on the revisions in the underlying version control system. Version control operations (e.g., commits and merges) could be invoked by sending messages to a nested class representing a revision.
+
+\begin{figure}[!htp]
+	\includegraphics[width=0.75\textwidth]{matriona_concept.pdf}
+	\centering
+	\caption[Example: git-based version control with nested classes.]{Example: git-based version control with nested classes. \texttt{WebClient} is a module and every commit in the underlying version control system corresponds to an automatically-generated nested class in \msname.}
+	\label{fig:fut_vers_control_git}
+\end{figure}
+
+Figure~\ref{fig:fut_vers_control_git} shows an example of a module named \texttt{WebClient}. The source code is stored in a git repository. Every commit in git corresponds to a nested class whose name is the SHA-1 hash of the commit. \msname takes care of the synchronization between the repository and the nested classes in the Squeak image. The programmer would always modify the source code in the class \texttt{WorkingCopy} and send a message like \texttt{commit:} to this class in order to perform a commit in the git repository. git tags could be used to provide a versioning scheme that is mirrored in the version control system.
+
+This mechansim would allow the programmer to access any revision in the Squeak image without having to load the source code for a certain revision manually. Furthermore, multiple revisions of the same module could be run at the same time. Having version control in the Squeak image would also reduce the number of tools involved in the software development process and get rid of the conceptual break of leaving the image for committing to a git repository (see Section~\ref{sec:impl_scm_chap}).
 % automatically download dependencies
 % generate list of all dependencies

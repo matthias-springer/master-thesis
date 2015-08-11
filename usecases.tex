@@ -129,18 +129,18 @@ Figure~\ref{fig:use_paintbrush} shows part of the implementation of a simple dra
 <@\textbf{(PaintbrushWith:}@> Matrix <@\textbf{IO:}@> ReaderWriter<@\textbf{) class>>Bitmap class>>}@>
         <@\textbf{load:}@> aFile
     <@\textcolor{Gray}{| instance |}@>
-    <@\textcolor{Gray}{instance}@> := self new.
+    <@\textcolor{Gray}{instance}@> := <@\textbf{self}@> new.
     ReaderWriter 
         readPixelsFrom: aFile
-        do: [ :point :color | <@\textcolor{Gray}{instance}@> setPixel: point color: color ].
+        do: [ <@\textcolor{gray}{:point :color}@> | <@\textcolor{Gray}{instance}@> setPixel: <@\textcolor{gray}{point}@> color: <@\textcolor{gray}{color}@> ].
     ^ <@\textcolor{Gray}{instance}@>
 
 <@\textbf{(PaintbrushWith:}@> Matrix <@\textbf{IO:}@> ReaderWriter<@\textbf{) class>>Bitmap>>save:}@> aFile
     <@\textcolor{Gray}{| writer |}@>
     <@\textcolor{Gray}{writer}@> := ReaderWriter BitmapWriter for: aFile.
-    1 to: pixels columns do: [ :x |
-        1 to: pixels rows do: [ :y | 
-            <@\textcolor{Gray}{writer}@> writePixel: x@y color: (pixels at: x@y) ] ].
+    1 to: pixels columns do: [ <@\textcolor{gray}{:x}@> |
+        1 to: pixels rows do: [ <@\textcolor{gray}{:y}@> | 
+            <@\textcolor{Gray}{writer}@> writePixel: <@\textcolor{gray}{x}@>@<@\textcolor{gray}{y}@> color: (pixels at: <@\textcolor{gray}{x}@>@<@\textcolor{gray}{y}@>) ] ].
     <@\textcolor{Gray}{writer}@> close.
 \end{lstlisting}
 \caption{Source code for configurable application}
@@ -376,7 +376,7 @@ Both problems can be solved by wrapping the mixin in an unparameterized class an
 \begin{figure}[!htp]
 \begin{lstlisting}
 <@\textbf{Class>><< aMixin}@>
-    ^ aMixin Mixin: self
+    ^ aMixin Mixin: <@\textbf{self}@>
 \end{lstlisting}
 \caption[Helper method for unparameterized class generator pattern]{Helper method on \texttt{Class} for unparameterized mixin wrapper classes}
 \label{fig:usecase_class_lele}
@@ -401,19 +401,19 @@ Figure~\ref{fig:usecase_unparam_class_gen} shows two mixins and a base class: \t
     ^ base subclass
 
 <@\textbf{(CollectionLogic class>>Mixin:}@> base<@\textbf{)>>allSatisfy:}@> aBlock
-    self do: [ :each | 
-        (aBlock value: each) ifFalse: [ ^ false ] ].
+    <@\textbf{self}@> do: [ <@\textcolor{gray}{:each}@> | 
+        (aBlock value: <@\textcolor{gray}{each}@>) ifFalse: [ ^ false ] ].
     ^ true
 
 <@\textbf{(CollectionLogic class>>Mixin:}@> base<@\textbf{)>>anySatisfy:}@> aBlock
-    self do: [ :each | 
-        (aBlock value: each) ifTrue: [ ^ true ] ].
+    <@\textbf{self}@> do: [ <@\textcolor{gray}{:each}@> | 
+        (aBlock value: <@\textcolor{gray}{each}@>) ifTrue: [ ^ true ] ].
     ^ false
 
-" (implementation of CollectionLogic omitted) "
+<@\textcolor{gray}{\textit{" (implementation of CollectionLogic omitted) "}}@>
 
 <@\textbf{MyCollection>>do:}@> aBlock
-    " Some implementation "
+    <@\textcolor{gray}{\textit{" Some implementation "}}@>
 
 <@\textbf{FullCollection}@>
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
@@ -438,8 +438,8 @@ Note, that the programmer can already write arbitrary code at the point where th
 \begin{lstlisting}
 <@\textbf{Class>><< aMixin}@>
     <@\textcolor{Gray}{| result |}@>
-    aMixin before: self.
-    <@\textcolor{Gray}{result}@> := aMixin Mixin: self.
+    aMixin before: <@\textbf{self}@>.
+    <@\textcolor{Gray}{result}@> := aMixin Mixin: <@\textbf{self}@>.
     aMixin after: <@\textcolor{Gray}{result}@>.
     ^ <@\textcolor{Gray}{result}@>
 \end{lstlisting}
@@ -475,7 +475,7 @@ Here is another point of view on the same situation: combine behavior from \text
         << CollectionLogic) subclass
 
 <@\textbf{FullCollection>>do:}@> aBlock
-    " Some implementation "
+    <@\textcolor{gray}{\textit{" Some implementation "}}@>
 \end{lstlisting}
 \end{subfigure}
 \qquad
@@ -551,8 +551,8 @@ Consider, for example, that we want to add a method \texttt{asString} to the top
     ^ Repository FullCollection
 
 <@\textbf{MyApplication class>>FullCollection>>asString}@>
-    ^ String streamContents: [ :stream |
-        self do: [ :each | stream nextPutAll: each asString ] ]
+    ^ String streamContents: [ <@\textcolor{gray}{:stream}@> |
+        <@\textbf{self}@> do: [ <@\textcolor{gray}{:each}@> | <@\textcolor{gray}{stream}@> nextPutAll: <@\textcolor{gray}{each}@> asString ] ]
 \end{lstlisting}
 \caption[Example: Extension methods using nested classes]{Example: Extension methods using nested classes. \texttt{FullCollection} is an alias to an already existing class which is extended when the alias' class accessor method is invoked for the first time.}
 \label{fig:use_ext_meth}
