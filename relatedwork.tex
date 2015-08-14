@@ -184,7 +184,7 @@ Parameterized classes in Newspeak can be used for external configuration of clas
 In this section, we briefly describe dependency/package management systems for different programming languages.
 
 \paragraph{Metacello}
-Metacello\footnote{\url{https://github.com/dalehenrich/metacello-work}} is a package management system for Smalltalk (multiple dialects). It can be used to load applications and libraries into a system and supports various backends, such as Monticello or github. Every Metacello project is represented by a \emph{configuration class} and consists of a set of versions, modelled as instance methods of the configuration. Every versin is a set of packages in a certain version (Monticello version). The configuration class also contains URLs to remote repositories and other dependent projects~\cite{metacellodraft}.
+Metacello\footnote{\url{https://github.com/dalehenrich/metacello-work}} is a package management system for Smalltalk (multiple dialects). It can be used to load applications and libraries into a system and supports various backends, such as Monticello or github. Every Metacello project is represented by a \emph{configuration class} and consists of a set of versions, modelled as instance methods of the configuration. Every version is a set of packages in a certain version (Monticello version). The configuration class also contains URLs to remote repositories and other dependent projects~\cite{metacellodraft}.
 
 Whenever a project is loaded, Metacello retrieves all packages from the (remote) repositories specified in the configuration class in the requested versions. Already existing classes already exist during filein. It is not possible to install multiple versions of a Metacello project side by side.
 

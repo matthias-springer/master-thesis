@@ -86,7 +86,7 @@ With \msname, it is theoretically possible to run multiple versions of Squeak in
 
 When we tried running bigger system libraries, such as Morphic, in different versions in one image, we encountered the following difficulties.
 \begin{itemize}
-    \item Many system libraries are not written in a modular way. For example, they use global state. Whenever global state is stored on other classes or in the \texttt{globals} dictionary (e.g. \texttt{Smalltalk globals at: \#World}), the library circumvents \msname.
+    \item Many system libraries are not written in a modular way. For example, they use global state. Whenever global state is stored on other classes or in the \texttt{globals} dictionary (e.g. \texttt{Smalltalk globals at: \textcolor{RoyalPurple}{\#World}}), the library circumvents \msname.
     \item Some classes should not exist multiple times in one image. For example, \texttt{Array} and \texttt{String} are classes that the virtual machine knows about\footnote{\texttt{SmalltalkImage>>specialObjectsArray} calls primitive 129 and returns an array of 56 unique special objects that the VM knows about.}. Whenever an argument is passed to a primitive, the virtual machine expects that it is an instance of a class it knows about. Similarly, whenever a primitive returns a value, it is an instance of the version the image knows about.
 \end{itemize}
 

@@ -63,7 +63,7 @@ In \msname, traits are implemented as mixins, which are wrapped in unparameteriz
     <@\textcolor{gray}{| trait |}@>
     <@\textcolor{gray}{trait}@> := <@\textbf{self}@> class allSuperclasses detect: [ <@\textcolor{gray}{:cls}@> |
         <@\textcolor{gray}{cls}@> specification includes: 
-            (classGenerator specification classAt: #Mixin:) ].
+            (classGenerator specification classAt: <@\textcolor{RoyalPurple}{\#Mixin:}@>) ].
     ^ <@\textbf{self}@> withArgs: args executeMethod: <@\textcolor{gray}{trait}@>>>symbol
 \end{lstlisting}
 \caption[Algorithm: Resolving trait conflicts]{Algorithm: Resolving trait conflicts. This method can be used to invoke a method implementation in a specific trait.}
