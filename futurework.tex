@@ -24,7 +24,9 @@ This process could be optimized by caching compiled methods and replacing affect
 In Newspeak, slots (instance variables) cannot be accessed directly. They are always accessed through automatically-generated accessor methods. Therefore, all references to slots are message sends. Consequently, the bytecode of a method for two different instantiations is always the same.
 
 \section{Squeak Integration}
-As of now, the integration of \msname in Squeak is still limited. For example, the new class browser does not have any refactoring tools yet. Furthermore, all Squeak classes should be migrated to classes in \msname, eventually, making \texttt{Repository} (a separate \texttt{globals} dictionary for \msname) obsolete.
+As of now, the integration of \msname in Squeak is still limited. For example, the new class browser does not have any refactoring tools yet. Furthermore, all Squeak classes should be migrated to classes in \msname, eventually, making \texttt{Repository} (a separate \texttt{globals} dictionary for \msname) obsolete. As described in Section~\ref{sec:impl_module_rep}, a single top-level class \texttt{Smalltalk} should contain all modules and Squeak base classes. Restructuring Squeak base classes in a hierarchical way will probably be the biggest and most tedious task. 
+
+The Newspeak class organization might be a good starting point. Black et al. described how traits can be used to modularize Smalltalk collection classes~\cite{Black:2003:ATS:949305.949311}, which might be another good starting point for restructuring these classes.
 
 \section{Extension Methods}
 \label{sec:future_ext_meth}

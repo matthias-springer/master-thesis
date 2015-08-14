@@ -377,11 +377,12 @@ In this section, we describe how \msname is integrated in Squeak. We also point 
 	\label{fig:impl_st_nested_future}
 \end{wrapfigure}
 \subsection{Module Repository}
+\label{sec:impl_module_rep}
 At the moment, there is a separate \emph{module repository} for \msname. This is a singleton class with a collection all top-level class specifications and a collection of instantiated top-level class specifications. This is useful for development purposes, because basic Squeak classes can be migrated to our system without the risk of damaging the base system. References to classes are first looked up in the module repository, then in the Smalltalk \texttt{globals} dictionary.
 
 Eventually, both the Smalltalk \texttt{globals} dictionary and the module repository should be replaced by a single top-level class \texttt{Smalltalk} (Figure~\ref{fig:impl_st_nested_future}). All modules are then nested classes of that top-level class and the method lookup always breaks down to looking up selectors in enclosing classes. \texttt{Smalltalk} is the only global variable and looked up differently. Global variables that are currently stored in the \texttt{globals} dictionary can either be class instance variables of the top-level \texttt{Smalltalk} class or be stored in a special dictionary which is stored as a class instance variable on \texttt{Smalltalk}.
 
-Future work should investigate how Smalltalk classes can be migrated to \msname, especially, what the nested class structure should look like.
+Future work should investigate how Smalltalk classes can be migrated to \msname, especially, what the nested class structure should look like. For example, in Figure~\ref{fig:impl_st_nested_future}, there are two modules \texttt{Morphic} and \texttt{Collections}. In \texttt{Collections}, there are nested classes for arrays and sets. It is unclear whether this is the best way of structuring Squeak base classes in a hierarchical way.
 
 %Eventually, all classes written in \msname should be listed in the Smalltalk \texttt{globals} dictionary, replacing system classes with their counterparts written in \msname, which would also make the module repository obsolete.
 
