@@ -328,7 +328,7 @@ At this point, we have to distinguish between class definitions and class extens
 \begin{lstlisting}
 <@\textbf{MyClass}@>
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
-    ^ super MyClass
+    ^ <@\textbf{super}@> MyClass
 \end{lstlisting}
 \caption{Class extension \\ (extending inherited nested class)}
 \label{fig:impl_cls_migr_ext_nested}
@@ -338,7 +338,7 @@ At this point, we have to distinguish between class definitions and class extens
 \begin{lstlisting}
 <@\textbf{MyClass}@>
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
-    ^ super MyClass subclass
+    ^ <@\textbf{super}@> MyClass subclass
 \end{lstlisting}
 \caption{Class definition \\ (subclassing inherited nested class)}
 \label{fig:impl_cls_migr_subclass_nested}
@@ -368,31 +368,45 @@ Figure~\ref{fig:impl_update_cycle} gives a high-level overview of the entire cla
 \end{figure}
 
 \section{Integration in Squeak}
-In this section, we describe how \msname is integrated in Squeak.
+In this section, we describe how \msname is integrated in Squeak. We also point out where more work is necessary to integrate \msname better in Squeak. These tasks are mostly engineering tasks. In Section~\ref{sec:future} we discuss conceptual future work.
 
+\begin{wrapfigure}{l}{0.5\textwidth}
+	\includegraphics[scale=0.75]{st_nested.pdf}
+	\centering
+	\caption[Example: Top-level \texttt{Smalltalk} class]{Example: Top-level \texttt{Smalltalk} class. In future versions of \msname, all classes should be nested within the top-level class \texttt{Smalltalk}.}
+	\label{fig:impl_st_nested_future}
+\end{wrapfigure}
 \subsection{Module Repository}
 At the moment, there is a separate \emph{module repository} for \msname. This is a singleton class with a collection all top-level class specifications and a collection of instantiated top-level class specifications. This is useful for development purposes, because basic Squeak classes can be migrated to our system without the risk of damaging the base system. References to classes are first looked up in the module repository, then in the Smalltalk \texttt{globals} dictionary.
 
-Eventually, all classes written in \msname should be listed in the Smalltalk \texttt{globals} dictionary, replacing system classes with their counterparts written in \msname, which would also make the module repository obsolete.
+Eventually, both the Smalltalk \texttt{globals} dictionary and the module repository should be replaced by a single top-level class \texttt{Smalltalk} (Figure~\ref{fig:impl_st_nested_future}). All modules are then nested classes of that top-level class and the method lookup always breaks down to looking up selectors in enclosing classes. \texttt{Smalltalk} is the only global variable and looked up differently. Global variables that are currently stored in the \texttt{globals} dictionary can either be class instance variables of the top-level \texttt{Smalltalk} class or be stored in a special dictionary which is stored as a class instance variable on \texttt{Smalltalk}.
+
+Future work should investigate how Smalltalk classes can be migrated to \msname, especially, what the nested class structure should look like.
+
+%Eventually, all classes written in \msname should be listed in the Smalltalk \texttt{globals} dictionary, replacing system classes with their counterparts written in \msname, which would also make the module repository obsolete.
 
 \subsection{IDE Support}
 \msname comes with a proof-of-concept implementation of a class browser. The existing system browser cannot be used, because it cannot handle class nesting. Our class browser is written in Vivide~\cite{Taeumel:2012:VPE:2384592.2384604}, a framework for dataflow-driven tool development, and shown in Figure~\ref{fig:impl_class_browser}. It supports creating and deleting methods and nested classes, but basic refactoring functionality and functionality such as browsing senders and receivers is still missing.
 
 \begin{figure}[!htp]
 	\centering
+	\begin{subfigure}[b]{\textwidth}
 	\includegraphics[width=\textwidth]{screenshot_classbrowser.png}
 	\caption{Class Browser for Nested Classes}
 	\label{fig:impl_class_browser}
-\end{figure}
+	\end{subfigure}
 
-\msname is also integrated with the Squeak workspace and the test runner (Figure~\ref{fig:impl_integration}). Unit tests can be written and will show up in the test runner, as long as test classes are defined in a nested class called \texttt{Tests} within a top-level class. Later versions might traverse the entire nested classes graph to look for subclasses of \texttt{TestCase}, but this basic functionality allows us already to test parts of our system with code written in the system itself.
+	\vspace{20pt}
 
-\begin{figure}[!htp]
-	\centering
+	\begin{subfigure}[b]{\textwidth}
 	\includegraphics[width=\textwidth]{screenshot_integration.png}
 	\caption{Integration in Squeak}
 	\label{fig:impl_integration}
+	\end{subfigure}
+	\caption[Screenshots: Integration of \msname in Squeak]{Screenshots: Integration of \msname in Squeak. \msname comes with a separate class browser supporting class nesting and is integrated in the test runner and the workspace.}
 \end{figure}
+
+\msname is also integrated with the Squeak workspace and the test runner (Figure~\ref{fig:impl_integration}). Unit tests can be written and will show up in the test runner, as long as test classes are defined in a nested class called \texttt{Tests} within a top-level class. Later versions might traverse the entire nested classes graph to look for subclasses of \texttt{TestCase}, but this basic functionality allows us already to test parts of our system with code written in the system itself.
 
 \subsection{Debugger}
 The Squeak debugger can be used to step through the source code. Parts of the source code can be selected and being evaluated. This also works with keywords that were introduced with \msname, such as \texttt{outer} and \texttt{enclosing}, because they are bound in the Squeak environment of the class.
