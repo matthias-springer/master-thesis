@@ -10,7 +10,7 @@ In this chapter, we show how \msname can be used in applications and describe ho
 	\label{fig:use_class_clash}
 \end{wrapfigure}
 
-In this example, class nesting is used to avoid class name clashes and to give every class a unique fully qualified name. Consider, that we want two load two computer games in a single Squeak image. The first game is a bomberman game (SpaceCleanup), providing classes \texttt{Game}, \texttt{Level}, \texttt{Resources} among others. The second game is a Sokoban game, and has three classes with the same name. Without \msname, this would be a problem: as soon as another class with the same name is installed, the old one is overwritten with the new one.
+In this example, class nesting is used to avoid class name clashes and to give every class a unique fully qualified name. Consider, that we want to load two computer games in a single Squeak image. The first game is a bomberman game (SpaceCleanup), providing classes \texttt{Game}, \texttt{Level}, \texttt{Resources} among others. The second game is a Sokoban game, and has three classes with the same name. Without \msname, this would be a problem: as soon as another class with the same name is installed, the old one is overwritten with the new one.
 
 With \msname, two classes with the same name can coexist in the same image, as long as they are nested within different classes (Figure~\ref{fig:use_class_clash}).
 

@@ -8,7 +8,7 @@ In pure Smalltalk, classes are the highest level of modular units. Classes are f
 Smalltalk is, as most object-oriented and class-based programming languages, amenable to well-established software design patterns~\cite{Gamma:1995:DPE:186897}, making it easier to write maintainable and understandable code.
 
 \section{Duplicate Class Names}
-In Squeak, there can be only one class with a certain name. Whenever the programmer tries to add another class with the same name, a conflict occurs. When source code is loaded into the system with the Monticello source control system or manually, the system asks the programmer if the already existing class should be replaced. As a workaround, it is good practice to add unique namespace prefixes to all class names within an application. 
+In Squeak, there can be only one class with a certain name, limiting code reuse and, therefore, hindering modular composability. Whenever the programmer tries to add another class with the same name, a conflict occurs. When source code is loaded into the system with the Monticello source control system or manually, the system asks the programmer if the already existing class should be replaced. As a workaround, it is good practice to add unique namespace prefixes to all class names within an application. 
 
 Squeak has packages~\cite{Nierstrasz:2009:SE:1816759}, but these are not used as namespaces. Their purpose is to make it easier to find existing classes (like method protocols). They are also used as deployment units. The programmer does usually not load single classes into the system. Instead, packages (groups of classes) are loaded. 
 
