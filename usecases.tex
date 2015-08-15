@@ -39,7 +39,7 @@ For development purposes, it is useful to have a special version called \texttt{
 \msname does at the moment not support delta updates. A new version is always an entire copy of an application, even if just a few methods changed. We might consider delta updates in future releases of \msname, such that a new version is essentially the previous version and a set of changed methods/classes. Of course, this requires having the entire application history installed in the image.
 
 \subsection{Aliasing Module Versions}
-Whenever an application requires a class from a library in a certain version, the application can either write down the fully qualified name of the class or create an alias. For example, the fully qualified name of the class \texttt{Calculus} in \texttt{MathLibrary} version 1.2 is \texttt{MathLibrary v1 v2 Calculus}. However, it is very likely that an application requires more than just one class from a library. In this case, an alias should be defined, because it keeps the required version number at a single point in the code (making it easy to change the version) and results in less verbose code.
+Whenever an application requires a class from a library in a certain version, the application can either write down the fully qualified name of the class or create an alias. For example, the fully qualified name of the class \texttt{Calculus} in \texttt{MathLibrary} version 1.2 is \texttt{MathLibrary v1 v2 Calculus}. However, it is very likely that an application requires more than just one class from a library. In this case, we suggest to define an alias, because it keeps the required version number at a single point in the code (making it easy to change the version) and results in less verbose code.
 
 \begin{figure}[!htp]
 \begin{lstlisting}
@@ -61,7 +61,7 @@ Figure~\ref{fig:use_alias} shows how class aliases can be used to specify module
 
 Aliases should be defined as deep (nested) as possible to avoid \emph{poluting} the namespace. Aliases to other modules should be defined in the module (top-level class) to get a quick overview of all dependencies. For example, if a class \texttt{MyApplication A B C} requires \texttt{MathLibrary v1 v2 Calculus}, then an alias to \texttt{MathLibrary v1 v2} should be defined in \texttt{MyApplication} and an alias to \texttt{MathLibrary Calculus} could be defined in \texttt{MyApplication A B C} using the previously defined alias.
 
-Classes aliases, as described in this paragraph, are similar to import statements in other programming languages, and are a form of internal dependency management.
+Class aliases, as described in this paragraph, are similar to import statements in other programming languages, and are a form of internal dependency management.
 
 \paragraph{Helper Methods}
 In Figure~\ref{fig:use_module_ver}, the top-level class and major version should be a subclass of the class \texttt{Versioning}, a class provided by our system. This class contains convenience methods making it easier to work with version containers. The following list gives an overview of the helper methods \texttt{Versioning} provides.
@@ -344,7 +344,7 @@ Figure~\ref{fig:usecase_breakout_game} shows the original source code of Breakou
 %example: large project, where parts of the code can now be understood, given that we have hierarchical nesting. could be an example where grouping according to multiple criteria is needed (would result in n x m packages)
 
 \section{Mixin Modularity with Parameterized Classes}
-Parameterized classes can be used to build mixins. Mixins are not a special feature of this system: they are an application of \msname and come for free by just having class nesting as described in the previous sections; they are an immediate consequence of parameterized classes. A mixin is a function that takes as an input a class and outputs a subclass with additional behavior~\cite{bracha1992programming, Bettini:2004:CCH:967900.968200, nestedinterfaces}, i.e., it is a class transformator (also called \emph{abstract subclass}~\cite{Bracha:1990:MI:97945.97982}). Previous work has shown that mixins are beneficial to improve code reuse and understandability, especially in configurable applications~\cite{Smaragdakis:2002:MLO:505145.505148, Cardone:2002:UMB:508386.508395, productlines-work}.
+Parameterized classes can be used to build mixins. Mixins are not a special feature of this system: they are an application of \msname and come for free by just having class nesting as described in the previous sections; they are an immediate consequence of parameterized classes. A mixin is a function that takes a class as input and outputs a subclass with additional behavior~\cite{bracha1992programming, Bettini:2004:CCH:967900.968200, nestedinterfaces}, i.e., it is a class transformator (also called \emph{abstract subclass}~\cite{Bracha:1990:MI:97945.97982}). Previous work has shown that mixins are beneficial to improve code reusability and understandability, especially in configurable applications~\cite{Smaragdakis:2002:MLO:505145.505148, Cardone:2002:UMB:508386.508395, productlines-work}.
 
 A mixin can be implemented by writing a class generator method with one parameter which is the input class. The method creates a subclass of that input class and returns it. Associated with that parameterized class generator method is a set of instance-side methods and a set of class-side methods. These are the methods that will be added when applying the mixin.
 
@@ -357,7 +357,7 @@ Figure~\ref{fig:concept_mixins} shows an example of parameterized classes and ho
 \begin{figure}[!htp]
     \centering
     \includegraphics[scale=0.75]{nested_mixins.pdf}
-    \caption[Implementation of Mixins]{Implementation of Mixins. A mixin is a parameterized class, whose class generator method takes a base class and returns a subclass of the base class.}
+    \caption[Implementation of mixins]{Implementation of mixins. A mixin is a parameterized class, whose class generator method takes a base class and returns a subclass of the base class.}
     \label{fig:concept_mixins}
 \end{figure}
 
