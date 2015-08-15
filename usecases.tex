@@ -174,7 +174,7 @@ As an example, we took two simple computer games written in Squeak: SpaceCleanup
 \label{fig:usecase_games}
 \end{figure}
 
-Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup and the source code after we introduced class nesting. The original source code already made use of packages, which can be compared to a single level of class nesting. The refactored source code is mostly unchanged, except for class name changes. It is interesting to see is that the class structure is already much more readable by just getting rid of all namespace prefixes. We can not only get rid of class prefixes, but also suffixes. For example, \texttt{Builder}, \texttt{Item}, and \texttt{State} suffixes are omitted. It is now also possible to group classes together that belong together logically. For example, both level builders are nested within \texttt{SpaceCleanup Level}. Similarly, all items are nested in \texttt{SpaceCleanup Level Item} (which is also the superclass of all items), which makes sense because a level consists of tiles and every tile can have items. An item cannot be used without a tile and a tile is never used outside a level. Note, that there exist two classes with the name \texttt{Random}, but they are nested in different classes.
+Figure~\ref{fig:usecase_sc_space} shows the original source code of SpaceCleanup and the source code after we introduced class nesting. The original source code already made use of packages, which can be compared to a single level of class nesting. The refactored source code is mostly unchanged, except for class name changes. It is interesting to see that the class structure is already much more readable by just getting rid of all namespace prefixes. We can not only get rid of class prefixes, but also suffixes. For example, \texttt{Builder}, \texttt{Item}, and \texttt{State} suffixes are omitted. It is now also possible to group classes together that belong together logically. For example, both level builders are nested within \texttt{SpaceCleanup Level}. Similarly, all items are nested in \texttt{SpaceCleanup Level Item} (which is also the superclass of all items), which makes sense because a level consists of tiles and every tile can have items. An item cannot be used without a tile and a tile is never used outside a level. Note, that there exist two classes with the name \texttt{Random}, but they are nested in different classes.
 
 \begin{figure}
 \begin{subfigure}[b]{0.45\textwidth}
@@ -369,7 +369,7 @@ The notation used in \texttt{A class>>M1M2} can be a bit confusing at first. Tha
 
 \section{Unparameterized Class Generator Pattern}
 \label{sec:usecase_classgen}
-The syntax used for mixin application has a few shortcomings. For example, the statements \texttt{self A: (self B: Object))} means that mixin \texttt{B:} is applied to \texttt{Object}, and then mixin \texttt{A:} is applied to that result. The problem is that the source code statement does not reflect the order of mixin applications: the statement has to be interpreted from right to left. Another problem is that \texttt{A:} and \texttt{B:} are parameterized classes and parameterized classe cannot be referenced using an implicit \texttt{scope} receiver. Therefore, the programmer always has to write \texttt{scope} explicitly.
+The syntax used for mixin application has a few shortcomings. For example, the statements \texttt{self A: (self B: Object))} means that mixin \texttt{B:} is applied to \texttt{Object}, and then mixin \texttt{A:} is applied to that result. The problem is that the source code statement does not reflect the order of mixin applications: the statement has to be interpreted from right to left. Another problem is that \texttt{A:} and \texttt{B:} are parameterized classes and parameterized classes cannot be referenced using an implicit \texttt{scope} receiver. Therefore, the programmer always has to write \texttt{scope} explicitly.
 
 Both problems can be solved by wrapping the mixin in an unparameterized class and adding a helper method to \texttt{Class}. We assume that the name of the parameterized nested class is always \texttt{Mixin:}. Then, the helper method \texttt{<<} can be defined as shown in Figure~\ref{fig:usecase_class_lele}.
 
@@ -486,8 +486,6 @@ Here is another point of view on the same situation: combine behavior from \text
 \label{fig:mixin_composable}
 \end{figure}
 
-For readability reasons, our implementation provides a simplified notation that combines this kind of mixin application and subclassing (Figure~\ref{fig:usecase_subcl_mixin}). This new notation first applies mixins, and creates a subclass of the result afterwards. Note, that the notation reflects the order of subclassing: at first, \texttt{Mixin1} is applied, then \texttt{Mixin2}, then \texttt{Mixin3}, and finally a subclass is created with the additional methods defined on \texttt{NewClass}.
-
 \begin{figure}[!htp]
 \begin{subfigure}[b]{0.45\textwidth}
 \begin{lstlisting}
@@ -518,6 +516,8 @@ For readability reasons, our implementation provides a simplified notation that 
 \caption{Simplified notation for using subclassing and mixins}
 \label{fig:usecase_subcl_mixin}
 \end{figure}
+
+For readability reasons, our implementation provides a simplified notation that combines this kind of mixin application and subclassing (Figure~\ref{fig:usecase_subcl_mixin}). This new notation first applies mixins, and creates a subclass of the result afterwards. Note, that the notation reflects the order of subclassing: at first, \texttt{Mixin1} is applied, then \texttt{Mixin2}, then \texttt{Mixin3}, and finally a subclass is created with the additional methods defined on \texttt{NewClass}.
 
 The idea of mixins used as composable units of behavior is similar to traits~\cite{traitsschaerli}. However, there are some minor differences.
 \begin{itemize}
