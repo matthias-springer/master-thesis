@@ -60,7 +60,7 @@ Figure~\ref{fig:impl_spec_example} shows an example of a class specification for
 \section{Meta Model Instantiation}
 The class specifications and meta class specifications described in Section~\ref{sec:impl_meta_model} are not class objects or meta class objects. These specifications can be instantiated, producing class objects and meta class objects. This section gives an overview of how \msname generates Smalltalk classes based on class specifications. We distinguish between \emph{class definitions} and \emph{class extensions}. In the former case, the nested class is a newly-generated subclass. In the latter case, an already existing class is extended (extension methods) or aliased. 
 
-\subsection{Class Definitions}
+\subsection{Class Definition}
 In this subsection, we consider the most common case that a brand new class is defined as a nested class, i.e., the nested class is a \emph{class definition}. Figure~\ref{fig:lazy_class_gen} illustrates how the system generates and initializes a class (class specification instantiation). 
 
 \begin{figure}[!hbp]
