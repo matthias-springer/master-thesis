@@ -133,6 +133,7 @@ This keyword combines \texttt{super} and \texttt{outer}: a message sent to \text
 %The statement \texttt{enclosing enclosing m1} in the previous example can also be written as \texttt{scope m1}. If the method \texttt{m1} would now be moved to its enclosing class (if it had one), the lookup would still succeed. However, \texttt{scope} exposes the risk of accidentially capturing method names in superclasses or the lexical chain.
 
 \subsection{Implicit \texttt{scope} Receiver}
+\label{sec:con_implz_recv}
 In \msname, references to globals are in fact message sends with \texttt{scope} as implicit receiver. This should make it easier for Smalltalk programmers to write code in \msname, even if they do not know about \texttt{enclosing} and \texttt{scope}. It also makes the code less verbose and easier to read.
 
 Whenever code references an identifier that is not a temporary variable, not an instance variable, and not a \emph{special} object/keyword\footnote{\texttt{self}, \texttt{super}, \texttt{thisContext}, \texttt{scope}, \texttt{outer}, \texttt{enclosing}}, the compiler replaces that identifier with a message send to \texttt{scope}.
@@ -152,6 +153,7 @@ In this example, we used the implicit \texttt{scope} receiver for class lookup, 
 Note, that only unary messages can have an implicit \texttt{scope} receiver, since we would have to change the Smalltalk syntax, otherwise.
 
 \section{Parameterized Classes}
+\label{sec:conz_param_cls}
 In \msname, classes are accessed using message sends. Since messages can have parameters, it seems natural to have parameterized class accessor methods, and, therefore, parameterized classes. All examples shown in the previous sections use unparameterized classes, i.e., class generator methods are always unary. Class generator methods can, however, also have binary selectors or selectors with a higher arity. For memory conservation reasons, these classes are then no longer cached.
 
 Parameterized classes can be used to make modules externally configurable or to implement mixins. We will present some conrete use cases in Section~\ref{sec:usecases}.

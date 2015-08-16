@@ -98,35 +98,35 @@ Parameterized classes can not only be used to build mixins, but also externally 
 In our system, methods inside parameterized classes can reference arguments provided to the class accessor method. The idea is that, instead of referencing classes in the global namespace, the programmer references these arguments. The user of the module can then decide which exact implementation he wants to use.
 
 \paragraph{Example}
-Figure~\ref{fig:use_paintbrush} shows part of the implementation of a simple drawing application. \texttt{PaintbrushWith:IO:} is a parameterized top-level class which takes as arguments a matrix implementation and a file IO library. The matrix implementation is used for storing the pixels inside the application. In the simplest case, this could be the class \texttt{Matrix} from the Squeak standard library. It could, however, also be a class which stores pixels in a compressed form (e.g., using run-length encoding), but has \texttt{at:}, \texttt{at:put:}, \texttt{rows}, and \texttt{columns} as public API methods. \texttt{ReaderWriter} must be a class or object that supports reading and writing files on a pixel-by-pixel basis. Depending on which IO class the user of the library provides to \texttt{PaintbrushWith:IO:}, the application might for example generate JPEG files or PNG files.
+Figure~\ref{fig:use_paintbrush} shows part of the implementation of a simple drawing application. \texttt{PaintbrushWithMatrix:IO:} is a parameterized top-level class which takes as arguments a matrix implementation and a file IO library. The matrix implementation is used for storing the pixels inside the application. In the simplest case, this could be the class \texttt{Matrix} from the Squeak standard library. It could, however, also be a class which stores pixels in a compressed form (e.g., using run-length encoding), but has \texttt{at:}, \texttt{at:put:}, \texttt{rows}, and \texttt{columns} as public API methods. \texttt{ReaderWriter} must be a class or object that supports reading and writing files on a pixel-by-pixel basis. Depending on which IO class the user of the library provides to \texttt{PaintbrushWithMatrix:IO:}, the application might for example generate JPEG files or PNG files. References to \texttt{Matrix} and \texttt{ReaderWriter} in the source code are implicit receiver sends to \texttt{scope} (see Section~\ref{sec:con_implz_recv}) and the lookup yields the corresponding class parameters (see Section~\ref{sec:conz_param_cls}).
 
 \begin{figure}[!htp]
 \begin{subfigure}[b]{\textwidth}
 \centering
-\includegraphics[width=0.8\textwidth]{usecase_paintbrush.pdf}
-\caption{Overview of the \texttt{PaintBrushWith:IO:} module and dependent interfaces}
+\includegraphics[width=0.9\textwidth]{usecase_paintbrush.pdf}
+\caption{Overview of the \texttt{PaintbrushWithMatrix:IO:} module and dependent interfaces}
 \end{subfigure}
 
 \vspace{10pt}
 
 \begin{subfigure}[b]{\textwidth}
 \begin{lstlisting}
-<@\textbf{PaintbrushWith:}@> Matrix <@\textbf{IO:}@> ReaderWriter
+<@\textbf{PaintbrushWithMatrix:}@> Matrix <@\textbf{IO:}@> ReaderWriter
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
     ^ Object subclass
 
-<@\textbf{(PaintbrushWith:}@> Matrix <@\textbf{IO:}@> ReaderWriter<@\textbf{) class>>Bitmap}@>
+<@\textbf{(PaintbrushWithMatrix:}@> Matrix <@\textbf{IO:}@> ReaderWriter<@\textbf{) class>>Bitmap}@>
     <@\textcolor{OliveGreen}{\textbf{< class >}}@>
     ^ Object subclassWithInstVars: <@\textcolor{RoyalPurple}{'pixels'}@>
 
-<@\textbf{(PaintbrushWith:}@> Matrix <@\textbf{IO:}@> ReaderWriter<@\textbf{) class>>Bitmap>>initialize}@>
+<@\textbf{(PaintbrushWithMatrix:}@> Matrix <@\textbf{IO:}@> ReaderWriter<@\textbf{) class>>Bitmap>>initialize}@>
     pixels := Matrix new.
 
-<@\textbf{(PaintbrushWith:}@> Matrix <@\textbf{IO:}@> ReaderWriter<@\textbf{) class>>Bitmap>>}@>
+<@\textbf{(PaintbrushWithMatrix:}@> Matrix <@\textbf{IO:}@> ReaderWriter<@\textbf{) class>>Bitmap>>}@>
         <@\textbf{setPixel:}@> aPoint <@\textbf{color:}@> aColor
     pixels at: aPoint put: aColor.
 
-<@\textbf{(PaintbrushWith:}@> Matrix <@\textbf{IO:}@> ReaderWriter<@\textbf{) class>>Bitmap class>>}@>
+<@\textbf{(PaintbrushWithMatrix:}@> Matrix <@\textbf{IO:}@> ReaderWriter<@\textbf{) class>>Bitmap class>>}@>
         <@\textbf{load:}@> aFile
     <@\textcolor{Gray}{| instance |}@>
     <@\textcolor{Gray}{instance}@> := <@\textbf{self}@> new.
@@ -135,7 +135,8 @@ Figure~\ref{fig:use_paintbrush} shows part of the implementation of a simple dra
         do: [ <@\textcolor{gray}{:point :color}@> | <@\textcolor{Gray}{instance}@> setPixel: <@\textcolor{gray}{point}@> color: <@\textcolor{gray}{color}@> ].
     ^ <@\textcolor{Gray}{instance}@>
 
-<@\textbf{(PaintbrushWith:}@> Matrix <@\textbf{IO:}@> ReaderWriter<@\textbf{) class>>Bitmap>>save:}@> aFile
+<@\textbf{(PaintbrushWithMatrix:}@> Matrix <@\textbf{IO:}@> ReaderWriter<@\textbf{) class>>}@>
+        <@\textbf{Bitmap>>save:}@> aFile
     <@\textcolor{Gray}{| writer |}@>
     <@\textcolor{Gray}{writer}@> := ReaderWriter BitmapWriter for: aFile.
     1 to: pixels columns do: [ <@\textcolor{gray}{:x}@> |
@@ -149,7 +150,7 @@ Figure~\ref{fig:use_paintbrush} shows part of the implementation of a simple dra
 \label{fig:use_paintbrush}
 \end{figure}
 
-It is important to understand that the implementation of \texttt{PaintbrushWith:IO:} is entirely decoupled from the pixel data structure representation and the import/export functionality. It is up to the user of \texttt{PaintbrushWith:IO:} to configure the class as needed.
+It is important to understand that the implementation of \texttt{PaintbrushWithMatrix:IO:} is entirely decoupled from the pixel data structure representation and the import/export functionality. It is up to the user of \texttt{PaintbrushWithMatrix:IO:} to configure the class as needed.
 
 External configuration as shown in this example is similar to a constructor that accepts class objects as parameters and constructs an instance of the class with the class objects stored in instance variables. The difference to this approach is that, in our system, also class methods are bound to the passed arguments, because a new class object is constructed instead of an instance of a class. Furthermore, our system allows creating new nested classes with the argument as a superclass (mixins).
 
@@ -559,6 +560,6 @@ An extension method can be added in \msname by creating a nested class whose cla
 Consider, for example, that we want to add a method \texttt{asString} to the top-level class \texttt{FullCollection} in Figure~\ref{fig:usecase_subcl_mixin}. Figure~\ref{fig:use_ext_meth} shows how to define a method returning the string concatenation of all elements in the collection.
 
 
-Note, that it is not possible to add extension methods to all parameterized classes or class specifications. Extension methods can only be added to concrete classes (i.e., class objects). For example, it is not possible, to add an extension method to all classes that are generated by \texttt{PaintBrushWith:IO:} in Figure~\ref{fig:use_paintbrush}; only a concrete class object (instantiation) can be extended.
+Note, that it is not possible to add extension methods to all parameterized classes or class specifications. Extension methods can only be added to concrete classes (i.e., class objects). For example, it is not possible, to add an extension method to all classes that are generated by \texttt{PaintbrushWithMatrix:IO:} in Figure~\ref{fig:use_paintbrush}; only a concrete class object (instantiation) can be extended.
 
 Extension methods are dangerous because changes to existing methods could break other code relying on the old behavior. Numerous alternatives have been proposed, and we provide a brief overview of some of them in Section~\ref{sec:future_ext_meth}.
