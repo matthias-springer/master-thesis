@@ -19,7 +19,7 @@ As a consequence, we removed support for instance-side nested classes, but we mi
 \section{Bytecode Transformation}
 Whenever a nested class specification is instantiated in \msname, all methods in the specification are complied in the target class. When using parameterized classes, this process happens multiple times, once for every target class. However, the bytecode is almost the same for every target class and differs only for reads/writes to instance variables (see Section~\ref{sec:impl_ch_inst_cl_vars}). In addition, \texttt{enclosing} and \texttt{outer} must be bound to different literals.
 
-This process could be optimized by caching compiled methods and replacing affected bytecodes and literals during instantiation. For example, instead of recompiling the entire method, all references to instance variables could be replaced with bytecodes with the correct indices in a linear pass through the compiled method.
+This process could be optimized by caching compiled methods and replacing affected bytecodes and literals during instantiation. For example, instead of recompiling the entire method, all references to instance variables could be replaced with bytecodes with correct indices in a linear pass through the compiled method.
 
 In Newspeak, slots (instance variables) cannot be accessed directly. They are always accessed through automatically-generated accessor methods. Therefore, all references to slots are message sends. Consequently, the bytecode of a method for two different instantiations is always the same.
 
@@ -53,12 +53,12 @@ Context-oriented programming (COP) is a mechanism to modularize heterogeneous cr
 
 Every module could group its extension methods in a separate layer, activate that layer whenever code from the module is run, and deactivate the layer afterwards. Most COP implementations support scoped layer activation~\cite{Appeltauer:2009:CCP:1562112.1562118}, which essentially activates a layer, then runs a method or function/block closure, and then deactivates the layer again.
 
-With context-oriented programming, duplicate extension methods are no longer a problem, as long as they are contained in different layers as partial method definitions.
+With context-oriented programming, duplicate extension methods are no longer a problem, as long as they are contained in different layers as partial methods.
 
 %\paragraph{Worlds}
 %better way is needed (e.g., class boxes, refinements, COP, world (paper viewpoints), monkey patching). return already existing class in generator method
 
-\section{Extending Inherited Nested Classes without Subclassing}
+\section{Extending Inherited Nested Classes}
 The way inherited nested classes can be extended without subclassing has two deficiencies. Firstly, there is currently no notation to add new instance variables to the extended class, because the subclass statement is part of the corresponding method in the superclass. Secondly, nested classes of already extended classes cannot be further extended, because a \texttt{super} call would not call the original class accessor method. Instead, the method lookup would start in the superclass of the extended class (which is the same class as the not yet extended class).
 
 It is still unclear, if extending inherited nested classes without subclassing should be forbidden in favor of the variant \emph{with subclassing}. Other programming languages like Jx do this by default~\cite{Nystrom:2004:SEV:1028976.1028986}. Extending inherited nested classes with subclassing would solve the problems described above and is already possible. However, forbidding \emph{extending without subclassing} is difficult without restricting the ability to write extension methods, which is technically a very similar concept.

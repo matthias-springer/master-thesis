@@ -371,11 +371,13 @@ Figure~\ref{fig:impl_update_cycle} gives a high-level overview of the entire cla
 In this section, we describe how \msname is integrated in Squeak. We also point out where more work is necessary to integrate \msname better in Squeak. These tasks are mostly engineering tasks. In Section~\ref{sec:future} we discuss conceptual future work.
 
 \begin{wrapfigure}{l}{0.5\textwidth}
-	\includegraphics[scale=0.75]{st_nested.pdf}
+	\includegraphics[scale=0.7]{st_nested.pdf}
 	\centering
-	\caption[Example: Top-level \texttt{Smalltalk} class]{Example: Top-level \texttt{Smalltalk} class. In future versions of \msname, all classes should be nested within the top-level class \texttt{Smalltalk}.}
+	\caption[Example: Top-level class \texttt{Smalltalk}]{Example: Top-level class \texttt{Smalltalk}. All classes should be nested within \texttt{Smalltalk}.}
 	\label{fig:impl_st_nested_future}
+	\vspace{-1cm}
 \end{wrapfigure}
+
 \subsection{Module Repository}
 \label{sec:impl_module_rep}
 At the moment, there is a separate \emph{module repository} for \msname. This is a singleton class with a collection all top-level class specifications and a collection of instantiated top-level class specifications. This is useful for development purposes, because basic Squeak classes can be migrated to our system without the risk of damaging the base system. References to classes are first looked up in the module repository, then in the Smalltalk \texttt{globals} dictionary.

@@ -35,7 +35,7 @@
 subject=master,degree={Master of Science},
 ]{hpi-swa}
 
-\supervisors{%
+\supervisor{%
 Prof.\,Dr.\,Robert Hirschfeld%\and %
 %Dr.\,John Doe%
 }
@@ -52,6 +52,15 @@ Prof.\,Dr.\,Robert Hirschfeld%\and %
 \othertitle{Modularität mit geschachtelten Klassen in Squeak/Smalltalk}
 \othersubtitle{}
 \lstset{escapeinside={<@}{@>}}
+
+\AtBeginDocument{
+        \KOMAoption{titlepage}{firstiscover}
+        \renewcommand{\coverpageleftmargin}{\dimexpr\evensidemargin + .8in\relax}
+}
+\AtEndPreamble{
+   \KOMAoptions{BCOR=12pt,DIV=9}
+   \areaset[current]{\textwidth}{1.61803399\textwidth}
+}
 
 \begin{document}
 \newcommand{\msname}{Matriona\xspace}
