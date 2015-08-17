@@ -23,7 +23,7 @@ Figure~\ref{fig:app_lex_scope} shows the relevant parts of the meta model for de
 \label{fig:app_lex_scope}
 \end{figure}
 
-Figure~\ref{fig:app_det_lex_scope_algo} shows the algorithm for determining the lexical scope, given that a method specification (\texttt{foo}) is instantitated within the target class \texttt{cls}. The first enclosing class should be \texttt{B}. \texttt{B}'s meta class specification can be reached by following the parent pointer twice. However, we do not need the specification but the actual class object of \texttt{B}. The \texttt{instantiations} dictionary maps class specification instantiations (e.g. the class object \texttt{C} which is the target class \texttt{cls}) to an array of the enclosing class object and the arguments provided to the class accessor method\footnote{Note, that \texttt{instantiations} can contain multiple class specification instantiations in case the class in question is an extended inherited nested class which was not subclassed or a paramterized class.}. The enclosing class object is always the first element in that array. Therefore, the first enclosing class in the lexical scope of \texttt{foo} is the first element in the \texttt{instantiations} array of \texttt{self parent parent theClassSpec theMethodSpec}.
+Figure~\ref{fig:app_det_lex_scope_algo} shows the algorithm for determining the lexical scope, given that a method specification (\texttt{foo}) is instantitated within the target class \texttt{cls}. The first enclosing class should be \texttt{B}. \texttt{B}'s meta class specification can be reached by following the parent pointer twice. However, we do not need the specification but the actual class object of \texttt{B}. The \texttt{instantiations} dictionary maps class specification instantiations (e.g. the class object \texttt{C} which is the target class \texttt{cls}) to an array of the enclosing class object and the arguments provided to the class accessor method\footnote{Note that \texttt{instantiations} can contain multiple class specification instantiations in case the class in question is an extended inherited nested class which was not subclassed or a paramterized class.}. The enclosing class object is always the first element in that array. Therefore, the first enclosing class in the lexical scope of \texttt{foo} is the first element in the \texttt{instantiations} array of \texttt{self parent parent theClassSpec theMethodSpec}.
 
 \begin{figure}[!htp]
 \begin{lstlisting}
@@ -70,7 +70,7 @@ In \msname, traits are implemented as mixins, which are wrapped in unparameteriz
 \label{fig:algo_trait_res}
 \end{figure}
 
-Note, that it is important to lookup the mixed-in trait in the superclass hierarchy of the receiver. Every mixed-in trait (\emph{trait instantiation}) provides the same methods, but whenever instance variables are accessed, the bytecode of two instantiations of the same trait method can differ (see Section~\ref{sec:impl_ch_inst_cl_vars}).
+Note that it is important to lookup the mixed-in trait in the superclass hierarchy of the receiver. Every mixed-in trait (\emph{trait instantiation}) provides the same methods, but whenever instance variables are accessed, the bytecode of two instantiations of the same trait method can differ (see Section~\ref{sec:impl_ch_inst_cl_vars}).
 
 %%% Local Variables: 
 %%% mode: latex
